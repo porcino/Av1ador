@@ -63,6 +63,7 @@ namespace Av1ador
         public int Grain_level { get; set; }
         public double Predicted { get; set; }
         public List<string> Tracks { get; set; }
+        public List<double> Tracks_delay { get; set; }
 
 
         public Video(string file, bool segundo = false, double len = 0)
@@ -72,6 +73,7 @@ namespace Av1ador
             Kf_fixed = true;
             Grain_level = -1;
             Tracks = new List<string> { };
+            Tracks_delay = new List<double>();
 
             Process ffprobe = new Process();
             Func.Setinicial(ffprobe, 2);
@@ -202,6 +204,23 @@ namespace Av1ador
             BackgroundWorker bw2 = new BackgroundWorker();
             bw2.DoWork += (s, e) =>
             {
+                if (Tracks.Count > 0)
+                {
+                    Process fftracks = new Process();
+                    Func.Setinicial(fftracks, 2);
+                    fftracks.StartInfo.Arguments = " -loglevel quiet -select_streams a -show_entries stream=start_time -of csv=p=0 -i \"" + file + "\"";
+                    fftracks.Start();
+                    fftracks.WaitForExit(-1);
+                    output = fftracks.StandardOutput.ReadToEnd();
+                    using (var reader = new StringReader(output))
+                    {
+                        for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+                            Tracks_delay.Add(double.Parse(line) * 1000.0);
+                    }
+                    while (Tracks_delay.Count < Tracks.Count)
+                        Tracks_delay.Add(0);
+                }
+
                 Process ffmpeg = new Process();
                 Func.Setinicial(ffmpeg, 3);
                 ffmpeg.StartInfo.Arguments = " -copyts -start_at_zero -i \"" + file + "\" -t 120 -filter:v \"select='eq(pict_type\\,I)',showinfo\" -f null -";
@@ -428,12 +447,7 @@ namespace Av1ador
                     g = g < 0 ? 0 : g;
                     gs.Add((int)g);
                 }
-                if (System.IO.File.Exists(name + "_th.webp"))
-                    System.IO.File.Delete(name + "_th.webp");
-                if (System.IO.File.Exists(name + "_th_dns.webp"))
-                    System.IO.File.Delete(name + "_th_dns.webp");
-                if (System.IO.File.Exists(name + "_th_dnb.webp"))
-                    System.IO.File.Delete(name + "_th_dnb.webp");
+                Clear_tmp();
                 if (!gsupdown.Enabled && mediainfo == inf.Text && status.Text.Contains("grain"))
                     Grain_level = (int)(Func.Median(gs.ToArray()) / (100.0/maxgs));
             };
@@ -448,6 +462,17 @@ namespace Av1ador
                 Gs_thread = false;
             };
             bw.RunWorkerAsync();
+        }
+
+        public void Clear_tmp()
+        {
+            string name = Path.GetFileNameWithoutExtension(File);
+            if (System.IO.File.Exists(name + "_th.webp"))
+                System.IO.File.Delete(name + "_th.webp");
+            if (System.IO.File.Exists(name + "_th_dns.webp"))
+                System.IO.File.Delete(name + "_th_dns.webp");
+            if (System.IO.File.Exists(name + "_th_dnb.webp"))
+                System.IO.File.Delete(name + "_th_dnb.webp");
         }
 
         internal void Predict(Label status, Encoder encoder, ListBox vf)

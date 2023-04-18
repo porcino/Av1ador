@@ -51,11 +51,24 @@ namespace Av1ador
         private FormWindowState winstate;
         private Size winsize;
         private Point winpos;
+        private readonly BackgroundWorker aset = new BackgroundWorker();
         public static bool Dialogo { get; set; }
 
         public Form1()
         {
             InitializeComponent();
+            aset.DoWork += (s, ee) =>
+            {
+                int aid = (int)ee.Argument;
+                while (primer_video.Busy)
+                    Thread.Sleep(30);
+                encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
+            };
+            aset.RunWorkerCompleted += (s, ee) =>
+            {
+                infoTimer.Enabled = true;
+                checkedListBox1.Enabled = true;
+            };
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -228,6 +241,9 @@ namespace Av1ador
                         primer_video.Busy = false;
                         Thread.Sleep(10);
                     }
+                    checkedListBox1.Enabled = false;
+                    infoTimer.Enabled = false;
+
                     MouseHook.UninstallHook();
                     syncButton.Checked = false;
                     removeButton.Enabled = true;
@@ -1164,11 +1180,8 @@ namespace Av1ador
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.webp").Where(item => item.EndsWith(".webp")))
-            {
-                try { File.Delete(file); }
-                catch { }
-            }
+            if (primer_video != null)
+                primer_video.Clear_tmp();
             if (encodestopButton.Enabled && encode.Chunks != null)
             {
                 e.Cancel = true;
@@ -1846,6 +1859,8 @@ namespace Av1ador
             {
                 if (i != e.Index)
                     checkedListBox1.SetItemChecked(i, false);
+                else if (e.NewValue == CheckState.Checked && !aset.IsBusy)
+                    aset.RunWorkerAsync(e.Index);
             }
             mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"aid\", " + (e.Index + 1) + "] }");
             Entry_update(10, e.NewValue == CheckState.Checked ? e.Index : -1);

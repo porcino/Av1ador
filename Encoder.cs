@@ -316,7 +316,7 @@ namespace Av1ador
             //bitrate=!bitrate!-^(!hertz!/8000^)-^(!framerate!/10^)
             kbps -= fps / 10;
             kbps = kbps < 4 ? 4 : kbps;
-            int reduccion = 16 - (((kbps * 4 ) - 4000 ) / (-253));
+            int reduccion = 16 - (((kbps * 4) - 4000) / (-253));
             int ba = A_kbps * (int.Parse(Ch) > 2 ? int.Parse(Ch) - 2 : int.Parse(Ch)) * reduccion / 64;
             ba = ba > A_kbps ? (ba - A_kbps) / 2 + A_kbps : ba;
             kbps -= ba;
@@ -327,7 +327,7 @@ namespace Av1ador
 
         public double Calc_total(int kbps, int ba, double duracion, int fps)
         {
-            return Math.Round((double)(kbps + ba + fps / 10) * duracion / (double)8 / (double)1024 , 1);
+            return Math.Round((double)(kbps + ba + fps / 10) * duracion / (double)8 / (double)1024, 1);
         }
 
         public string Params_replace(int fps)
@@ -443,7 +443,7 @@ namespace Av1ador
                 }
                 if (!d)
                 {
-                    if(Libplacebo)
+                    if (Libplacebo)
                         Vf_add("tonemap_vk", "");
                     else
                         Vf_add("tonemap_cl", "");
@@ -459,7 +459,7 @@ namespace Av1ador
                 Af.RemoveAll(s => s.StartsWith("dynaudnorm"));
                 if (int.Parse(Ch) < int.Parse(v) && int.Parse(Ch) < 3)
                 {
-                    if(int.Parse(Ch) == 2)
+                    if (int.Parse(Ch) == 2)
                         Af.Insert(0, "sofalizer='HRIR_CIRC360_NF150.sofa':type=freq:lfegain=1:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'\"");
                     Af.Add("dynaudnorm=g=3:peak=0.99:maxgain=" + v + ":b=1:r=1");
                 }
@@ -471,6 +471,12 @@ namespace Av1ador
             }
             if (f == "normalize")
                 Af.Add("dynaudnorm=g=3:peak=0.99:maxgain=" + v + ":b=1:r=1");
+            if (f == "adelay")
+            {
+                Af.RemoveAll(s => s.StartsWith("adelay"));
+                if (double.Parse(v) > 0)
+                    Af.Add("adelay=" + v + ":all=true");
+            }
         }
 
         public string Build_vstr(bool predict = false)
