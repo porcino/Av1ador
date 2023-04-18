@@ -599,7 +599,7 @@ namespace Av1ador
         public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto)
         {
             Settings settings;
-            string res_s = resolution.SelectedIndex > 0 || (resolution.Text != "" && int.Parse(resolution.Text.Replace("p", "")) > Screen.PrimaryScreen.Bounds.Height) ? resolution.Text : "Default";
+            string res_s = resolution.SelectedIndex > 0 || (resolution.Text != "" && int.Parse(resolution.Text.Replace("p", "")) > Screen.FromControl(Form.ActiveForm).Bounds.Height) ? resolution.Text : "Default";
             string hdr_s = hdr.Enabled ? hdr.Text : "Default";
             string bit_s = bit_depth.Items.Count > 1 ? bit_depth.Text : "Default";
             string ch_s = (channels.Text != c[0] || c.Length > 2) && channels.Items.Count > 1 ? channels.Text : "Default";

@@ -38,7 +38,7 @@ namespace Av1ador
         private Process mpv1p, mpv2p;
         private bool mpv2_loaded = false;
         private double panx, pany, panx_ratio, pany_ratio;
-        private bool click_in, mouse1, moviendo_divisor, reading;
+        private bool click_in, mouse1, moviendo_divisor, reading, can_sync;
         private POINT click_pos, mouse_pos, mouse_pos_antes;
         private int focus_id, mpv_left, me_x, underload;
         private Encoder encoder;
@@ -48,7 +48,9 @@ namespace Av1ador
         private PerformanceCounter disk;
         private string[] disks;
         Settings settings;
-        private bool can_sync;
+        private FormWindowState winstate;
+        private Size winsize;
+        private Point winpos;
         public static bool Dialogo { get; set; }
 
         public Form1()
@@ -81,12 +83,12 @@ namespace Av1ador
             formatComboBox.SelectedIndex = 0;
 
             leftPanel.Width = mpvsPanel.Width;
-            rightPanel.Width = Screen.PrimaryScreen.Bounds.Width;
+            rightPanel.Width = Screen.FromControl(this).Bounds.Width;
             Show_filter(true);
 
             if (!File.Exists("background.png"))
             {
-                Bitmap background_png = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+                Bitmap background_png = new Bitmap(Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height);
                 Graphics g = Graphics.FromImage(background_png);
                 g.Clear(Color.Transparent);
                 g.Flush();
@@ -132,7 +134,7 @@ namespace Av1ador
                 Wait_mpv();
                 Wait_mpv();
                 SetParent(mpv1p.MainWindowHandle, leftPanel.Handle);
-                MoveWindow(mpv1p.MainWindowHandle, 0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, true);
+                MoveWindow(mpv1p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                 mpv_cmd = new StreamWriter(mpv_tubo);
                 mpv_tubo.Connect();
                 mpv_cmd.AutoFlush = true;
@@ -200,7 +202,7 @@ namespace Av1ador
                     Wait_mpv();
                     Wait_mpv();
                     SetParent(mpv2p.MainWindowHandle, rightPanel.Handle);
-                    MoveWindow(mpv2p.MainWindowHandle, 0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, true);
+                    MoveWindow(mpv2p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                     mpv2_loaded = true;
                     mpv2_cmd = new StreamWriter(mpv2_tubo);
                     mpv2_tubo.Connect();
@@ -252,7 +254,7 @@ namespace Av1ador
                         if (alto <= primer_video.Height || alto <= primer_video.Height / primer_video.Sar || alto <= primer_video.Width * 9 / 15 )
                         {
                             resComboBox.Items.Add(encoder.Resos[i]);
-                            if (resComboBox.SelectedIndex < 0 && (alto <= Screen.PrimaryScreen.Bounds.Height || alto <= Screen.PrimaryScreen.Bounds.Height))
+                            if (resComboBox.SelectedIndex < 0 && (alto <= Screen.FromControl(this).Bounds.Height || alto <= Screen.FromControl(this).Bounds.Height))
                                 resComboBox.Text = encoder.Resos[i];
                         }
                     }
@@ -418,7 +420,7 @@ namespace Av1ador
             if ((hide && segundo_video == null) || (mpv_left + leftPanel.Width - PointToScreen(Point.Empty).X) > form_w)
                 leftPanel.Width = mpvsPanel.Width;
 
-            rightPanel.Width = Screen.PrimaryScreen.Bounds.Width - (mpv_left - PointToScreen(Point.Empty).X) - (Screen.PrimaryScreen.Bounds.Width - Width + bordes);
+            rightPanel.Width = Screen.FromControl(this).Bounds.Width - (mpv_left - PointToScreen(Point.Empty).X) - (Screen.FromControl(this).Bounds.Width - Width + bordes);
             
             if (primer_video != null)
             {
@@ -743,6 +745,13 @@ namespace Av1ador
 
         private void ExpandButton_Click(object sender, EventArgs e)
         {
+            winstate = WindowState;
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Normal;
+            winsize = Size;
+            winpos = Location;
+            Location = new Point(Screen.FromControl(this).WorkingArea.Left, Screen.FromControl(this).WorkingArea.Top);
+            Size = new Size(Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height);
             tableLayoutPanel1.RowStyles[2].Height = 16;
             tableLayoutPanel1.RowStyles[3].Height = 0;
             tableLayoutPanel4.RowStyles[0].Height = 24;
@@ -757,6 +766,10 @@ namespace Av1ador
 
         private void RestoreButton_Click(object sender, EventArgs e)
         {
+            FormBorderStyle = FormBorderStyle.Sizable;
+            WindowState = winstate;
+            Size = winsize;
+            Location = winpos;
             tableLayoutPanel1.RowStyles[2].Height = 24;
             tableLayoutPanel1.RowStyles[3].Height = 24;
             tableLayoutPanel4.RowStyles[0].Height = 38;
@@ -1962,8 +1975,8 @@ namespace Av1ador
             {
                 if (mouse_pos_antes.x > 0 && mouse_pos_antes.y > 0)
                 {
-                    panx += ((Double)mouse_pos.x - (Double)mouse_pos_antes.x) / (Double)Screen.PrimaryScreen.Bounds.Width * 1.5;
-                    pany += ((Double)mouse_pos.y - (Double)mouse_pos_antes.y) / (Double)Screen.PrimaryScreen.Bounds.Height * 1.5;
+                    panx += ((Double)mouse_pos.x - (Double)mouse_pos_antes.x) / (Double)Screen.FromControl(this).Bounds.Width * 1.5;
+                    pany += ((Double)mouse_pos.y - (Double)mouse_pos_antes.y) / (Double)Screen.FromControl(this).Bounds.Height * 1.5;
                     if (panx != 0 || pany != 0)
                     {
                         mpv_cmd.WriteLine("set video-pan-x " + panx + ";set video-pan-y " + pany);
