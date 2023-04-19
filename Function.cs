@@ -206,5 +206,13 @@ namespace Av1ador
             }
             return false;
         }
+
+        public static Color Heat(int usage)
+        {
+            int r, gb;
+            r = 255 - (100 - usage) / 6;
+            gb = 240 - usage * 12 / 5;
+            return Color.FromArgb(r, gb, gb);
+        }
     }
 }

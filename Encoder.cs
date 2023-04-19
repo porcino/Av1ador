@@ -363,15 +363,7 @@ namespace Av1ador
                 Vf.RemoveAll(s => s.StartsWith("scale"));
                 int w = (int)Double.Parse(v);
                 int index = Math.Max(Vf.FindIndex(s => s.Contains("nnedi")), Vf.FindIndex(s => s.Contains("crop")));
-                for (int i = 0; i <= index; i++)
-                {
-                    if (Vf[i].Contains("crop"))
-                    {
-                        a = "-2";
-                        break;
-                    }
-                }
-                Vf.Insert(index > -1 ? index + 1 : (Vf.Count > 0 && Vf[0].StartsWith("fps") ? 1 : 0), "scale=w=" + (w % 2 == 0 ? w : w + 1) + ":h=" + a);
+                Vf.Insert(index > -1 ? index + 1 : (Vf.Count > 0 && Vf[0].StartsWith("fps") ? 1 : 0), "scale=w=" + (w % 2 == 0 ? w : w + 1) + ":h=" + a + ":force_original_aspect_ratio=decrease");
             }
             else if (f == "crop")
             {

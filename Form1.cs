@@ -1279,6 +1279,7 @@ namespace Av1ador
             encodestartButton.Enabled = true;
             if (encode != null)
                 encode.Set_state(true);
+            workersgroupBox.BackColor = DefaultBackColor;
         }
 
         private void Abitrate_update(bool calc)
@@ -1415,7 +1416,9 @@ namespace Av1ador
             {
                 if (!workersBox.Checked && workersUpDown.Value > 1 && encode.Counter == 0)
                 {
-                    if (cpu.NextValue() < 91 && disk.NextValue() < 70)
+                    float usage = (int)cpu.NextValue();
+                    workersgroupBox.BackColor = Func.Heat((int)usage);
+                    if (usage < 91 && disk.NextValue() < 70)
                         underload++;
                     else
                         underload = 0;
