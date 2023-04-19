@@ -195,5 +195,16 @@ namespace Av1ador
             crf *= 100.0;
             return Math.Pow(5000000 / (crf + 1600) + crf / 29 - 800, 2) / 100 + 50;
         }
+
+        public static bool Preview(string vf)
+        {
+            string[] filters = new string[] { "crop", "eq", "delogo", "smartblur" };
+            foreach (string filter in filters)
+            {
+                if (vf.IndexOf(filter + "=") > -1)
+                    return true;
+            }
+            return false;
+        }
     }
 }

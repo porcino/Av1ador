@@ -630,16 +630,18 @@ namespace Av1ador
 
         private void Add_entry(string file)
         {
-            Entry entry = new Entry();
-            entry.File = file;
-            entry.Vf = "";
-            entry.Gs = "";
-            entry.Cv = cvComboBox.SelectedIndex;
-            entry.Bits = bitsComboBox.Text;
-            entry.Param = paramsBox.Text;
-            entry.Crf = (int)numericUpDown1.Value;
-            entry.Ba = int.Parse(abitrateBox.Text);
-            entry.Bv = bitrateBox.Text;
+            Entry entry = new Entry
+            {
+                File = file,
+                Vf = "",
+                Gs = "",
+                Cv = cvComboBox.SelectedIndex,
+                Bits = bitsComboBox.Text,
+                Param = paramsBox.Text,
+                Crf = (int)numericUpDown1.Value,
+                Ba = int.Parse(abitrateBox.Text),
+                Bv = bitrateBox.Text
+            };
             listBox1.Items.Add(entry);
         }
 
@@ -1575,11 +1577,8 @@ namespace Av1ador
                     else if (clTextBox.Text != "")
                         encoder.Vf.Add(clTextBox.Text);
                     Filter_items_update(clTextBox.Text.Contains("crop"));
-                    if (clTextBox.Text.Contains("crop"))
-                    {
-                        mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
-                        mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + clTextBox.Text + "\"] }");
-                    }
+                    if (Func.Preview(clTextBox.Text))
+                        Filter_preview(clTextBox.Text);
                     clTextBox.Text = "";
                 }
                 else
@@ -1592,6 +1591,12 @@ namespace Av1ador
                     clTextBox.Text = "";
                 }
             }
+        }
+
+        private void Filter_preview(string vf)
+        {
+            mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
+            mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + vf + "\"] }");
         }
 
         private void FilternewButton_Click(object sender, EventArgs e)
@@ -1887,6 +1892,7 @@ namespace Av1ador
                 {
                     ResComboBox_DropDownClosed(sender, e);
                     Filter_items_update();
+                    Filter_preview(encoder.Vf[0]);
                 };
                 bw.RunWorkerAsync();
             }
