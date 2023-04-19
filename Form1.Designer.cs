@@ -110,6 +110,7 @@
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.filteraddDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeBlackBarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deinterlaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1309,6 +1310,7 @@
             this.filteraddDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.filteraddDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.colorToolStripMenuItem,
+            this.removeBlackBarsToolStripMenuItem,
             this.cropToolStripMenuItem,
             this.debandToolStripMenuItem,
             this.deinterlaceToolStripMenuItem,
@@ -1330,63 +1332,70 @@
             // colorToolStripMenuItem
             // 
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.colorToolStripMenuItem.Text = "Color adjustment";
             this.colorToolStripMenuItem.Click += new System.EventHandler(this.ColorToolStripMenuItem_Click);
+            // 
+            // removeBlackBarsToolStripMenuItem
+            // 
+            this.removeBlackBarsToolStripMenuItem.Name = "removeBlackBarsToolStripMenuItem";
+            this.removeBlackBarsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeBlackBarsToolStripMenuItem.Text = "Remove black bars";
+            this.removeBlackBarsToolStripMenuItem.Click += new System.EventHandler(this.RemoveBlackBarsToolStripMenuItem_Click);
             // 
             // cropToolStripMenuItem
             // 
             this.cropToolStripMenuItem.Name = "cropToolStripMenuItem";
-            this.cropToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.cropToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cropToolStripMenuItem.Text = "Crop";
             this.cropToolStripMenuItem.Click += new System.EventHandler(this.CropToolStripMenuItem_Click);
             // 
             // debandToolStripMenuItem
             // 
             this.debandToolStripMenuItem.Name = "debandToolStripMenuItem";
-            this.debandToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.debandToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debandToolStripMenuItem.Text = "Deband";
             this.debandToolStripMenuItem.Click += new System.EventHandler(this.DebandToolStripMenuItem_Click);
             // 
             // deinterlaceToolStripMenuItem
             // 
             this.deinterlaceToolStripMenuItem.Name = "deinterlaceToolStripMenuItem";
-            this.deinterlaceToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.deinterlaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deinterlaceToolStripMenuItem.Text = "Deinterlace";
             this.deinterlaceToolStripMenuItem.Click += new System.EventHandler(this.DeinterlaceToolStripMenuItem_Click);
             // 
             // delogoToolStripMenuItem
             // 
             this.delogoToolStripMenuItem.Name = "delogoToolStripMenuItem";
-            this.delogoToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.delogoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.delogoToolStripMenuItem.Text = "Delogo";
             this.delogoToolStripMenuItem.Click += new System.EventHandler(this.DelogoToolStripMenuItem_Click);
             // 
             // denoiseToolStripMenuItem
             // 
             this.denoiseToolStripMenuItem.Name = "denoiseToolStripMenuItem";
-            this.denoiseToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.denoiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.denoiseToolStripMenuItem.Text = "Denoise";
             this.denoiseToolStripMenuItem.Click += new System.EventHandler(this.DenoiseToolStripMenuItem_Click);
             // 
             // pOIaddroiToolStripMenuItem
             // 
             this.pOIaddroiToolStripMenuItem.Name = "pOIaddroiToolStripMenuItem";
-            this.pOIaddroiToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.pOIaddroiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pOIaddroiToolStripMenuItem.Text = "POI (addroi)";
             this.pOIaddroiToolStripMenuItem.Click += new System.EventHandler(this.POIaddroiToolStripMenuItem_Click);
             // 
             // sharpenToolStripMenuItem
             // 
             this.sharpenToolStripMenuItem.Name = "sharpenToolStripMenuItem";
-            this.sharpenToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.sharpenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sharpenToolStripMenuItem.Text = "Sharpen";
             this.sharpenToolStripMenuItem.Click += new System.EventHandler(this.SharpenToolStripMenuItem_Click);
             // 
             // stabilizationToolStripMenuItem
             // 
             this.stabilizationToolStripMenuItem.Name = "stabilizationToolStripMenuItem";
-            this.stabilizationToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.stabilizationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stabilizationToolStripMenuItem.Text = "Stabilization";
             this.stabilizationToolStripMenuItem.Visible = false;
             // 
@@ -1396,7 +1405,7 @@
             this.openclToolStripMenuItem,
             this.vulkanToolStripMenuItem});
             this.tonemapToolStripMenuItem.Name = "tonemapToolStripMenuItem";
-            this.tonemapToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.tonemapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.tonemapToolStripMenuItem.Text = "Tonemap";
             // 
             // openclToolStripMenuItem
@@ -1416,7 +1425,7 @@
             // upscaleToolStripMenuItem
             // 
             this.upscaleToolStripMenuItem.Name = "upscaleToolStripMenuItem";
-            this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.upscaleToolStripMenuItem.Text = "Upscale (FSRCNN)";
             this.upscaleToolStripMenuItem.Visible = false;
             // 
@@ -2455,6 +2464,7 @@
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
         private System.Windows.Forms.ToolStripButton filterdocButton;
+        private System.Windows.Forms.ToolStripMenuItem removeBlackBarsToolStripMenuItem;
     }
 }
 

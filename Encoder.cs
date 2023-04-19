@@ -340,7 +340,7 @@ namespace Av1ador
             return Param;
         }
 
-        public void Vf_add(string f, string v, [Optional] string a)
+        public void Vf_add(string f, string v, [Optional] string a, [Optional] string b, [Optional] string c)
         {
             if (f == "fps")
             {
@@ -362,18 +362,35 @@ namespace Av1ador
             {
                 Vf.RemoveAll(s => s.StartsWith("scale"));
                 int w = (int)Double.Parse(v);
-                int index = Vf.FindIndex(s => s.Contains("nnedi"));
+                int index = Math.Max(Vf.FindIndex(s => s.Contains("nnedi")), Vf.FindIndex(s => s.Contains("crop")));
+                for (int i = 0; i <= index; i++)
+                {
+                    if (Vf[i].Contains("crop"))
+                    {
+                        a = "-2";
+                        break;
+                    }
+                }
                 Vf.Insert(index > -1 ? index + 1 : (Vf.Count > 0 && Vf[0].StartsWith("fps") ? 1 : 0), "scale=w=" + (w % 2 == 0 ? w : w + 1) + ":h=" + a);
             }
             else if (f == "crop")
             {
-                string[] dim = Func.Find_w_h(Vf);
-                if (dim.Count() > 0)
+                if (b == null)
                 {
-                    v = dim[0];
-                    a = dim[1];
+                    string[] dim = Func.Find_w_h(Vf);
+                    if (dim.Count() > 0)
+                    {
+                        v = dim[0];
+                        a = dim[1];
+                    }
+                    Vf.Add("crop=w=" + v + ":h=" + a + ":x=0:y=0");
                 }
-                Vf.Add("crop=w=" + v + ":h=" + a + ":x=0:y=0");
+                else
+                {
+                    Vf.Remove("crop=w=Detecting:h=.:x=.:y=.");
+                    Vf.Remove("crop=w=" + v + ":h=" + a + ":x=" + b + ":y=" + c);
+                    Vf.Insert(0, "crop=w=" + v + ":h=" + a + ":x=" + b + ":y=" + c);
+                }
             }
             else if (f == "deband")
             {

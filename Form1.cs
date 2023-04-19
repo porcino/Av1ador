@@ -60,9 +60,10 @@ namespace Av1ador
             aset.DoWork += (s, ee) =>
             {
                 int aid = (int)ee.Argument;
-                while (primer_video.Busy)
+                while (primer_video != null && primer_video.Busy)
                     Thread.Sleep(30);
-                encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
+                if (primer_video != null && encoder != null)
+                    encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
             };
             aset.RunWorkerCompleted += (s, ee) =>
             {
@@ -241,6 +242,7 @@ namespace Av1ador
                 }
                 if (primer_video == null || (primer_video != null && entry.File != primer_video.File))
                 {
+                    encoder.Vf.Clear();
                     while (primer_video != null && primer_video.Busy)
                     {
                         primer_video.Busy = false;
@@ -662,8 +664,6 @@ namespace Av1ador
                 Entry entry = (Entry)listBox1.Items[listBox1.SelectedIndex];
                 if (!File.Exists(entry.File))
                     listBox1.Items.RemoveAt(listBox1.SelectedIndex);
-                if (primer_video != null && entry.File != primer_video.File)
-                    encoder.Vf.Clear();
             }
             mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
         }
@@ -1354,7 +1354,7 @@ namespace Av1ador
                 primer_video.Grain_detect(gsUpDown, statusLabel, encoder.Gs, mediainfoLabel, encoder.Vf);
                 return;
             }
-            else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && entry.Param != "")
+            else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && entry.Param != "" && !encoder.Vf[0].Contains("crop=D"))
             {
                 encoder.Params = paramsBox.Text;
                 paramsBox.Text = encoder.Params_replace((int)primer_video.Fps);
@@ -1636,11 +1636,8 @@ namespace Av1ador
 
             if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
             {
-                if (encoder.Vf.FindIndex(s => s.Contains("scale")) == -1 || encoder.Vf[encoder.Vf.Count - 1].Contains("scale"))
-                {
-                    encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
-                    encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString());
-                }
+                encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
+                encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString());
             }
             else
                 encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
@@ -1871,6 +1868,28 @@ namespace Av1ador
         private void FilterdocButton_Click(object sender, EventArgs e)
         {
             Process.Start("https://ffmpeg.org/ffmpeg-filters.html");
+        }
+
+        private void RemoveBlackBarsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (primer_video != null && encoder != null)
+            {
+                encoder.Vf_add("crop", "Detecting", ".", ".", ".");
+                Filter_items_update();
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (s, ee) =>
+                {
+                    primer_video.Blackbars(encoder);
+                    while (primer_video.Letterbox.Width == 0)
+                        Thread.Sleep(30);
+                };
+                bw.RunWorkerCompleted += (s, ee) =>
+                {
+                    ResComboBox_DropDownClosed(sender, e);
+                    Filter_items_update();
+                };
+                bw.RunWorkerAsync();
+            }
         }
 
         private void ScaleBox_CheckedChanged(object sender, EventArgs e)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -50,7 +51,7 @@ namespace Av1ador
                     Environment.Exit(0);
             return output;
         }
-        public static void Setinicial(Process process, int id)
+        public static void Setinicial(Process process, int id, [Optional] string args)
         {
             string exe;
             switch (id)
@@ -71,6 +72,7 @@ namespace Av1ador
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute = false;
             process.EnableRaisingEvents = true;
+            process.StartInfo.Arguments = args;
         }
 
         public static void Update_combo(ToolStripComboBox combobox, string[] items, bool keep, string text = "")

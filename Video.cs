@@ -8,7 +8,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
+using Point = System.Drawing.Point;
 
 namespace Av1ador
 {
@@ -64,6 +66,7 @@ namespace Av1ador
         public double Predicted { get; set; }
         public List<string> Tracks { get; set; }
         public List<double> Tracks_delay { get; set; }
+        public Rect Letterbox { get; set; }
 
 
         public Video(string file, bool segundo = false, double len = 0)
@@ -76,9 +79,8 @@ namespace Av1ador
             Tracks_delay = new List<double>();
 
             Process ffprobe = new Process();
-            Func.Setinicial(ffprobe, 2);
+            Func.Setinicial(ffprobe, 2, " -show_entries stream=channels -of compact=p=0:nk=0 -v 0 \"" + file + "\"");
 
-            ffprobe.StartInfo.Arguments = " -show_entries stream=channels -of compact=p=0:nk=0 -v 0 \"" + file + "\"";
             ffprobe.Start();
             string output = ffprobe.StandardOutput.ReadToEnd();
             Regex res_regex = new Regex("channels=([0-9])");
@@ -169,8 +171,7 @@ namespace Av1ador
                 bw.DoWork += (s, e) =>
                 {
                     Process ffmpeg = new Process();
-                    Func.Setinicial(ffmpeg, 3);
-                    ffmpeg.StartInfo.Arguments = " -ss 0 -i \"" + file + "\" -t 180 -map 0:v:0 -c copy -f null -";
+                    Func.Setinicial(ffmpeg, 3, " -ss 0 -i \"" + file + "\" -t 180 -map 0:v:0 -c copy -f null -");
                     ffmpeg.Start();
                     ffmpeg.PriorityClass = ProcessPriorityClass.BelowNormal;
                     string output2 = ffmpeg.StandardError.ReadToEnd();
@@ -207,10 +208,8 @@ namespace Av1ador
                 if (Tracks.Count > 0)
                 {
                     Process fftracks = new Process();
-                    Func.Setinicial(fftracks, 2);
-                    fftracks.StartInfo.Arguments = " -loglevel quiet -select_streams a -show_entries stream=start_time -of csv=p=0 -i \"" + file + "\"";
+                    Func.Setinicial(fftracks, 2, " -loglevel quiet -select_streams a -show_entries stream=start_time -of csv=p=0 -i \"" + file + "\"");
                     fftracks.Start();
-                    fftracks.WaitForExit(-1);
                     output = fftracks.StandardOutput.ReadToEnd();
                     using (var reader = new StringReader(output))
                     {
@@ -222,8 +221,7 @@ namespace Av1ador
                 }
 
                 Process ffmpeg = new Process();
-                Func.Setinicial(ffmpeg, 3);
-                ffmpeg.StartInfo.Arguments = " -copyts -start_at_zero -i \"" + file + "\" -t 120 -filter:v \"select='eq(pict_type\\,I)',showinfo\" -f null -";
+                Func.Setinicial(ffmpeg, 3, " -copyts -start_at_zero -i \"" + file + "\" -t 120 -filter:v \"select='eq(pict_type\\,I)',showinfo\" -f null -");
                 ffmpeg.Start();
                 var kf = new List<double>();
                 res_regex = new Regex("pts:[ ]*([0-9]{4}[0-9]*)");
@@ -462,6 +460,26 @@ namespace Av1ador
                 Gs_thread = false;
             };
             bw.RunWorkerAsync();
+        }
+
+        internal void Blackbars([Optional] Encoder enc)
+        {
+            if (Letterbox.Width != 0) {
+                enc.Vf_add("crop", Letterbox.Width.ToString(), Letterbox.Height.ToString(), Letterbox.X.ToString(), Letterbox.Y.ToString());
+                return;
+            }
+            string th = (Hdr ? 64 : 16).ToString();
+            double ss = Duration > Kf_interval * 3 ? Duration / 2.0 : 0;
+            Process ffmpeg = new Process();
+            Func.Setinicial(ffmpeg, 3, " -ss " + ss + " -i \"" + File + "\" -vframes " + ((35 - (int)Math.Pow(Width, 1.0/3.0)) * (int)Fps) + " -an -vf cropdetect=limit=" + th + ":round=2 -f null NUL");
+            ffmpeg.Start();
+            Regex regex = new Regex("crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*)", RegexOptions.RightToLeft);
+            Match m = regex.Match(ffmpeg.StandardError.ReadToEnd());
+            if (m.Success) {
+                Letterbox = new Rect(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value), int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+                if (enc != null)
+                    enc.Vf_add("crop", Letterbox.Width.ToString(), Letterbox.Height.ToString(), Letterbox.X.ToString(), Letterbox.Y.ToString());
+            }
         }
 
         public void Clear_tmp()

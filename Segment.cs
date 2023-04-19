@@ -207,8 +207,7 @@ namespace Av1ador
                 {
                     Status.Add("Encoding audio...");
                     Process ffaudio = new Process();
-                    Func.Setinicial(ffaudio, 3);
-                    ffaudio.StartInfo.Arguments = " -copyts -start_at_zero -y" + ss1 + " -i \"" + file + "\"" + ss2 + " -to " + to.ToString() + A_Param + " \"" + audiofile + "\"";
+                    Func.Setinicial(ffaudio, 3, " -copyts -start_at_zero -y" + ss1 + " -i \"" + file + "\"" + ss2 + " -to " + to.ToString() + A_Param + " \"" + audiofile + "\"");
                     ffaudio.Start();
                     string aout = ffaudio.StartInfo.Arguments + Environment.NewLine;
                     BackgroundWorker abw = new BackgroundWorker();
@@ -614,8 +613,7 @@ namespace Av1ador
         {
             Encoding = true;
             Process ffmpeg = new Process();
-            Func.Setinicial(ffmpeg, 3);
-            ffmpeg.StartInfo.Arguments = Credits ? Func.Worsen_crf(Func.Replace_gs(Arguments, 0)) : Arguments;
+            Func.Setinicial(ffmpeg, 3, Credits ? Func.Worsen_crf(Func.Replace_gs(Arguments, 0)) : Arguments);
             bool multi = ffmpeg.StartInfo.Arguments.Contains("&& ffmpeg");
             if (multi)
             {
