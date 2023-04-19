@@ -234,6 +234,11 @@ namespace Av1ador
             if (listBox1.Items.Count > 0)
             {
                 Entry entry = listBox1.SelectedIndex > -1 ? (Entry)listBox1.SelectedItems[0] : (Entry)listBox1.Items[0];
+                if (!File.Exists(entry.File))
+                {
+                    listBox1.Items.Remove(entry);
+                    return;
+                }
                 if (primer_video == null || (primer_video != null && entry.File != primer_video.File))
                 {
                     while (primer_video != null && primer_video.Busy)
@@ -986,17 +991,15 @@ namespace Av1ador
                 else
                     bitrateBox.Text = "";
             }
-            //else if (bitrateBox.Focused)
-            //{
-                if (bitrateBox.Text != "")
-                {
-                    totalBox.Text = (encoder.Calc_total(int.Parse(bitrateBox.Text), int.Parse(abitrateBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)).ToString();
-                    if (bitrateBox.Focused)
-                        abitrateBox.Text = encoder.Calc_kbps(Double.Parse(totalBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)[1];
-                }
-                else
-                    totalBox.Text = "";
-            //}
+            
+            if (bitrateBox.Text != "")
+            {
+                totalBox.Text = (encoder.Calc_total(int.Parse(bitrateBox.Text), int.Parse(abitrateBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)).ToString();
+                if (bitrateBox.Focused)
+                    abitrateBox.Text = encoder.Calc_kbps(Double.Parse(totalBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)[1];
+            }
+            else
+                totalBox.Text = "";
 
             if (bitrateBox.Text != "")
             {
@@ -1735,7 +1738,6 @@ namespace Av1ador
                 }
             }
             encoder.Threads = (int)Math.Ceiling((double)encoder.Cores / (double)workersUpDown.Value);
-            paramsBox.Text = Func.Replace_threads(paramsBox.Text, encoder.Threads);
         }
 
         private void DeinterlaceToolStripMenuItem_Click(object sender, EventArgs e)
