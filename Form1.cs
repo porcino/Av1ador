@@ -1414,10 +1414,10 @@ namespace Av1ador
             }
             if (encodestopButton.Enabled && !statusLabel.Text.Contains("grain"))
             {
+                float usage = (int)cpu.NextValue();
+                workersgroupBox.BackColor = Func.Heat((int)usage);
                 if (!workersBox.Checked && workersUpDown.Value > 1 && encode.Counter == 0)
                 {
-                    float usage = (int)cpu.NextValue();
-                    workersgroupBox.BackColor = Func.Heat((int)usage);
                     if (usage < 91 && disk.NextValue() < 70)
                         underload++;
                     else

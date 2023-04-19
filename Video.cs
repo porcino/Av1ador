@@ -392,7 +392,13 @@ namespace Av1ador
                     break;
             }
             double size = Math.Round(new FileInfo(File).Length / 1024.0 / 1024.0, 1);
-            return str_duration + ", " + Width + "x" + Height + (Interlaced ? "i" : "p") + ", " + (Fps == 0 ? "..." : Fps.ToString() ) + " fps" + (Hdr ? ", HDR" : "") + " - " + str_ch + " - " + size + "MB";
+            string unit = "MB";
+            if (size > 1024)
+            {
+                size = Math.Round(size / 1024.0 , 1);
+                unit = "GB";
+            }
+            return str_duration + ", " + Width + "x" + Height + (Interlaced ? "i" : "p") + ", " + (Fps == 0 ? "..." : Fps.ToString() ) + " fps" + (Hdr ? ", HDR" : "") + " - " + str_ch + " - " + size + unit;
         }
 
         internal void Grain_detect(NumericUpDown gsupdown, Label status, int maxgs, Label inf, List<string> vf)
