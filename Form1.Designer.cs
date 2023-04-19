@@ -132,6 +132,8 @@
             this.filterdownButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.filterremoveButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.filterdocButton = new System.Windows.Forms.ToolStripButton();
             this.togglefButton = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
             this.vfListBox = new System.Windows.Forms.ListBox();
@@ -1293,6 +1295,8 @@
             this.filterdownButton,
             this.toolStripSeparator2,
             this.filterremoveButton,
+            this.toolStripSeparator14,
+            this.filterdocButton,
             this.togglefButton});
             this.toolStrip5.Location = new System.Drawing.Point(0, 0);
             this.toolStrip5.Name = "toolStrip5";
@@ -1501,6 +1505,21 @@
             this.filterremoveButton.Text = "Remove selected filters";
             this.filterremoveButton.Click += new System.EventHandler(this.FilterremoveButton_Click);
             // 
+            // toolStripSeparator14
+            // 
+            this.toolStripSeparator14.Name = "toolStripSeparator14";
+            this.toolStripSeparator14.Size = new System.Drawing.Size(6, 24);
+            // 
+            // filterdocButton
+            // 
+            this.filterdocButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filterdocButton.Image = global::Av1ador.Properties.Resources.HelpTableOfContents;
+            this.filterdocButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filterdocButton.Name = "filterdocButton";
+            this.filterdocButton.Size = new System.Drawing.Size(23, 21);
+            this.filterdocButton.Text = "Documentation";
+            this.filterdocButton.Click += new System.EventHandler(this.FilterdocButton_Click);
+            // 
             // togglefButton
             // 
             this.togglefButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -1614,9 +1633,9 @@
             this.zoomButton,
             this.expandButton,
             this.restoreButton});
-            this.toolStrip2.Location = new System.Drawing.Point(197, 0);
+            this.toolStrip2.Location = new System.Drawing.Point(285, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(606, 38);
+            this.toolStrip2.Size = new System.Drawing.Size(429, 38);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             this.toolStrip2.MouseEnter += new System.EventHandler(this.ToolStrip2_MouseEnter);
@@ -1770,7 +1789,7 @@
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(197, 38);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(285, 38);
             this.tableLayoutPanel8.TabIndex = 1;
             // 
             // playtimeLabel
@@ -1802,20 +1821,20 @@
             this.tableLayoutPanel9.Controls.Add(this.statusLabel, 0, 1);
             this.tableLayoutPanel9.Controls.Add(this.estimatedLabel, 0, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(803, 0);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(714, 0);
             this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(197, 38);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(286, 38);
             this.tableLayoutPanel9.TabIndex = 2;
             // 
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
             this.statusLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.statusLabel.Location = new System.Drawing.Point(194, 19);
+            this.statusLabel.Location = new System.Drawing.Point(283, 19);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(0, 19);
             this.statusLabel.TabIndex = 0;
@@ -1825,7 +1844,7 @@
             // 
             this.estimatedLabel.AutoSize = true;
             this.estimatedLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.estimatedLabel.Location = new System.Drawing.Point(194, 0);
+            this.estimatedLabel.Location = new System.Drawing.Point(283, 0);
             this.estimatedLabel.Name = "estimatedLabel";
             this.estimatedLabel.Size = new System.Drawing.Size(0, 19);
             this.estimatedLabel.TabIndex = 1;
@@ -2434,6 +2453,8 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel21;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+        private System.Windows.Forms.ToolStripButton filterdocButton;
     }
 }
 

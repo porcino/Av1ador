@@ -1868,6 +1868,11 @@ namespace Av1ador
             Entry_update(10, e.NewValue == CheckState.Checked ? e.Index : -1);
         }
 
+        private void FilterdocButton_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://ffmpeg.org/ffmpeg-filters.html");
+        }
+
         private void ScaleBox_CheckedChanged(object sender, EventArgs e)
         {
             if (bitrateBox.Text.Length > 0)

@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="av1ador.ico" />
+    <None Include="Resources\HelpTableOfContents.png" />
     <None Include="Resources\ZoomToggle.png" />
     <None Include="Resources\DebugHistorySeekToFrame2.png" />
   </ItemGroup>
