@@ -25,19 +25,14 @@ jobs:
         .\MSBuild.exe $Env:GITHUB_WORKSPACE\Av1ador.sln /p:Configuration=Release
     - name: Archive Release
       run: 7z a -tzip Av1ador-nightly.zip .\bin\Release\*.exe .\bin\Release\*.dll .\bin\Release\*.bin .\bin\Release\*.sofa
-    - name: Delete Old Nightly
-      uses: mknejp/delete-release-assets@v1
+    - uses: ncipollo/release-action@v1
       with:
-        token: ${{ github.token }}
+        artifacts: "Av1ador-nightly.zip"
+        artifactContentType: application/zip
+        prerelease: false
+        allowUpdates: true
+        removeArtifacts: true
+        replacesArtifacts: true
         tag: Nightly
-        assets: Av1ador-nightly.zip
-    - name: Update Nightly Release
-      uses: sekwah41/upload-release-assets@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-#        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        upload_url: "https://uploads.github.com/repos/porcino/Av1ador/releases/100142409/assets{?name,label}"  # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
-        asset_path: ./Av1ador-nightly.zip
-        asset_name: Av1ador-nightly.zip
-        asset_content_type: application/zip
+        name: Nightly
+        makeLatest: true
