@@ -193,6 +193,7 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panTimer = new System.Windows.Forms.Timer(this.components);
             this.infoTimer = new System.Windows.Forms.Timer(this.components);
+            this.mouseTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -2206,6 +2207,12 @@
             this.infoTimer.Interval = 221;
             this.infoTimer.Tick += new System.EventHandler(this.InfoTimer_Tick);
             // 
+            // mouseTimer
+            // 
+            this.mouseTimer.Enabled = true;
+            this.mouseTimer.Interval = 16;
+            this.mouseTimer.Tick += new System.EventHandler(this.MouseTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2465,6 +2472,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
         private System.Windows.Forms.ToolStripButton filterdocButton;
         private System.Windows.Forms.ToolStripMenuItem removeBlackBarsToolStripMenuItem;
+        private System.Windows.Forms.Timer mouseTimer;
     }
 }
 

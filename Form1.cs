@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using static MouseHook;
 
 namespace Av1ador
 {
@@ -24,6 +23,10 @@ namespace Av1ador
         static extern int GetForegroundWindow();
         [DllImport("user32.dll")]
         static extern int GetWindowThreadProcessId(IntPtr hWnd, ref int ProcessID);
+        [DllImport("user32.dll")]
+        static extern short GetAsyncKeyState(int VirtualKeyPressed);
+        [DllImport("user32.dll")]
+        static extern bool GetCursorPos(ref Point point);
 
         private readonly string title = "Av1ador 1.0.5";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$");
@@ -39,7 +42,7 @@ namespace Av1ador
         private bool mpv2_loaded = false;
         private double panx, pany, panx_ratio, pany_ratio;
         private bool click_in, mouse1, moviendo_divisor, reading, can_sync;
-        private POINT click_pos, mouse_pos, mouse_pos_antes;
+        private Point click_pos, mouse_pos, mouse_pos_antes;
         private int focus_id, mpv_left, me_x, underload;
         private Encoder encoder;
         private Encode encode;
@@ -76,8 +79,6 @@ namespace Av1ador
         {
             Text = title;
             string exes = Func.Exes();
-            MouseHook.MouseEvent += new MouseHook.MouseEventEventHandler(MouseHook_MouseEvent);
-            MouseHook.MouseMove += new MouseHook.MouseMoveEventHandler(MouseMove_MouseEvent);
 
             encoder = new Encoder
             {
@@ -247,7 +248,6 @@ namespace Av1ador
                     checkedListBox1.Enabled = false;
                     infoTimer.Enabled = false;
 
-                    MouseHook.UninstallHook();
                     syncButton.Checked = false;
                     removeButton.Enabled = true;
                     picBoxBarra.Cursor = Cursors.Hand;
@@ -319,7 +319,6 @@ namespace Av1ador
                     };
                     bw.RunWorkerAsync();
                     infoTimer.Interval = 221;
-                    MouseHook.InstallHook();
                 }
             }
             else
@@ -483,68 +482,18 @@ namespace Av1ador
         private bool Sobrelinea()
         {
             int division_x = leftPanel.PointToScreen(Point.Empty).X + leftPanel.Width;
-            if (moviendo_divisor || (mouse_pos.x > (division_x - 10) && mouse_pos.x < (division_x + 10) && mouse_pos.y > leftPanel.PointToScreen(Point.Empty).Y && mouse_pos.y < (leftPanel.PointToScreen(Point.Empty).Y + splitterPanel.Height)))
+            if (moviendo_divisor || (mouse_pos.X > (division_x - 10) && mouse_pos.X < (division_x + 10) && mouse_pos.Y > leftPanel.PointToScreen(Point.Empty).Y && mouse_pos.Y < (leftPanel.PointToScreen(Point.Empty).Y + splitterPanel.Height)))
             {
                 if (!panTimer.Enabled)
+                {
+                    if (mouse1)
+                        mouseTimer.Interval = 8;
                     return true;
+                }
             }
+            mouseTimer.Interval = 16;
             return false;
          }
-
-        private void MouseMove_MouseEvent(POINT ptLocat)
-        {
-            try
-            {
-                mouse_pos = ptLocat;
-                if (!Dialogo && click_in && mouse1 && Sobrelinea())
-                {
-                    moviendo_divisor = true;
-                    int distancia = mouse_pos.x - leftPanel.PointToScreen(Point.Empty).X;
-                    leftPanel.Width = distancia > 0 ? distancia : 0;
-                    UpdateLayout();
-                }
-            }
-            catch { }
-        }
-
-        private void MouseHook_MouseEvent(MouseEvents mEvent)
-        {
-            try
-            {
-                if (mEvent == MouseHook.MouseEvents.LeftUp)
-                {
-                    mouse1 = false;
-                    moviendo_divisor = false;
-                    panTimer.Enabled = false;
-                    mouse_pos_antes.x = 0;
-                    mouse_pos_antes.y = 0;
-                }
-                if (mEvent == MouseHook.MouseEvents.LeftDown)
-                {
-                    mouse1 = true;
-
-                    int mpv_id = 0, mpv2_id = 0, new_id = 0;
-                    GetWindowThreadProcessId(mpv1p.MainWindowHandle, ref mpv_id);
-                    if (IsLoaded_mpv2())
-                        GetWindowThreadProcessId(mpv2p.MainWindowHandle, ref mpv2_id);
-                    GetWindowThreadProcessId((IntPtr)GetForegroundWindow(), ref new_id);
-                    focus_id = new_id != 0 ? new_id : focus_id;
-                    if (focus_id > 0 || new_id == 0)
-                    {
-                        click_in = mpv_id == focus_id || mpv2_id == focus_id || Process.GetProcessById(focus_id).ProcessName.ToString() == GetType().Assembly.GetName().Name;
-                        if (click_in || new_id == 0)
-                        {
-                            click_pos = mouse_pos;
-                            int izq = tableLayoutPanel1.PointToScreen(Point.Empty).X;
-                            int bordes = (izq - Left) * 2;
-                            if (!Dialogo && !Sobrelinea() && click_pos.x > leftPanel.PointToScreen(Point.Empty).X && click_pos.x < (izq + Width - bordes) && click_pos.y > leftPanel.PointToScreen(Point.Empty).Y && click_pos.y < (leftPanel.PointToScreen(Point.Empty).Y + splitterPanel.Height))
-                                panTimer.Enabled = true;
-                        }
-                    }
-                }
-            }
-            catch { }
-        }
 
         private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -694,7 +643,6 @@ namespace Av1ador
         {
             if (prevframeButton.Enabled)
             {
-                MouseHook.UninstallHook();
                 if (pauseButton.Visible)
                     Detener();
                 nextframeButton.Enabled = false;
@@ -715,7 +663,6 @@ namespace Av1ador
                     nextframeButton.Enabled = true;
                     prevframeButton.Enabled = true;
                     mpvTimer.Enabled = true;
-                    MouseHook.InstallHook();
                 };
                 bw.RunWorkerAsync();
             }
@@ -860,7 +807,6 @@ namespace Av1ador
                 return;
             syncButton.Checked = false;
             can_sync = true;
-            MouseHook.UninstallHook();
             Reconnect();
             double pos = primer_video.Duration * e.Location.X / picBoxBarra.Width;
             Update_current_time(pos);
@@ -886,7 +832,6 @@ namespace Av1ador
                 if (IsLoaded_mpv2() && segundo_video != null)
                     mpv2_cmd.WriteLine("seek " + (pos + segundo_video.First_frame - primer_video.First_frame - primer_video.StartTime).ToString() + " absolute+exact");
             }
-            MouseHook.InstallHook();
         }
 
         private void Reconnect()
@@ -1100,7 +1045,6 @@ namespace Av1ador
 
         private void Reset()
         {
-            MouseHook.UninstallHook();
             Reconnect();
             panx = 0;
             pany = 0;
@@ -1108,7 +1052,6 @@ namespace Av1ador
             if (IsLoaded_mpv2())
                 mpv2_cmd.WriteLine("set pause yes;seek 0 absolute;set video-pan-x " + panx + ";set video-pan-y " + pany);
             encoder.Playtime = 0;
-            MouseHook.InstallHook();
         }
 
         private void FormatComboBox_DropDownClosed(object sender, EventArgs e)
@@ -1199,7 +1142,6 @@ namespace Av1ador
             }
             else if (mpv_cmd != null)
             {
-                MouseHook.UninstallHook();
                 encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox);
             }
         }
@@ -1899,6 +1841,58 @@ namespace Av1ador
             }
         }
 
+        private void MouseTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                GetCursorPos(ref mouse_pos);
+                if (!Dialogo && click_in && mouse1 && Sobrelinea())
+                {
+                    moviendo_divisor = true;
+                    int distancia = mouse_pos.X - leftPanel.PointToScreen(Point.Empty).X;
+                    leftPanel.Width = distancia > 0 ? distancia : 0;
+                    UpdateLayout();
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (GetAsyncKeyState(0x01) == 0)
+                {
+                    mouse1 = false;
+                    moviendo_divisor = false;
+                    panTimer.Enabled = false;
+                    mouse_pos_antes.X = 0;
+                    mouse_pos_antes.Y = 0;
+                }
+                else
+                {
+                    mouse1 = true;
+
+                    int mpv_id = 0, mpv2_id = 0, new_id = 0;
+                    GetWindowThreadProcessId(mpv1p.MainWindowHandle, ref mpv_id);
+                    if (IsLoaded_mpv2())
+                        GetWindowThreadProcessId(mpv2p.MainWindowHandle, ref mpv2_id);
+                    GetWindowThreadProcessId((IntPtr)GetForegroundWindow(), ref new_id);
+                    focus_id = new_id != 0 ? new_id : focus_id;
+                    if (focus_id > 0 || new_id == 0)
+                    {
+                        click_in = mpv_id == focus_id || mpv2_id == focus_id || Process.GetProcessById(focus_id).ProcessName.ToString() == GetType().Assembly.GetName().Name;
+                        if (click_in || new_id == 0)
+                        {
+                            click_pos = mouse_pos;
+                            int izq = tableLayoutPanel1.PointToScreen(Point.Empty).X;
+                            int bordes = (izq - Left) * 2;
+                            if (!Dialogo && !Sobrelinea() && click_pos.X > leftPanel.PointToScreen(Point.Empty).X && click_pos.X < (izq + Width - bordes) && click_pos.Y > leftPanel.PointToScreen(Point.Empty).Y && click_pos.Y < (leftPanel.PointToScreen(Point.Empty).Y + splitterPanel.Height))
+                                panTimer.Enabled = true;
+                        }
+                    }
+                }
+            }
+            catch { }
+        }
+
         private void ScaleBox_CheckedChanged(object sender, EventArgs e)
         {
             if (bitrateBox.Text.Length > 0)
@@ -2023,10 +2017,10 @@ namespace Av1ador
                 panTimer.Enabled = false;
             else
             {
-                if (mouse_pos_antes.x > 0 && mouse_pos_antes.y > 0)
+                if (mouse_pos_antes.X > 0 && mouse_pos_antes.Y > 0)
                 {
-                    panx += ((Double)mouse_pos.x - (Double)mouse_pos_antes.x) / (Double)Screen.FromControl(this).Bounds.Width * 1.5;
-                    pany += ((Double)mouse_pos.y - (Double)mouse_pos_antes.y) / (Double)Screen.FromControl(this).Bounds.Height * 1.5;
+                    panx += ((Double)mouse_pos.X - (Double)mouse_pos_antes.X) / (Double)Screen.FromControl(this).Bounds.Width * 1.5;
+                    pany += ((Double)mouse_pos.Y - (Double)mouse_pos_antes.Y) / (Double)Screen.FromControl(this).Bounds.Height * 1.5;
                     if (panx != 0 || pany != 0)
                     {
                         mpv_cmd.WriteLine("set video-pan-x " + panx + ";set video-pan-y " + pany);
