@@ -1,0 +1,37 @@
+# This workflow will build a .NET project
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: robinraju/release-downloader@v1.7
+      with:
+        tag: "v1.0.5"
+        fileName: "Av1ador.zip"
+    - name: Extract Release
+      run: 7z e Av1ador.zip -oD:bin\Release\ Av1ador\*
+    - name: Build DotNET35
+      run: |
+        cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\"
+        .\MSBuild.exe $Env:GITHUB_WORKSPACE\Av1ador.sln /p:Configuration=Release
+    - name: Archive Release
+      run: 7z a -tzip Av1ador-nightly.zip .\bin\Release\*.exe .\bin\Release\*.dll .\bin\Release\*.bin .\bin\Release\*.sofa
+    - name: Update Nightly Release
+      uses: sekwah41/upload-release-assets@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: "https://uploads.github.com/repos/porcino/Av1ador/releases/100142409/assets{?name,label}"  # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
+        asset_path: ./Av1ador-nightly.zip
+        asset_name: Av1ador-nightly.zip
+        asset_content_type: application/zip
