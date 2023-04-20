@@ -25,6 +25,12 @@ jobs:
         .\MSBuild.exe $Env:GITHUB_WORKSPACE\Av1ador.sln /p:Configuration=Release
     - name: Archive Release
       run: 7z a -tzip Av1ador-nightly.zip .\bin\Release\*.exe .\bin\Release\*.dll .\bin\Release\*.bin .\bin\Release\*.sofa
+    - name: Delete Old Nightly
+      uses: mknejp/delete-release-assets@v1
+      with:
+        token: ${{ github.token }}
+        tag: Nightly
+        assets: Av1ador-nightly.zip
     - name: Update Nightly Release
       uses: sekwah41/upload-release-assets@v1
       env:
