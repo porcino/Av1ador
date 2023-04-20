@@ -123,22 +123,6 @@ namespace Av1ador
                 Duration = len;
             endtime = Duration;
 
-            res_regex = new Regex("(bt2020|smpte170m)");
-            compare = res_regex.Match(info);
-            if (compare.Success)
-                Hdr = true;
-
-            res_regex = new Regex("(bt2020|smpte170m|mpeg2video)");
-            compare = res_regex.Match(info);
-            if (compare.Success)
-            {
-                Color_matrix = compare.Groups[1].ToString();
-                if (Color_matrix == "bt2020")
-                    Hdr = true;
-            }
-            else
-                Color_matrix = "";
-
             res_regex = new Regex("SAR ([0-9]+):([0-9]+)", RegexOptions.RightToLeft);
             compare = res_regex.Match(info);
             if (compare.Success)
@@ -160,6 +144,19 @@ namespace Av1ador
             compare = res_regex.Match(info);
             if (compare.Success)
                 Interlaced = true;
+
+            res_regex = new Regex("(bt2020|smpte170m|mpeg2video)");
+            compare = res_regex.Match(info);
+            if (compare.Success)
+            {
+                Color_matrix = compare.Groups[1].ToString();
+                if (Color_matrix != "mpeg2video")
+                    Hdr = true;
+            }
+            else if (Height < 580 && (Sar < 1 || Interlaced))
+                Color_matrix = "mpeg2video";
+            else
+                Color_matrix = "";
 
             res_regex = new Regex("(23.976|23.98|24|25|30|29.97|60) fps");
             compare = res_regex.Match(info);
@@ -214,7 +211,10 @@ namespace Av1ador
                     using (var reader = new StringReader(output))
                     {
                         for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                            Tracks_delay.Add(double.Parse(line) * 1000.0);
+                        {
+                            if (line.Replace(" ", "") != "")
+                                Tracks_delay.Add(double.Parse(line) * 1000.0);
+                        }
                     }
                     while (Tracks_delay.Count < Tracks.Count)
                         Tracks_delay.Add(0);

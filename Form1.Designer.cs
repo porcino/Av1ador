@@ -1341,6 +1341,7 @@
             // 
             // removeBlackBarsToolStripMenuItem
             // 
+            this.removeBlackBarsToolStripMenuItem.AutoSize = false;
             this.removeBlackBarsToolStripMenuItem.Name = "removeBlackBarsToolStripMenuItem";
             this.removeBlackBarsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.removeBlackBarsToolStripMenuItem.Text = "Remove black bars";
@@ -1348,6 +1349,7 @@
             // 
             // cropToolStripMenuItem
             // 
+            this.cropToolStripMenuItem.AutoSize = false;
             this.cropToolStripMenuItem.Name = "cropToolStripMenuItem";
             this.cropToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cropToolStripMenuItem.Text = "Crop";
@@ -1355,6 +1357,7 @@
             // 
             // debandToolStripMenuItem
             // 
+            this.debandToolStripMenuItem.AutoSize = false;
             this.debandToolStripMenuItem.Name = "debandToolStripMenuItem";
             this.debandToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debandToolStripMenuItem.Text = "Deband";
@@ -1362,6 +1365,7 @@
             // 
             // deinterlaceToolStripMenuItem
             // 
+            this.deinterlaceToolStripMenuItem.AutoSize = false;
             this.deinterlaceToolStripMenuItem.Name = "deinterlaceToolStripMenuItem";
             this.deinterlaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deinterlaceToolStripMenuItem.Text = "Deinterlace";
@@ -1369,6 +1373,7 @@
             // 
             // delogoToolStripMenuItem
             // 
+            this.delogoToolStripMenuItem.AutoSize = false;
             this.delogoToolStripMenuItem.Name = "delogoToolStripMenuItem";
             this.delogoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.delogoToolStripMenuItem.Text = "Delogo";
@@ -1376,6 +1381,7 @@
             // 
             // denoiseToolStripMenuItem
             // 
+            this.denoiseToolStripMenuItem.AutoSize = false;
             this.denoiseToolStripMenuItem.Name = "denoiseToolStripMenuItem";
             this.denoiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.denoiseToolStripMenuItem.Text = "Denoise";
@@ -1383,6 +1389,7 @@
             // 
             // pOIaddroiToolStripMenuItem
             // 
+            this.pOIaddroiToolStripMenuItem.AutoSize = false;
             this.pOIaddroiToolStripMenuItem.Name = "pOIaddroiToolStripMenuItem";
             this.pOIaddroiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pOIaddroiToolStripMenuItem.Text = "POI (addroi)";
@@ -1390,6 +1397,7 @@
             // 
             // sharpenToolStripMenuItem
             // 
+            this.sharpenToolStripMenuItem.AutoSize = false;
             this.sharpenToolStripMenuItem.Name = "sharpenToolStripMenuItem";
             this.sharpenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sharpenToolStripMenuItem.Text = "Sharpen";
@@ -1397,6 +1405,7 @@
             // 
             // stabilizationToolStripMenuItem
             // 
+            this.stabilizationToolStripMenuItem.AutoSize = false;
             this.stabilizationToolStripMenuItem.Name = "stabilizationToolStripMenuItem";
             this.stabilizationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stabilizationToolStripMenuItem.Text = "Stabilization";
@@ -1404,6 +1413,7 @@
             // 
             // tonemapToolStripMenuItem
             // 
+            this.tonemapToolStripMenuItem.AutoSize = false;
             this.tonemapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openclToolStripMenuItem,
             this.vulkanToolStripMenuItem});
@@ -1413,20 +1423,23 @@
             // 
             // openclToolStripMenuItem
             // 
+            this.openclToolStripMenuItem.AutoSize = false;
             this.openclToolStripMenuItem.Name = "openclToolStripMenuItem";
-            this.openclToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.openclToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openclToolStripMenuItem.Text = "OpenCL";
             this.openclToolStripMenuItem.Click += new System.EventHandler(this.OpenclToolStripMenuItem_Click);
             // 
             // vulkanToolStripMenuItem
             // 
+            this.vulkanToolStripMenuItem.AutoSize = false;
             this.vulkanToolStripMenuItem.Name = "vulkanToolStripMenuItem";
-            this.vulkanToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.vulkanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.vulkanToolStripMenuItem.Text = "Vulkan";
             this.vulkanToolStripMenuItem.Click += new System.EventHandler(this.VulkanToolStripMenuItem_Click);
             // 
             // upscaleToolStripMenuItem
             // 
+            this.upscaleToolStripMenuItem.AutoSize = false;
             this.upscaleToolStripMenuItem.Name = "upscaleToolStripMenuItem";
             this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.upscaleToolStripMenuItem.Text = "Upscale (FSRCNN)";
