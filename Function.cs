@@ -214,5 +214,16 @@ namespace Av1ador
             gb = 240 - usage * 12 / 5;
             return Color.FromArgb(r, gb, gb);
         }
+
+        public static string Size_unit(double size)
+        {
+            string unit = "MB";
+            if (size > 1024)
+            {
+                size = Math.Round(size / 1024.0, 1);
+                unit = "GB";
+            }
+            return size.ToString() + unit;
+        }
     }
 }

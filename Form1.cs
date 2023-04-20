@@ -144,9 +144,7 @@ namespace Av1ador
             bw.RunWorkerCompleted += (s, ee) =>
             {
                 mpv1p = mp;
-                Wait_mpv();
-                Wait_mpv();
-                Wait_mpv();
+                Wait_mpv(5);
                 SetParent(mpv1p.MainWindowHandle, leftPanel.Handle);
                 MoveWindow(mpv1p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                 mpv_cmd = new StreamWriter(mpv_tubo);
@@ -212,9 +210,7 @@ namespace Av1ador
                 bw.RunWorkerCompleted += (s, ee) =>
                 {
                     mpv2p = mp;
-                    Wait_mpv();
-                    Wait_mpv();
-                    Wait_mpv();
+                    Wait_mpv(5);
                     SetParent(mpv2p.MainWindowHandle, rightPanel.Handle);
                     MoveWindow(mpv2p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                     mpv2_loaded = true;
@@ -401,7 +397,7 @@ namespace Av1ador
             pauseButton.Visible = false;
         }
 
-        private bool Wait_mpv()
+        private bool Wait_mpv(int times = 1)
         {
             bool idle1 = false;
             bool idle2 = false;
@@ -412,8 +408,8 @@ namespace Av1ador
                 TimeSpan mpv2_b = mpv1_b;
                 if (IsLoaded_mpv2())
                     mpv2_b = mpv2p.TotalProcessorTime;
-                Thread.Sleep(20);
-                limit += 20;
+                Thread.Sleep(20 * times);
+                limit += 20 * times;
                 mpv1p.Refresh();
                 TimeSpan mpv1_e = mpv1p.TotalProcessorTime;
                 TimeSpan mpv2_e = mpv1_e;
@@ -1357,7 +1353,7 @@ namespace Av1ador
                 primer_video.Grain_detect(gsUpDown, statusLabel, encoder.Gs, mediainfoLabel, encoder.Vf);
                 return;
             }
-            else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && entry.Param != "" && !encoder.Vf[0].Contains("crop=D"))
+            else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && entry.Param != "" && (encoder.Vf.Count == 0 || !encoder.Vf[0].Contains("crop=D")))
             {
                 encoder.Params = paramsBox.Text;
                 paramsBox.Text = encoder.Params_replace((int)primer_video.Fps);
@@ -1392,6 +1388,7 @@ namespace Av1ador
                 {
                     encodestopButton.Enabled = false;
                     encodestartButton.Enabled = true;
+                    workersgroupBox.BackColor = DefaultBackColor;
                     Detener();
                     Mpv2_load(encode.Dir + encode.Name + "_Av1ador." + encode.Extension, "set pause yes");
                     mpv_cmd.WriteLine("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
@@ -1415,8 +1412,9 @@ namespace Av1ador
             if (encodestopButton.Enabled && !statusLabel.Text.Contains("grain"))
             {
                 float usage = (int)cpu.NextValue();
-                workersgroupBox.BackColor = Func.Heat((int)usage);
-                if (!workersBox.Checked && workersUpDown.Value > 1 && encode.Counter == 0)
+                if (WindowState != FormWindowState.Minimized)
+                    workersgroupBox.BackColor = Func.Heat((int)usage);
+                if (!workersBox.Checked && workersUpDown.Maximum > 1 && encode.Counter == 0)
                 {
                     if (usage < 91 && disk.NextValue() < 70)
                         underload++;
@@ -1956,6 +1954,8 @@ namespace Av1ador
 
         private void UpdateBar()
         {
+            if (WindowState == FormWindowState.Minimized)
+                return;
             if (encode.Splits != null && encode.File == primer_video.File)
                 picBoxBarra.Image = primer_video.Bar(picBoxBarra.Width, picBoxBarra.Height, encoder.Playtime, encode);
             else
