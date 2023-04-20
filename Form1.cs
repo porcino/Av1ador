@@ -28,7 +28,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.0.5";
+        private readonly string title = "Av1ador 1.0.6";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$");
         private readonly string mpv_args = " background.png --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend";
         private static readonly int processID = Process.GetCurrentProcess().Id;
@@ -55,6 +55,8 @@ namespace Av1ador
         private Size winsize;
         private Point winpos;
         private readonly BackgroundWorker aset = new BackgroundWorker();
+        private Color heat = Color.FromArgb(220, 220, 220);
+
         public static bool Dialogo { get; set; }
 
         public Form1()
@@ -914,7 +916,7 @@ namespace Av1ador
                 if (primer_video.Predicted > 0)
                 {
                     if (encoder.Out_w < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
-                        encoder.Vf_add("scale", encoder.Out_w.ToString(), encoder.Out_h.ToString());
+                        encoder.Vf_add("scale", encoder.Out_w.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
                     else
                         encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
                     Filter_items_update();
@@ -1041,17 +1043,6 @@ namespace Av1ador
             workersUpDown.Value = workersUpDown.Maximum > 1 ? 2 : 1;
             encoder.Predicted = false;
             Entry_update(4);
-        }
-
-        private void Reset()
-        {
-            Reconnect();
-            panx = 0;
-            pany = 0;
-            mpv_cmd.WriteLine("set pause yes;seek 0 absolute;set video-pan-x " + panx + ";set video-pan-y " + pany);
-            if (IsLoaded_mpv2())
-                mpv2_cmd.WriteLine("set pause yes;seek 0 absolute;set video-pan-x " + panx + ";set video-pan-y " + pany);
-            encoder.Playtime = 0;
         }
 
         private void FormatComboBox_DropDownClosed(object sender, EventArgs e)
@@ -1217,7 +1208,8 @@ namespace Av1ador
             encodestartButton.Enabled = true;
             if (encode != null)
                 encode.Set_state(true);
-            workersgroupBox.BackColor = DefaultBackColor;
+            heat = Func.Heat(0);
+            workersgroupBox.Invalidate();
         }
 
         private void Abitrate_update(bool calc)
@@ -1330,7 +1322,8 @@ namespace Av1ador
                 {
                     encodestopButton.Enabled = false;
                     encodestartButton.Enabled = true;
-                    workersgroupBox.BackColor = DefaultBackColor;
+                    heat = Func.Heat(0);
+                    workersgroupBox.Invalidate();
                     Detener();
                     Mpv2_load(encode.Dir + encode.Name + "_Av1ador." + encode.Extension, "set pause yes");
                     mpv_cmd.WriteLine("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
@@ -1355,7 +1348,10 @@ namespace Av1ador
             {
                 float usage = (int)cpu.NextValue();
                 if (WindowState != FormWindowState.Minimized)
-                    workersgroupBox.BackColor = Func.Heat((int)usage);
+                {
+                    heat = Func.Heat((int)usage);
+                    workersgroupBox.Invalidate();
+                }
                 if (!workersBox.Checked && workersUpDown.Maximum > 1 && encode.Counter == 0)
                 {
                     if (usage < 91 && disk.NextValue() < 70)
@@ -1378,7 +1374,7 @@ namespace Av1ador
                 string t = encode.Remaining.ToString().Split('.')[0];
                 if (t.Length < 4)
                     t += " day" + (t == "1" ? "" : "s");
-                estimatedLabel.Text = size > 0 ? "Estimated size: " + size.ToString() + "MB, Remaining time: " + t : "";
+                estimatedLabel.Text = size > 0 ? "Estimated size: " + Func.Size_unit(size) + ", Remaining time: " + t : "";
             }
             Text = statusLabel.Text.Contains("%") ? statusLabel.Text.Split('%')[0].Split(' ').Last() + "%" + " - " + title : title;
             UpdateBar();
@@ -1585,7 +1581,7 @@ namespace Av1ador
             if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
             {
                 encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
-                encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString());
+                encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
             }
             else
                 encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
@@ -1891,6 +1887,22 @@ namespace Av1ador
                 }
             }
             catch { }
+        }
+
+        private void WorkersgroupBox_Paint(object sender, PaintEventArgs e)
+        {
+            var gfx = e.Graphics;
+            Pen pen = new Pen(heat, 1);
+            gfx.DrawLine(pen, 0, 6, 0, e.ClipRectangle.Height - 2);
+            gfx.DrawLine(pen, 0, 6, 8, 6);
+            gfx.DrawLine(pen, e.ClipRectangle.Width - (workersBox.Checked ? e.ClipRectangle.Width - 50 : e.ClipRectangle.Width - (e.ClipRectangle.Width < 91 ? 50 : 80)), 6, e.ClipRectangle.Width - 2, 6);
+            gfx.DrawLine(pen, e.ClipRectangle.Width - 1, 6, e.ClipRectangle.Width - 1, e.ClipRectangle.Height - 2);
+            gfx.DrawLine(pen, e.ClipRectangle.Width - 2, e.ClipRectangle.Height - 2, 0, e.ClipRectangle.Height - 2);
+        }
+
+        private void VfListBox_DragOver(object sender, DragEventArgs e)
+        {
+            tabControl1.SelectedIndex = 0;
         }
 
         private void ScaleBox_CheckedChanged(object sender, EventArgs e)

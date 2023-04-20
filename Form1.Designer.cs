@@ -1116,6 +1116,7 @@
             this.workersgroupBox.TabIndex = 3;
             this.workersgroupBox.TabStop = false;
             this.workersgroupBox.Text = "Workers (auto)";
+            this.workersgroupBox.Paint += new System.Windows.Forms.PaintEventHandler(this.WorkersgroupBox_Paint);
             // 
             // tableLayoutPanel20
             // 
@@ -1332,6 +1333,7 @@
             // 
             // colorToolStripMenuItem
             // 
+            this.colorToolStripMenuItem.AutoSize = false;
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
             this.colorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.colorToolStripMenuItem.Text = "Color adjustment";
@@ -1561,6 +1563,7 @@
             // 
             // vfListBox
             // 
+            this.vfListBox.AllowDrop = true;
             this.vfListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.vfListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.vfListBox.FormattingEnabled = true;
@@ -1573,9 +1576,11 @@
             this.vfListBox.TabIndex = 0;
             this.vfListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.VfListBox_DrawItem);
             this.vfListBox.SelectedIndexChanged += new System.EventHandler(this.AfListBox_SelectedIndexChanged);
+            this.vfListBox.DragOver += new System.Windows.Forms.DragEventHandler(this.VfListBox_DragOver);
             // 
             // afListBox
             // 
+            this.afListBox.AllowDrop = true;
             this.afListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.afListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.afListBox.FormattingEnabled = true;
@@ -1588,6 +1593,7 @@
             this.afListBox.TabIndex = 1;
             this.afListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.AfListBox_DrawItem);
             this.afListBox.SelectedIndexChanged += new System.EventHandler(this.AfListBox_SelectedIndexChanged);
+            this.afListBox.DragOver += new System.Windows.Forms.DragEventHandler(this.VfListBox_DragOver);
             // 
             // tableLayoutPanel4
             // 

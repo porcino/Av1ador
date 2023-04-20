@@ -361,9 +361,33 @@ namespace Av1ador
             else if (f == "scale")
             {
                 Vf.RemoveAll(s => s.StartsWith("scale"));
-                int w = (int)Double.Parse(v);
-                int index = Math.Max(Vf.FindIndex(s => s.Contains("nnedi")), Vf.FindIndex(s => s.Contains("crop")));
-                Vf.Insert(index > -1 ? index + 1 : (Vf.Count > 0 && Vf[0].StartsWith("fps") ? 1 : 0), "scale=w=" + (w % 2 == 0 ? w : w + 1) + ":h=" + a + ":force_original_aspect_ratio=decrease");
+                int ow = (int)Double.Parse(v);
+                int oh = int.Parse(a);
+                int iw = int.Parse(b);
+                int ih = int.Parse(c);
+                double cw = iw;
+                double ch = ih;
+                int index = -1;
+                if (Vf.Count > 0)
+                {
+                    index = Math.Max(Vf.FindIndex(s => s.Contains("nnedi")), Vf.FindIndex(s => s.Contains("crop")));
+                    if (index > -1)
+                    {
+                        string[] crop = Func.Find_w_h(Vf);
+                        if (crop.Count() > 0)
+                        {
+                            cw = int.Parse(crop[0]);
+                            ch = int.Parse(crop[1]);
+                        }
+                    }
+                    else
+                        index = Vf.FindIndex(s => s.StartsWith("fps"));
+                }
+                ow = (int)(Double.Parse(v) * (double)cw / (double)iw);
+                oh = (int)(oh * (double)ch / (double)ih);
+                ow = ow % 2 != 0 ? ow + 1 : ow;
+                oh = oh % 2 != 0 ? oh - 1 : oh;
+                Vf.Insert(index > -1 ? index + 1 : 0, "scale=w=" + ow + ":h=" + oh);
             }
             else if (f == "crop")
             {

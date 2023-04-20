@@ -551,9 +551,7 @@ namespace Av1ador
                     w = 16;
                 int h = ((w * enc.Out_h / enc.Out_w) + 4) / 8;
                 h *= 8;
-                if (h % 2 != 0)
-                    h -= 1;
-                encoder.Vf_add("scale", w.ToString(), h.ToString());
+                encoder.Vf_add("scale", w.ToString(), h.ToString(), Width.ToString(), Height.ToString());
             };
             bw.RunWorkerCompleted += (s, e) => {
                 vf.Items.Clear();

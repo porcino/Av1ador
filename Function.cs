@@ -164,12 +164,19 @@ namespace Av1ador
 
         public static string[] Find_w_h(List<string> list)
         {
-            Regex regex = new Regex("w=([0-9]+):h=([0-9]+)");
-            for (int i = 0; i < list.Count; i++)
+            Regex[] regex = new Regex[]
             {
-                Match compare = regex.Match(list[i]);
-                if (compare.Success)
-                    return new string[] { compare.Groups[1].Value, compare.Groups[2].Value };
+                new Regex("crop=([0-9]+):([0-9]+)"),
+                new Regex("w=([0-9]+):h=([0-9]+)")
+            };
+            for (int j = 0; j < regex.Length; j++)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Match compare = regex[j].Match(list[i]);
+                    if (compare.Success)
+                        return new string[] { compare.Groups[1].Value, compare.Groups[2].Value };
+                }
             }
             return new string[] { };
         }
@@ -210,8 +217,8 @@ namespace Av1ador
         public static Color Heat(int usage)
         {
             int r, gb;
-            r = 255 - (100 - usage) / 6;
-            gb = 240 - usage * 12 / 5;
+            r = 255 - (100 - usage) * 35 / 100;
+            gb = 220 - usage * 22 / 10;
             return Color.FromArgb(r, gb, gb);
         }
 
