@@ -18,7 +18,7 @@ jobs:
         tag: "v1.0.6"
         fileName: "Av1ador.zip"
     - name: Extract Release
-      run: 7z e Av1ador.zip -oD:bin\Release\
+      run: 7z x Av1ador.zip -oD:bin\Release\
     - name: Build DotNET35
       run: |
         cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\"
