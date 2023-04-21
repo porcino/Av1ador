@@ -584,8 +584,6 @@ namespace Av1ador
 
         public string Build_astr(int track)
         {
-            if (track == -1)
-                return "";
             if (Ca == "libfdk_aac")
             {
                 if (Ba < 8)

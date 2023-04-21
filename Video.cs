@@ -212,12 +212,24 @@ namespace Av1ador
                     {
                         for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                         {
-                            if (line.Replace(" ", "") != "")
+                            if (line.Replace(" ", "").Replace(",", "") != "")
                                 Tracks_delay.Add(double.Parse(line) * 1000.0);
                         }
                     }
                     while (Tracks_delay.Count < Tracks.Count)
                         Tracks_delay.Add(0);
+                    fftracks.StartInfo.Arguments = " -loglevel quiet -select_streams v -show_entries stream=start_time -of csv=p=0 -i \"" + file + "\"";
+                    fftracks.Start();
+                    output = fftracks.StandardOutput.ReadToEnd();
+                    using (var reader = new StringReader(output))
+                    {
+                        string line = reader.ReadLine().Replace(" ", "").Replace(",", "");
+                        if (line != "")
+                        {
+                            for (int i = 0; i < Tracks_delay.Count; i++)
+                                Tracks_delay[i] -= double.Parse(line);
+                        }
+                    }
                 }
 
                 Process ffmpeg = new Process();

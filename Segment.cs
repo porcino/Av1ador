@@ -22,6 +22,7 @@ namespace Av1ador
         private TimeSpan remaining;
         private readonly Stopwatch watch;
         private int bitrate;
+        private double track_delay;
         public string Dir { get; set; }
         public string File { get; set; }
         public string Name { get; set; }
@@ -175,8 +176,9 @@ namespace Av1ador
             bitrate = 0;
         }
 
-        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, int br = 0)
+        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0)
         {
+            track_delay = delay;
             Dir = dir == "" ? Path.GetDirectoryName(file) + "\\" : dir + "\\";
             File = file;
             Name = tempdir + Path.GetFileNameWithoutExtension(file);
@@ -473,7 +475,7 @@ namespace Av1ador
             string b = A_Job == "m4a" ? "-bsf:a aac_adtstoasc " : "";
             b += Extension == "mp4" ? "-movflags faststart " : "";
             if (System.IO.File.Exists(Name + "\\audio." + A_Job))
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\" -i \"" + Name + "\\audio." + A_Job + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             else
                 ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             ffconcat.Start();
@@ -708,17 +710,17 @@ namespace Av1ador
             Encoding = false;
             if (Stop)
             {
-                while (true)
+                while (File.Exists(Pathfile))
                 {
                     try
                     { 
                         ffmpeg.Kill();
                         Thread.Sleep(1000);
+                        File.Delete(Pathfile);
                         break;
                     }
                     catch { }
                 }
-                File.Delete(Pathfile);
                 Progress = 0;
                 Stop = false;
             }

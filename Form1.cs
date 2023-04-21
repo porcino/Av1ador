@@ -1296,13 +1296,15 @@ namespace Av1ador
                     Param = encoder.Build_vstr()
                 };
                 encode.Set_fps_filter(encoder.Vf);
-                if (primer_video.Channels > 0)
+                double delay = 0;
+                if (primer_video.Channels > 0 && checkedListBox1.CheckedItems.Count > 0)
                 {
-                    encode.A_Param = encoder.Build_astr(checkedListBox1.CheckedItems.Count > 0 ? checkedListBox1.CheckedIndices[0] : -1);
+                    encode.A_Param = encoder.Build_astr(checkedListBox1.CheckedIndices[0]);
                     encode.A_Job = encoder.A_Job;
+                    delay = primer_video.Tracks_delay[checkedListBox1.CheckedIndices[0]];
                 }
                 double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
-                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, encoder.V_kbps);
+                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps);
             }
             else if (encodestopButton.Enabled && encode.Finished)
             {
