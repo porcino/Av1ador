@@ -815,7 +815,7 @@ namespace Av1ador
                 if (segment > -1 && (encode.Chunks[segment].Completed || (encode.Chunks[segment].Encoding && encode.Chunks[segment].Progress > 0)) && File.Exists(name))
                 {
                     Detener();
-                    Mpv2_load(name, "set pause yes", pos - Double.Parse(encode.Splits[segment]) - primer_video.First_frame - primer_video.StartTime);
+                    Mpv2_load(name, "set pause yes", pos - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
                     mpv_cmd.WriteLine("set pause yes;seek " + pos.ToString() + " absolute+exact");
                 }
                 else
