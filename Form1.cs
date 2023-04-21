@@ -49,6 +49,7 @@ namespace Av1ador
         private double scale = 1.0;
         private PerformanceCounter cpu;
         private PerformanceCounter disk;
+        private PerformanceCounter ram;
         private string[] disks;
         Settings settings;
         private FormWindowState winstate;
@@ -88,6 +89,7 @@ namespace Av1ador
                 Libplacebo = exes.Contains("enable-libplacebo")
             };
             workersUpDown.Maximum = encoder.Cores;
+            workersgroupBox.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(workersgroupBox, true, null);
 
             playtimeLabel.Text = "";
             mediainfoLabel.Text = "";
@@ -166,6 +168,7 @@ namespace Av1ador
 
                 PerformanceCounterCategory disks_cat = new PerformanceCounterCategory("PhysicalDisk");
                 disks = disks_cat.GetInstanceNames();
+                ram = new PerformanceCounter("Memory", "Available MBytes");
             };
             bw2.RunWorkerAsync();
         }
@@ -1351,7 +1354,7 @@ namespace Av1ador
                 }
                 if (!workersBox.Checked && workersUpDown.Maximum > 1 && encode.Counter == 0)
                 {
-                    if (disk != null && usage < 91 && disk.NextValue() < 70)
+                    if (disk != null && usage < 91 && disk.NextValue() < 70 && ram.NextValue() > primer_video.Height)
                         underload++;
                     else
                         underload = 0;
