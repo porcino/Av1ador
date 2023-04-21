@@ -1205,7 +1205,7 @@ namespace Av1ador
             if (encode != null)
                 encode.Set_state(true);
             heat = Func.Heat(0);
-            workersgroupBox.Invalidate();
+            workersgroupBox.Refresh();
         }
 
         private void Abitrate_update(bool calc)
@@ -1318,7 +1318,7 @@ namespace Av1ador
                     encodestopButton.Enabled = false;
                     encodestartButton.Enabled = true;
                     heat = Func.Heat(0);
-                    workersgroupBox.Invalidate();
+                    workersgroupBox.Refresh();
                     Detener();
                     Mpv2_load(encode.Dir + Path.GetFileNameWithoutExtension(encode.Name) + "_Av1ador." + encode.Extension, "set pause yes");
                     mpv_cmd.WriteLine("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
@@ -1345,7 +1345,7 @@ namespace Av1ador
                 if (WindowState != FormWindowState.Minimized)
                 {
                     heat = Func.Heat((int)usage);
-                    workersgroupBox.Invalidate();
+                    workersgroupBox.Refresh();
                 }
                 if (!workersBox.Checked && workersUpDown.Maximum > 1 && encode.Counter == 0)
                 {
@@ -1928,6 +1928,8 @@ namespace Av1ador
                 if (int.Parse(encoder.Resos[i].Replace("p", "")) <= uh)
                     resComboBox.Items.Add(encoder.Resos[i]);
             }
+            if (uh > int.Parse(resComboBox.Items[0].ToString().Replace("p", "")))
+                resComboBox.Items.Insert(0, uh + "p");
             resComboBox.SelectedIndex = 0;
             Filter_items_update();
         }
