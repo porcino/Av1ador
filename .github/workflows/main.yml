@@ -15,16 +15,16 @@ jobs:
     - uses: actions/checkout@v3
     - uses: robinraju/release-downloader@v1.7
       with:
-        tag: "v1.0.5"
+        tag: "v1.0.6"
         fileName: "Av1ador.zip"
     - name: Extract Release
-      run: 7z e Av1ador.zip -oD:bin\Release\ Av1ador\*
+      run: 7z e Av1ador.zip -oD:bin\Release\
     - name: Build DotNET35
       run: |
         cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\"
         .\MSBuild.exe $Env:GITHUB_WORKSPACE\Av1ador.sln /p:Configuration=Release
     - name: Archive Release
-      run: 7z a -tzip Av1ador-nightly.zip .\bin\Release\*.exe .\bin\Release\*.dll .\bin\Release\*.bin .\bin\Release\*.sofa
+      run: 7z a -tzip Av1ador-nightly.zip .\bin\Release\*.exe .\bin\Release\bin .\bin\Release\resource
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "Av1ador-nightly.zip"
