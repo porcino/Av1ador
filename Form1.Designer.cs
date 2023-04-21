@@ -123,8 +123,13 @@
             this.openclToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vulkanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.anime4kToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fSRCNNXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filteraddaDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.downmixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.noiseReductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.normalizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.volumeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filternewButton = new System.Windows.Forms.ToolStripButton();
@@ -1440,16 +1445,53 @@
             // upscaleToolStripMenuItem
             // 
             this.upscaleToolStripMenuItem.AutoSize = false;
+            this.upscaleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.anime4kToolStripMenuItem,
+            this.fSRCNNXToolStripMenuItem});
             this.upscaleToolStripMenuItem.Name = "upscaleToolStripMenuItem";
             this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.upscaleToolStripMenuItem.Text = "Upscale (FSRCNN)";
-            this.upscaleToolStripMenuItem.Visible = false;
+            this.upscaleToolStripMenuItem.Text = "Upscale";
+            // 
+            // anime4kToolStripMenuItem
+            // 
+            this.anime4kToolStripMenuItem.AutoSize = false;
+            this.anime4kToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xToolStripMenuItem,
+            this.x2ToolStripMenuItem});
+            this.anime4kToolStripMenuItem.Name = "anime4kToolStripMenuItem";
+            this.anime4kToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.anime4kToolStripMenuItem.Text = "Anime4K";
+            // 
+            // xToolStripMenuItem
+            // 
+            this.xToolStripMenuItem.AutoSize = false;
+            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.xToolStripMenuItem.Text = "Scale x1.5";
+            this.xToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
+            // 
+            // x2ToolStripMenuItem
+            // 
+            this.x2ToolStripMenuItem.AutoSize = false;
+            this.x2ToolStripMenuItem.Name = "x2ToolStripMenuItem";
+            this.x2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x2ToolStripMenuItem.Text = "Scale x2";
+            this.x2ToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
+            // 
+            // fSRCNNXToolStripMenuItem
+            // 
+            this.fSRCNNXToolStripMenuItem.AutoSize = false;
+            this.fSRCNNXToolStripMenuItem.Name = "fSRCNNXToolStripMenuItem";
+            this.fSRCNNXToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.fSRCNNXToolStripMenuItem.Text = "FSRCNNX x2";
+            this.fSRCNNXToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
             // 
             // filteraddaDropDownButton
             // 
             this.filteraddaDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.filteraddaDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.downmixToolStripMenuItem,
+            this.noiseReductionToolStripMenuItem,
             this.normalizeToolStripMenuItem,
             this.volumeToolStripMenuItem});
             this.filteraddaDropDownButton.Image = global::Av1ador.Properties.Resources.RecommendedTest;
@@ -1461,22 +1503,33 @@
             // 
             // downmixToolStripMenuItem
             // 
+            this.downmixToolStripMenuItem.AutoSize = false;
             this.downmixToolStripMenuItem.Name = "downmixToolStripMenuItem";
-            this.downmixToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.downmixToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.downmixToolStripMenuItem.Text = "Downmix";
             this.downmixToolStripMenuItem.Click += new System.EventHandler(this.DownmixToolStripMenuItem_Click);
             // 
+            // noiseReductionToolStripMenuItem
+            // 
+            this.noiseReductionToolStripMenuItem.AutoSize = false;
+            this.noiseReductionToolStripMenuItem.Name = "noiseReductionToolStripMenuItem";
+            this.noiseReductionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.noiseReductionToolStripMenuItem.Text = "Noise reduction";
+            this.noiseReductionToolStripMenuItem.Click += new System.EventHandler(this.NoiseReductionToolStripMenuItem_Click);
+            // 
             // normalizeToolStripMenuItem
             // 
+            this.normalizeToolStripMenuItem.AutoSize = false;
             this.normalizeToolStripMenuItem.Name = "normalizeToolStripMenuItem";
-            this.normalizeToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.normalizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.normalizeToolStripMenuItem.Text = "Normalize";
             this.normalizeToolStripMenuItem.Click += new System.EventHandler(this.NormalizeToolStripMenuItem_Click);
             // 
             // volumeToolStripMenuItem
             // 
+            this.volumeToolStripMenuItem.AutoSize = false;
             this.volumeToolStripMenuItem.Name = "volumeToolStripMenuItem";
-            this.volumeToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.volumeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.volumeToolStripMenuItem.Text = "Volume";
             this.volumeToolStripMenuItem.Click += new System.EventHandler(this.VolumeToolStripMenuItem_Click);
             // 
@@ -1798,9 +1851,9 @@
             this.restoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.restoreButton.Name = "restoreButton";
             this.restoreButton.Size = new System.Drawing.Size(50, 35);
-            this.restoreButton.Text = "Panel";
+            this.restoreButton.Text = "Restore";
             this.restoreButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.restoreButton.ToolTipText = "Show left panel";
+            this.restoreButton.ToolTipText = "Restore";
             this.restoreButton.Visible = false;
             this.restoreButton.Click += new System.EventHandler(this.RestoreButton_Click);
             // 
@@ -2492,6 +2545,11 @@
         private System.Windows.Forms.ToolStripButton filterdocButton;
         private System.Windows.Forms.ToolStripMenuItem removeBlackBarsToolStripMenuItem;
         private System.Windows.Forms.Timer mouseTimer;
+        private System.Windows.Forms.ToolStripMenuItem noiseReductionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem anime4kToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fSRCNNXToolStripMenuItem;
     }
 }
 

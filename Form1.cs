@@ -30,7 +30,7 @@ namespace Av1ador
 
         private readonly string title = "Av1ador 1.0.6";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$");
-        private readonly string mpv_args = " background.png --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend";
+        private readonly string mpv_args = " --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend";
         private static readonly int processID = Process.GetCurrentProcess().Id;
         private Video primer_video, segundo_video;
         public Process mpv2 = new Process();
@@ -103,20 +103,11 @@ namespace Av1ador
             rightPanel.Width = Screen.FromControl(this).Bounds.Width;
             Show_filter(true);
 
-            if (!File.Exists("background.png"))
-            {
-                Bitmap background_png = new Bitmap(Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height);
-                Graphics g = Graphics.FromImage(background_png);
-                g.Clear(Color.Transparent);
-                g.Flush();
-                background_png.Save("background.png", System.Drawing.Imaging.ImageFormat.Png);
-            }
-
             Process[] processes = Process.GetProcessesByName("mpv");
             List<IntPtr> ignore = new List<IntPtr>();
             foreach (Process p in processes)
                 ignore.Add(p.MainWindowHandle);
-            Process.Start("mpv.exe", mpv_args.Replace("socket", "socket" + processID.ToString()));
+            Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "socket" + processID.ToString()));
             BackgroundWorker bw = new BackgroundWorker();
             BackgroundWorker bw2 = new BackgroundWorker();
             Process mp = mpv1p;
@@ -157,7 +148,6 @@ namespace Av1ador
                 Entry.Load(listBox1);
 
                 underload = -2;
-                //MouseHook.InstallHook();
                 Program.Log = true;
                 Restore_settings(true);
                 Mpv_load_first();
@@ -188,7 +178,7 @@ namespace Av1ador
                 List<IntPtr> ignore = new List<IntPtr>();
                 foreach (Process p in processes)
                     ignore.Add(p.MainWindowHandle);
-                Process.Start("mpv.exe", mpv_args.Replace("socket", "2socket" + processID.ToString()));
+                Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "2socket" + processID.ToString()));
                 BackgroundWorker bw = new BackgroundWorker();
                 Process mp = mpv2p;
                 bw.DoWork += (s, ee) =>
@@ -248,7 +238,6 @@ namespace Av1ador
                         Thread.Sleep(10);
                     }
                     checkedListBox1.Enabled = false;
-                    infoTimer.Enabled = false;
 
                     syncButton.Checked = false;
                     removeButton.Enabled = true;
@@ -268,25 +257,10 @@ namespace Av1ador
                     caComboBox.Enabled = chComboBox.Enabled;
                     groupBox2.Enabled = chComboBox.Enabled;
                     audiounmuteButton.Enabled = chComboBox.Enabled;
-                    resComboBox.Items.Clear();
-                    for (int i = 0; i < encoder.Resos.Length; i++)
-                    {
-                        int alto = int.Parse(encoder.Resos[i].Replace("p", ""));
-                        if (alto <= primer_video.Height || alto <= primer_video.Height / primer_video.Sar || alto <= primer_video.Width * 9 / 15 )
-                        {
-                            resComboBox.Items.Add(encoder.Resos[i]);
-                            if (resComboBox.SelectedIndex < 0 && (alto <= Screen.FromControl(this).Bounds.Height || alto <= Screen.FromControl(this).Bounds.Height))
-                                resComboBox.Text = encoder.Resos[i];
-                        }
-                    }
-                    if (primer_video.Height / primer_video.Sar > int.Parse(resComboBox.Items[0].ToString().Replace("p", "")))
-                    {
-                        resComboBox.Items.Insert(0, primer_video.Height / primer_video.Sar + "p");
-                        resComboBox.Text = resComboBox.Items[0].ToString();
-                    }
                     encoder.Predicted = false;
                     if (entry.Vf != "")
                         encoder.Vf = entry.Vf.Split(new char[] { '¡' }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+                    Get_res();
                     primer_video.CreditsTime = entry.Credits;
                     primer_video.CreditsEndTime = entry.CreditsEnd;
                     cvComboBox.SelectedIndex = entry.Cv;
@@ -326,12 +300,12 @@ namespace Av1ador
             else
             {
                 picBoxBarra.Cursor = Cursors.Default;
-                mpv_cmd.WriteLine("loadfile background.png");
+                mpv_cmd.WriteLine("playlist-play-index none");
                 primer_video = null;
             }
             if (IsLoaded_mpv2())
             {
-                mpv2_cmd.WriteLine("loadfile background.png");
+                mpv2_cmd.WriteLine("playlist-play-index none");
                 segundo_video = null;
                 leftPanel.Width = mpvsPanel.Width;
             }
@@ -384,6 +358,28 @@ namespace Av1ador
             }
             else if (seek != 0)
                 mpv2_cmd.WriteLine("set pause yes;seek " + (seek + segundo_video.First_frame).ToString() + " absolute+exact");
+        }
+
+        private void Get_res()
+        {
+            resComboBox.Items.Clear();
+            double[] ur = Func.Upscale_ratio(encoder.Vf);
+            int uh = (int)(primer_video.Height * ur[0]);
+            for (int i = 0; i < encoder.Resos.Length; i++)
+            {
+                int alto = int.Parse(encoder.Resos[i].Replace("p", ""));
+                if (alto <= uh || alto <= uh / primer_video.Sar || alto <= primer_video.Width * ur[1] * 9 / 15)
+                {
+                    resComboBox.Items.Add(encoder.Resos[i]);
+                    if (resComboBox.SelectedIndex < 0 && (alto <= Screen.FromControl(this).Bounds.Height || alto <= Screen.FromControl(this).Bounds.Height))
+                        resComboBox.Text = encoder.Resos[i];
+                }
+            }
+            if (uh / primer_video.Sar > int.Parse(resComboBox.Items[0].ToString().Replace("p", "")))
+            {
+                resComboBox.Items.Insert(0, uh / primer_video.Sar + "p");
+                resComboBox.Text = resComboBox.Items[0].ToString();
+            }
         }
 
         private bool IsLoaded_mpv2()
@@ -549,11 +545,11 @@ namespace Av1ador
             if (listBox1.Items.Count == 0)
             {
                 Detener();
-                mpv_cmd.WriteLine("loadfile background.png");
+                mpv_cmd.WriteLine("playlist-play-index none");
                 primer_video = null;
                 if (IsLoaded_mpv2())
                 {
-                    mpv2_cmd.WriteLine("loadfile background.png");
+                    mpv2_cmd.WriteLine("playlist-play-index none");
                     segundo_video = null;
                 }
             }
@@ -1273,7 +1269,6 @@ namespace Av1ador
                     fpsComboBox.Items.Add(Math.Round(primer_video.Fps / 3, 1) + " (1/3)");
                     fpsComboBox.Items.Add(Math.Round(primer_video.Fps / 4, 1) + " (1/4)");
                     infoTimer.Interval = 250;
-                    //MouseHook.InstallHook();
                 }
             }
             if (infoTimer.Interval == 250 && !encodestopButton.Enabled && scaleBox.Checked && bitrateBox.Text != "" && !primer_video.Gs_thread && !encoder.Predicted)
@@ -1325,7 +1320,7 @@ namespace Av1ador
                     heat = Func.Heat(0);
                     workersgroupBox.Invalidate();
                     Detener();
-                    Mpv2_load(encode.Dir + encode.Name + "_Av1ador." + encode.Extension, "set pause yes");
+                    Mpv2_load(encode.Dir + Path.GetFileNameWithoutExtension(encode.Name) + "_Av1ador." + encode.Extension, "set pause yes");
                     mpv_cmd.WriteLine("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
                     Update_current_time(primer_video.StartTime);
                 }
@@ -1354,7 +1349,7 @@ namespace Av1ador
                 }
                 if (!workersBox.Checked && workersUpDown.Maximum > 1 && encode.Counter == 0)
                 {
-                    if (usage < 91 && disk.NextValue() < 70)
+                    if (disk != null && usage < 91 && disk.NextValue() < 70)
                         underload++;
                     else
                         underload = 0;
@@ -1471,11 +1466,14 @@ namespace Av1ador
             {
                 if (vfListBox.SelectedIndex > -1)
                 {
-                    if (clTextBox.Text.Contains("crop"))
+                    string s = vfListBox.SelectedItem.ToString();
+                    if (Func.Preview(clTextBox.Text))
                         mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
-                    if (clTextBox.Text == vfListBox.SelectedItem.ToString())
+                    if (clTextBox.Text == s)
                         clTextBox.Text = "";
                     encoder.Vf.RemoveAt(vfListBox.SelectedIndex);
+                    if (s.Contains("Anime4K") || s.Contains("FSRCNNX"))
+                        Get_res();
                 }
             }
             else
@@ -1586,7 +1584,6 @@ namespace Av1ador
             else
                 encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
             
-            Filter_items_update();
             if (segundo_video == null) {
                 mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + scale + "] }");
                 mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + scale + "] }");
@@ -1597,6 +1594,7 @@ namespace Av1ador
                 encoder.Vf_add("deinterlace", primer_video.Interlaced.ToString());
                 encoder.Vf_add("autocolor", primer_video.Color_matrix);
             }
+            Filter_items_update();
         }
 
         private void VolumeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1614,7 +1612,7 @@ namespace Av1ador
 
         private void DebandToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            encoder.Vf_add("deband", (!denoiseToolStripMenuItem.Enabled).ToString());
+            encoder.Vf_add("deband");
             Filter_items_update();
         }
 
@@ -1698,6 +1696,12 @@ namespace Av1ador
         {
             if (primer_video != null)
                 encoder.Af_add("sofalizer", primer_video.Channels.ToString());
+            Filter_items_update();
+        }
+
+        private void NoiseReductionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            encoder.Af_add("noisereduction");
             Filter_items_update();
         }
 
@@ -1903,6 +1907,29 @@ namespace Av1ador
         private void VfListBox_DragOver(object sender, DragEventArgs e)
         {
             tabControl1.SelectedIndex = 0;
+        }
+
+        private void XToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int uh = int.Parse(resComboBox.Items[0].ToString().Replace("p", ""));
+            resComboBox.Items.Clear();
+            if ((sender as ToolStripMenuItem).Text.Contains("x2"))
+            {
+                uh *= 2;
+                encoder.Vf_add((sender as ToolStripMenuItem).Text.Contains("FSRCNNX") ? "fsrcnnx" : "anime4k", "2", (bitsComboBox.Text == "10").ToString());
+            }
+            else
+            {
+                uh = uh * 3 / 2;
+                encoder.Vf_add("anime4k", "1.5", (bitsComboBox.Text == "10").ToString());
+            }
+            for (int i = 0; i < encoder.Resos.Length; i++)
+            {
+                if (int.Parse(encoder.Resos[i].Replace("p", "")) <= uh)
+                    resComboBox.Items.Add(encoder.Resos[i]);
+            }
+            resComboBox.SelectedIndex = 0;
+            Filter_items_update();
         }
 
         private void ScaleBox_CheckedChanged(object sender, EventArgs e)

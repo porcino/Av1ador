@@ -13,6 +13,7 @@ namespace Av1ador
 {
     internal class Encode
     {
+        const string tempdir = "temp\\";
         private double progress;
         private double initial_progress;
         private double video_size;
@@ -178,7 +179,7 @@ namespace Av1ador
         {
             Dir = dir == "" ? Path.GetDirectoryName(file) + "\\" : dir + "\\";
             File = file;
-            Name = Path.GetFileNameWithoutExtension(file);
+            Name = tempdir + Path.GetFileNameWithoutExtension(file);
             if (!Directory.Exists(Name))
                 Directory.CreateDirectory(Name);
             else
@@ -472,9 +473,9 @@ namespace Av1ador
             string b = A_Job == "m4a" ? "-bsf:a aac_adtstoasc " : "";
             b += Extension == "mp4" ? "-movflags faststart " : "";
             if (System.IO.File.Exists(Name + "\\audio." + A_Job))
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\" -i \"" + Name + "\\audio." + A_Job + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? -map_metadata -1 " + b + "\"" + Dir + Name + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\" -i \"" + Name + "\\audio." + A_Job + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             else
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Name + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             ffconcat.Start();
             Regex regex = new Regex("time=([0-9]{2}):([0-9]{2}):([0-9]{2}.[0-9]{2})");
             Match compare;
@@ -574,7 +575,7 @@ namespace Av1ador
 
         public void Clear_splits(string file)
         {
-            string name = Path.GetFileNameWithoutExtension(file);
+            string name = tempdir + Path.GetFileNameWithoutExtension(file);
             if (System.IO.File.Exists(name + "\\segments.txt"))
                 System.IO.File.Delete(name + "\\segments.txt");
         }

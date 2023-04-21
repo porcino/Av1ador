@@ -9,6 +9,7 @@ namespace Av1ador
 {
     internal class Encoder : ICloneable
     {
+        public const string resdir = "resource\\\\";
         private readonly string gpu_name;
         private int ba;
         private readonly string[] v = new string[] { "AV1 (aom)", "AV1 (svt)", "AV1 (rav1e)", "VP9 (vpx)", "HEVC (x265)", "HEVC (nvenc)", "H264 (x264)", "H264 (nvenc)", "MPEG4 (xvid)" };
@@ -340,7 +341,15 @@ namespace Av1ador
             return Param;
         }
 
-        public void Vf_add(string f, string v, [Optional] string a, [Optional] string b, [Optional] string c)
+        private string Bit_Format()
+        {
+            if (Bits == 10)
+                return "format=p010";
+            else
+                return "format=nv12";
+        }
+
+        public void Vf_add(string f, [Optional] string v, [Optional] string a, [Optional] string b, [Optional] string c)
         {
             if (f == "fps")
             {
@@ -371,6 +380,7 @@ namespace Av1ador
                 if (Vf.Count > 0)
                 {
                     index = Math.Max(Vf.FindIndex(s => s.Contains("nnedi")), Vf.FindIndex(s => s.Contains("crop")));
+                    index = Math.Max(index, Vf.FindIndex(s => s.Contains("glsl")));
                     if (index > -1)
                     {
                         string[] crop = Func.Find_w_h(Vf);
@@ -410,8 +420,8 @@ namespace Av1ador
             }
             else if (f == "deband")
             {
-                if (Libplacebo && v == "True")
-                    Vf.Add("format=pix_fmts=yuv420p,hwupload,libplacebo=deband=true:deband_iterations=1:deband_radius=8:deband_threshold=3:deband_grain=21,hwdownload,format=pix_fmts=yuv420p");
+                if (Libplacebo && Vf.FindIndex(s => s.Contains("opencl")) == -1)
+                    Vf.Add(Bit_Format() + ",hwupload,libplacebo=deband=true:deband_iterations=1:deband_radius=8:deband_threshold=3:deband_grain=21,hwdownload," + Bit_Format());
                 else
                     Vf.Add("gradfun=3:8");
             }
@@ -429,7 +439,7 @@ namespace Av1ador
             {
                 Vf.RemoveAll(s => s.StartsWith("nnedi"));
                 if (v == "True")
-                    Vf.Insert(0, "nnedi='weights=nnedi3_weights.bin:field=a'");
+                    Vf.Insert(0, "nnedi='weights=" + resdir + "nnedi3_weights.bin:field=a'");
             }
             else if (f == "autocolor")
             {
@@ -444,9 +454,13 @@ namespace Av1ador
             else if (f == "denoise")
                 Vf.Add("format=pix_fmts=yuv420p,hwupload,nlmeans_opencl=s=3:p=15:r=7,hwdownload,format=pix_fmts=yuv420p");
             else if (f == "tonemap_cl")
-                Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709" + (Bits == 8 ? ":format=nv12,hwdownload,format=nv12" : ":format=p010,hwdownload,format=p010") + "\"");
+                Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             else if (f == "tonemap_vk")
-                Vf.Add("\"curves=m=0/0 0.25/0.3 0.87/0.88 1/1,format=p010,hwupload,libplacebo=minimum_peak=4:gamut_mode=desaturate:tonemapping=hable:tonemapping_mode=rgb:tonemapping_crosstalk=0.04:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709" + (Bits == 8 ? ":format=nv12,hwdownload,format=nv12" : ":format=p010,hwdownload,format=p010") + "\"");
+                Vf.Add("\"curves=m=0/0 0.25/0.3 0.87/0.88 1/1,format=p010,hwupload,libplacebo=minimum_peak=4:gamut_mode=desaturate:tonemapping=hable:tonemapping_mode=rgb:tonemapping_crosstalk=0.04:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
+            else if (f == "anime4k")
+                Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Clamp_Highlights.glsl',libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v +":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
+            else if (f == "fsrcnnx")
+                Vf.Add(Bit_Format() + ",hwupload,libplacebo='w=iw*2:h=ih*2:custom_shader_path=" + resdir + "FSRCNNX_x2_16-0-4-1.glsl',hwdownload," + Bit_Format());
         }
 
         public void Vf_update(string f, string v, [Optional] string a)
@@ -484,7 +498,7 @@ namespace Av1ador
             }
         }
 
-        public void Af_add(string f, string v)
+        public void Af_add(string f, [Optional] string v)
         {
             if (f == "sofalizer")
             {
@@ -493,7 +507,7 @@ namespace Av1ador
                 if (int.Parse(Ch) < int.Parse(v) && int.Parse(Ch) < 3)
                 {
                     if (int.Parse(Ch) == 2)
-                        Af.Insert(0, "sofalizer='HRIR_CIRC360_NF150.sofa':type=freq:lfegain=1:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'\"");
+                        Af.Insert(0, "sofalizer='" + resdir + "HRIR_CIRC360_NF150.sofa':type=freq:lfegain=1:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'\"");
                     Af.Add("dynaudnorm=g=3:peak=0.99:maxgain=" + v + ":b=1:r=1");
                 }
             }
@@ -510,6 +524,8 @@ namespace Av1ador
                 if (double.Parse(v) > 0)
                     Af.Add("adelay=" + v + ":all=true");
             }
+            if (f == "noisereduction")
+                Af.Add("arnndn=m='" + resdir + "std.rnnn':mix=0.65,afftdn=nr=3:nf=-20");
         }
 
         public string Build_vstr(bool predict = false)
@@ -537,7 +553,6 @@ namespace Av1ador
             str += " -fps_mode vfr";
             if (V_kbps > 0)
             {
-                //str += " -b:v " + V_kbps + "k";
                 str += " -b:v !bitrate!k";
                 if (Multipass != "" && !predict)
                     str += " " + Multipass;
@@ -637,6 +652,8 @@ namespace Av1ador
 
         public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto)
         {
+            if (Form.ActiveForm == null)
+                return;
             Settings settings;
             string res_s = resolution.SelectedIndex > 0 || (resolution.Text != "" && int.Parse(resolution.Text.Replace("p", "")) > Screen.FromControl(Form.ActiveForm).Bounds.Height) ? resolution.Text : "Default";
             string hdr_s = hdr.Enabled ? hdr.Text : "Default";

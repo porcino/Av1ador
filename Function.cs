@@ -11,6 +11,8 @@ namespace Av1ador
 {
     public class Func
     {
+        public static readonly string bindir = "bin\\";
+
         public static string Exes()
         {
             string msg = "";
@@ -26,7 +28,7 @@ namespace Av1ador
             {
                 msg += "ffmpeg.exe\n";
             }
-            process.StartInfo.FileName = "ffprobe.exe";
+            Setinicial(process, 2);
             try
             {
                 process.Start();
@@ -35,7 +37,7 @@ namespace Av1ador
             {
                 msg += "ffprobe.exe\n";
             }
-            process.StartInfo.FileName = "mpv.exe";
+            Setinicial(process, 1);
             try
             {
                 process.Start();
@@ -51,19 +53,20 @@ namespace Av1ador
                     Environment.Exit(0);
             return output;
         }
+
         public static void Setinicial(Process process, int id, [Optional] string args)
         {
-            string exe;
+            string exe = bindir;
             switch (id)
             {
                 case 1:
-                    exe = "mpv.exe";
+                    exe += "mpv.exe";
                     break;
                 case 2:
-                    exe = "ffprobe.exe";
+                    exe += "ffprobe.exe";
                     break;
                 default:
-                    exe = "ffmpeg.exe";
+                    exe += "ffmpeg.exe";
                     break;
             }
             process.StartInfo.FileName = exe;
@@ -179,6 +182,18 @@ namespace Av1ador
                 }
             }
             return new string[] { };
+        }
+
+        public static double[] Upscale_ratio(List<string> list)
+        {
+            Regex regex = new Regex(@"iw\*([0-9\.]+).*ih\*([0-9\.]+)");
+            for (int i = 0; i < list.Count; i++)
+            {
+                Match compare = regex.Match(list[i]);
+                if (compare.Success)
+                    return new double[] { double.Parse(compare.Groups[1].Value), double.Parse(compare.Groups[2].Value) };
+            }
+            return new double[] { 1, 1 };
         }
 
         public static double Scale(Video v1, Video v2, double scale, double w = 0)
