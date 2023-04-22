@@ -162,5 +162,15 @@ namespace Av1ador
         {
             return f.Split(new char[] { '¡' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
+
+        public static bool Queued(ListBox list, string file)
+        {
+            for (int i = 0; i < list.Items.Count; i++)
+            {
+                if ((list.Items[i] as Entry).File == file)
+                    return true;
+            }
+            return false;
+        }
     }
 }

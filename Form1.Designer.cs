@@ -387,7 +387,7 @@
             this.creditsstartButton.Name = "creditsstartButton";
             this.creditsstartButton.Size = new System.Drawing.Size(23, 33);
             this.creditsstartButton.Text = "Credits";
-            this.creditsstartButton.ToolTipText = "Credits start at current time";
+            this.creditsstartButton.ToolTipText = "Credits start at current time (lower quality)";
             this.creditsstartButton.Click += new System.EventHandler(this.CreditsstartButton_Click);
             // 
             // creditsendButton
@@ -1660,6 +1660,7 @@
             this.vfListBox.Location = new System.Drawing.Point(0, 0);
             this.vfListBox.Margin = new System.Windows.Forms.Padding(0);
             this.vfListBox.Name = "vfListBox";
+            this.vfListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.vfListBox.Size = new System.Drawing.Size(126, 377);
             this.vfListBox.TabIndex = 0;
             this.vfListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.VfListBox_DrawItem);
@@ -1677,6 +1678,7 @@
             this.afListBox.Location = new System.Drawing.Point(126, 0);
             this.afListBox.Margin = new System.Windows.Forms.Padding(0);
             this.afListBox.Name = "afListBox";
+            this.afListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.afListBox.Size = new System.Drawing.Size(126, 377);
             this.afListBox.TabIndex = 1;
             this.afListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.AfListBox_DrawItem);

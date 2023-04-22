@@ -30,7 +30,7 @@ namespace Av1ador
 
         private readonly string title = "Av1ador 1.0.6";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$");
-        private readonly string mpv_args = " --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend";
+        private readonly string mpv_args = " --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
         private static readonly int processID = Process.GetCurrentProcess().Id;
         private Video primer_video, segundo_video;
         public Process mpv2 = new Process();
@@ -525,7 +525,7 @@ namespace Av1ador
             {
                 foreach (string file in (string[])(e.Data.GetData(DataFormats.FileDrop)))
                 {
-                    if (formatos.Match(file).Success && !listBox1.Items.Contains(file) && File.Exists(file))
+                    if (formatos.Match(file).Success && !Entry.Queued(listBox1, file) && File.Exists(file))
                         Add_entry(file);
                 }
                 
@@ -617,7 +617,7 @@ namespace Av1ador
                 if (!File.Exists(entry.File))
                     listBox1.Items.RemoveAt(listBox1.SelectedIndex);
             }
-            mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
+            Filter_remove();
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
@@ -1202,7 +1202,7 @@ namespace Av1ador
             encodestartButton.Enabled = false;
             if (encode != null)
                 encode.Set_state();
-            mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
+            Filter_remove();
         }
 
         private void EncodestopButton_Click(object sender, EventArgs e)
@@ -1473,25 +1473,25 @@ namespace Av1ador
         {
             if (togglefButton.Text == "Video")
             {
-                if (vfListBox.SelectedIndex > -1)
+                for (int i = vfListBox.SelectedIndices.Count - 1; i >= 0; i--)
                 {
-                    string s = vfListBox.SelectedItem.ToString();
+                    string s = vfListBox.SelectedItems[i].ToString();
                     if (Func.Preview(clTextBox.Text))
-                        mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
+                        Filter_remove();
                     if (clTextBox.Text == s)
                         clTextBox.Text = "";
-                    encoder.Vf.RemoveAt(vfListBox.SelectedIndex);
+                    encoder.Vf.RemoveAt(vfListBox.SelectedIndices[i]);
                     if (s.Contains("Anime4K") || s.Contains("FSRCNNX"))
                         Get_res();
                 }
             }
             else
             {
-                if (afListBox.SelectedIndex > -1)
+                for (int i = afListBox.SelectedIndices.Count - 1; i >= 0; i--)
                 {
-                    if (clTextBox.Text == afListBox.SelectedItem.ToString())
+                    if (clTextBox.Text == afListBox.SelectedItems[i].ToString())
                         clTextBox.Text = "";
-                    encoder.Af.RemoveAt(afListBox.SelectedIndex);
+                    encoder.Af.RemoveAt(afListBox.SelectedIndices[i]);
                 }
             }
             Filter_items_update();
@@ -1503,6 +1503,7 @@ namespace Av1ador
             {
                 if (vfListBox.SelectedIndex > -1)
                     clTextBox.Text = vfListBox.SelectedItem.ToString();
+                Filter_preview(clTextBox.Text);
             }
             else
             {
@@ -1523,8 +1524,7 @@ namespace Av1ador
                     else if (clTextBox.Text != "")
                         encoder.Vf.Add(clTextBox.Text);
                     Filter_items_update(clTextBox.Text.Contains("crop"));
-                    if (Func.Preview(clTextBox.Text))
-                        Filter_preview(clTextBox.Text);
+                    Filter_preview(clTextBox.Text);
                     clTextBox.Text = "";
                 }
                 else
@@ -1541,8 +1541,22 @@ namespace Av1ador
 
         private void Filter_preview(string vf)
         {
+            vf = encoder.Filter_convert(vf);
+            if (Func.Preview(vf))
+            {
+                string osd = "Filter preview: " + vf.Substring(0, vf.IndexOf('='));
+                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
+                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + vf + "\"] }");
+                mpv_cmd.WriteLine("{ \"command\": [\"show-text\", \"" + osd + "\"] }");
+            }
+            else
+                Filter_remove();
+        }
+
+        private void Filter_remove()
+        {
             mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
-            mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + vf + "\"] }");
+            mpv_cmd.WriteLine("{ \"command\": [\"show-text\", \"\"] }");
         }
 
         private void FilternewButton_Click(object sender, EventArgs e)
@@ -1749,7 +1763,7 @@ namespace Av1ador
             denoiseToolStripMenuItem.Enabled = !vulkan;
             openclToolStripMenuItem.Enabled = !vulkan && !tonemap;
             vulkanToolStripMenuItem.Enabled = !opencl && !tonemap;
-
+            upscaleToolStripMenuItem.Enabled = !vulkan;
         }
 
         private void SyncButton_CheckStateChanged(object sender, EventArgs e)

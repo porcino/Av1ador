@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Av1ador
@@ -349,6 +350,18 @@ namespace Av1ador
                 return "format=nv12";
         }
 
+        public string Filter_convert(string f)
+        {
+            if (f.IndexOf("nlmeans") > -1)
+            {
+                Regex regex = new Regex(@"_opencl=s=([0-9]+):p=([0-9]+):r=([0-9]+)");
+                Match match = regex.Match(f);
+                if (match.Success)
+                    return "nlmeans=s=" + match.Groups[1].Value + ":p=" + match.Groups[2].Value + ":r=" + match.Groups[3].Value;
+            }
+            return f;
+        }
+
         public void Vf_add(string f, [Optional] string v, [Optional] string a, [Optional] string b, [Optional] string c)
         {
             if (f == "fps")
@@ -448,7 +461,7 @@ namespace Av1ador
                     Vf.Add("scale=in_color_matrix=" + (v == "smpte170m" ? "bt601" : "auto") + ":out_color_matrix=bt709");
             }
             else if (f == "Color adjustment")
-                Vf.Add("eq=contrast=1.0:brightness=0.0:saturation=1.0:gamma=1.0");
+                Vf.Add("eq=contrast=1.1:brightness=0.05:saturation=1.4:gamma=1.0");
             else if (f == "Sharpen")
                 Vf.Add("smartblur=luma_radius=2:luma_strength=-1.0:luma_threshold=-3");
             else if (f == "Denoise")
