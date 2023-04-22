@@ -550,7 +550,7 @@ namespace Av1ador
                 str = str.Replace("!bitrate!", bitrate.ToString());
                 str = str.Replace("!log!", name);
             }
-            return str.Replace("!name!", name);
+            return str.Replace("!name!", name).Replace("transforms.trf", name.Replace(@"\", @"\\") + ".trf");
         }
 
         public int Get_segment(int w, int x, double duration)
@@ -628,7 +628,7 @@ namespace Av1ador
                     pass = pass.Substring(pos1 + 9);
                     pos1 = pass.IndexOf("&& ffmpeg");
                     ffmpeg.Start();
-                    ffmpeg.WaitForExit(-1);
+                    ffmpeg.StandardError.ReadToEnd();
                 }
                 ffmpeg.StartInfo.Arguments = pass;
             }
@@ -745,6 +745,8 @@ namespace Av1ador
                     File.Delete(Pathfile + "-0.log");
                 if (File.Exists(Pathfile + "-0.log.mbtree"))
                     File.Delete(Pathfile + "-0.log.mbtree");
+                if (File.Exists(Pathfile + ".trf"))
+                    File.Delete(Pathfile + ".trf");
             }
             return "";
         }

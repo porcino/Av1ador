@@ -1615,12 +1615,6 @@ namespace Av1ador
             Filter_items_update(true);
         }
 
-        private void DebandToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            encoder.Vf_add("deband");
-            Filter_items_update();
-        }
-
         private void DelogoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (primer_video != null)
@@ -1731,24 +1725,6 @@ namespace Av1ador
             mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + zoom + "] }");
         }
 
-        private void ColorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            encoder.Vf_add("eq","");
-            Filter_items_update();
-        }
-
-        private void SharpenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            encoder.Vf_add("sharpen", "");
-            Filter_items_update();
-        }
-
-        private void DenoiseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            encoder.Vf_add("denoise", "");
-            Filter_items_update();
-        }
-
         private void FilteraddDropDownButton_DropDownOpening(object sender, EventArgs e)
         {
             bool vulkan = false;
@@ -1797,12 +1773,6 @@ namespace Av1ador
                 Entry_update(6);
                 Entry.Save(listBox1);
             }
-        }
-
-        private void OpenclToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            encoder.Vf_add("tonemap_cl", "");
-            Filter_items_update();
         }
 
         private void CheckedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -1939,16 +1909,16 @@ namespace Av1ador
             Filter_items_update();
         }
 
+        private void MultiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            encoder.Vf_add((sender as ToolStripMenuItem).Text);
+            Filter_items_update();
+        }
+
         private void ScaleBox_CheckedChanged(object sender, EventArgs e)
         {
             if (bitrateBox.Text.Length > 0)
                 resComboBox.Enabled = !scaleBox.Checked;
-        }
-
-        private void VulkanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            encoder.Vf_add("tonemap_vk", "");
-            Filter_items_update();
         }
 
         private void WorkersBox_CheckedChanged(object sender, EventArgs e)

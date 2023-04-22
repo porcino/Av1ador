@@ -418,7 +418,7 @@ namespace Av1ador
                     Vf.Insert(0, "crop=w=" + v + ":h=" + a + ":x=" + b + ":y=" + c);
                 }
             }
-            else if (f == "deband")
+            else if (f == "Deband")
             {
                 if (Libplacebo && Vf.FindIndex(s => s.Contains("opencl")) == -1)
                     Vf.Add(Bit_Format() + ",hwupload,libplacebo=deband=true:deband_iterations=1:deband_radius=8:deband_threshold=3:deband_grain=21,hwdownload," + Bit_Format());
@@ -447,20 +447,22 @@ namespace Av1ador
                 if (v != "" && v != "bt2020")
                     Vf.Add("scale=in_color_matrix=" + (v == "smpte170m" ? "bt601" : "auto") + ":out_color_matrix=bt709");
             }
-            else if (f == "eq")
+            else if (f == "Color adjustment")
                 Vf.Add("eq=contrast=1.0:brightness=0.0:saturation=1.0:gamma=1.0");
-            else if (f == "sharpen")
+            else if (f == "Sharpen")
                 Vf.Add("smartblur=luma_radius=2:luma_strength=-1.0:luma_threshold=-3");
-            else if (f == "denoise")
+            else if (f == "Denoise")
                 Vf.Add("format=pix_fmts=yuv420p,hwupload,nlmeans_opencl=s=3:p=15:r=7,hwdownload,format=pix_fmts=yuv420p");
-            else if (f == "tonemap_cl")
+            else if (f == "OpenCL")
                 Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
-            else if (f == "tonemap_vk")
+            else if (f == "Vulkan")
                 Vf.Add("\"curves=m=0/0 0.25/0.3 0.87/0.88 1/1,format=p010,hwupload,libplacebo=minimum_peak=4:gamut_mode=desaturate:tonemapping=hable:tonemapping_mode=rgb:tonemapping_crosstalk=0.04:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             else if (f == "anime4k")
-                Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Clamp_Highlights.glsl',libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v +":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
+                Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Clamp_Highlights.glsl',libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
             else if (f == "fsrcnnx")
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='w=iw*2:h=ih*2:custom_shader_path=" + resdir + "FSRCNNX_x2_16-0-4-1.glsl',hwdownload," + Bit_Format());
+            else if (f == "Stabilization")
+                Vf.Insert(Vf.FindIndex(s => s.Contains("nnedi")) > -1 ? 1 : 0, "\"vidstabtransform=smoothing=6:crop=keep:zoom=0:optzoom=0:input='transforms.trf'\"");
         }
 
         public void Vf_update(string f, string v, [Optional] string a)
@@ -534,6 +536,9 @@ namespace Av1ador
             str += " -c:v:0 " + Cv;
             if (Vf.Count > 0)
             {
+                if (Vf.FindIndex(s => s.Contains("vidstabtransform")) > -1)
+                    str = " -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration! -vf \"scale='min(640,iw)':-2,vidstabdetect=shakiness=10:accuracy=5:result='transforms.trf'\" -f null NUL && ffmpeg" + str;
+
                 foreach (string s in Vf)
                 {
                     if (s.Contains("libplacebo") && Libplacebo)

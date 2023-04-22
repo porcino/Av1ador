@@ -124,8 +124,7 @@
             this.vulkanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upscaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.anime4kToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.anime4kX2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fSRCNNXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filteraddaDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.downmixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1342,7 +1341,7 @@
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
             this.colorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.colorToolStripMenuItem.Text = "Color adjustment";
-            this.colorToolStripMenuItem.Click += new System.EventHandler(this.ColorToolStripMenuItem_Click);
+            this.colorToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // removeBlackBarsToolStripMenuItem
             // 
@@ -1366,7 +1365,7 @@
             this.debandToolStripMenuItem.Name = "debandToolStripMenuItem";
             this.debandToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debandToolStripMenuItem.Text = "Deband";
-            this.debandToolStripMenuItem.Click += new System.EventHandler(this.DebandToolStripMenuItem_Click);
+            this.debandToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // deinterlaceToolStripMenuItem
             // 
@@ -1390,7 +1389,7 @@
             this.denoiseToolStripMenuItem.Name = "denoiseToolStripMenuItem";
             this.denoiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.denoiseToolStripMenuItem.Text = "Denoise";
-            this.denoiseToolStripMenuItem.Click += new System.EventHandler(this.DenoiseToolStripMenuItem_Click);
+            this.denoiseToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // pOIaddroiToolStripMenuItem
             // 
@@ -1406,7 +1405,7 @@
             this.sharpenToolStripMenuItem.Name = "sharpenToolStripMenuItem";
             this.sharpenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sharpenToolStripMenuItem.Text = "Sharpen";
-            this.sharpenToolStripMenuItem.Click += new System.EventHandler(this.SharpenToolStripMenuItem_Click);
+            this.sharpenToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // stabilizationToolStripMenuItem
             // 
@@ -1414,7 +1413,7 @@
             this.stabilizationToolStripMenuItem.Name = "stabilizationToolStripMenuItem";
             this.stabilizationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stabilizationToolStripMenuItem.Text = "Stabilization";
-            this.stabilizationToolStripMenuItem.Visible = false;
+            this.stabilizationToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // tonemapToolStripMenuItem
             // 
@@ -1432,7 +1431,7 @@
             this.openclToolStripMenuItem.Name = "openclToolStripMenuItem";
             this.openclToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openclToolStripMenuItem.Text = "OpenCL";
-            this.openclToolStripMenuItem.Click += new System.EventHandler(this.OpenclToolStripMenuItem_Click);
+            this.openclToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // vulkanToolStripMenuItem
             // 
@@ -1440,13 +1439,14 @@
             this.vulkanToolStripMenuItem.Name = "vulkanToolStripMenuItem";
             this.vulkanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.vulkanToolStripMenuItem.Text = "Vulkan";
-            this.vulkanToolStripMenuItem.Click += new System.EventHandler(this.VulkanToolStripMenuItem_Click);
+            this.vulkanToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // upscaleToolStripMenuItem
             // 
             this.upscaleToolStripMenuItem.AutoSize = false;
             this.upscaleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.anime4kToolStripMenuItem,
+            this.anime4kX2ToolStripMenuItem,
             this.fSRCNNXToolStripMenuItem});
             this.upscaleToolStripMenuItem.Name = "upscaleToolStripMenuItem";
             this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
@@ -1455,28 +1455,18 @@
             // anime4kToolStripMenuItem
             // 
             this.anime4kToolStripMenuItem.AutoSize = false;
-            this.anime4kToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.xToolStripMenuItem,
-            this.x2ToolStripMenuItem});
             this.anime4kToolStripMenuItem.Name = "anime4kToolStripMenuItem";
             this.anime4kToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.anime4kToolStripMenuItem.Text = "Anime4K";
+            this.anime4kToolStripMenuItem.Text = "Anime4K x1.5";
+            this.anime4kToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
             // 
-            // xToolStripMenuItem
+            // anime4kX2ToolStripMenuItem
             // 
-            this.xToolStripMenuItem.AutoSize = false;
-            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
-            this.xToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.xToolStripMenuItem.Text = "Scale x1.5";
-            this.xToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
-            // 
-            // x2ToolStripMenuItem
-            // 
-            this.x2ToolStripMenuItem.AutoSize = false;
-            this.x2ToolStripMenuItem.Name = "x2ToolStripMenuItem";
-            this.x2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x2ToolStripMenuItem.Text = "Scale x2";
-            this.x2ToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
+            this.anime4kX2ToolStripMenuItem.AutoSize = false;
+            this.anime4kX2ToolStripMenuItem.Name = "anime4kX2ToolStripMenuItem";
+            this.anime4kX2ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.anime4kX2ToolStripMenuItem.Text = "Anime4k x2";
+            this.anime4kX2ToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
             // 
             // fSRCNNXToolStripMenuItem
             // 
@@ -2547,9 +2537,8 @@
         private System.Windows.Forms.Timer mouseTimer;
         private System.Windows.Forms.ToolStripMenuItem noiseReductionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem anime4kToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem x2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fSRCNNXToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem anime4kX2ToolStripMenuItem;
     }
 }
 
