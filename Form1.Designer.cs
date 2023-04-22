@@ -57,6 +57,9 @@
             this.origfolderButton = new System.Windows.Forms.ToolStripButton();
             this.outfolderButton = new System.Windows.Forms.ToolStripButton();
             this.encodelistButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.copytoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.pastetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -492,7 +495,10 @@
             this.toolStripSeparator7,
             this.origfolderButton,
             this.outfolderButton,
-            this.encodelistButton});
+            this.encodelistButton,
+            this.toolStripSeparator15,
+            this.copytoolStripButton,
+            this.pastetoolStripButton});
             this.toolStrip3.Location = new System.Drawing.Point(0, 0);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Size = new System.Drawing.Size(252, 24);
@@ -585,6 +591,32 @@
             this.encodelistButton.Size = new System.Drawing.Size(23, 21);
             this.encodelistButton.Text = "Encode list";
             this.encodelistButton.ToolTipText = "Encode entire list";
+            // 
+            // toolStripSeparator15
+            // 
+            this.toolStripSeparator15.Name = "toolStripSeparator15";
+            this.toolStripSeparator15.Size = new System.Drawing.Size(6, 24);
+            // 
+            // copytoolStripButton
+            // 
+            this.copytoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.copytoolStripButton.Image = global::Av1ador.Properties.Resources.Copy;
+            this.copytoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.copytoolStripButton.Name = "copytoolStripButton";
+            this.copytoolStripButton.Size = new System.Drawing.Size(23, 21);
+            this.copytoolStripButton.Text = "Copy filters";
+            this.copytoolStripButton.Click += new System.EventHandler(this.CopytoolStripButton_Click);
+            // 
+            // pastetoolStripButton
+            // 
+            this.pastetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.pastetoolStripButton.Enabled = false;
+            this.pastetoolStripButton.Image = global::Av1ador.Properties.Resources.Paste;
+            this.pastetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.pastetoolStripButton.Name = "pastetoolStripButton";
+            this.pastetoolStripButton.Size = new System.Drawing.Size(23, 21);
+            this.pastetoolStripButton.Text = "Paste filters";
+            this.pastetoolStripButton.Click += new System.EventHandler(this.PastetoolStripButton_Click);
             // 
             // listBox1
             // 
@@ -2539,6 +2571,9 @@
         private System.Windows.Forms.ToolStripMenuItem anime4kToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fSRCNNXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem anime4kX2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
+        private System.Windows.Forms.ToolStripButton copytoolStripButton;
+        private System.Windows.Forms.ToolStripButton pastetoolStripButton;
     }
 }
 

@@ -57,6 +57,7 @@ namespace Av1ador
         private Point winpos;
         private readonly BackgroundWorker aset = new BackgroundWorker();
         private Color heat = Color.FromArgb(220, 220, 220);
+        private string[] clipboard = new string[] { "", "" };
 
         public static bool Dialogo { get; set; }
 
@@ -262,7 +263,9 @@ namespace Av1ador
                     audiounmuteButton.Enabled = chComboBox.Enabled;
                     encoder.Predicted = false;
                     if (entry.Vf != "")
-                        encoder.Vf = entry.Vf.Split(new char[] { '¡' }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+                        encoder.Vf = Entry.Filter2List(entry.Vf);
+                    if (entry.Af != null && entry.Af != "")
+                        encoder.Af = Entry.Filter2List(entry.Af);
                     Get_res();
                     primer_video.CreditsTime = entry.Credits;
                     primer_video.CreditsEndTime = entry.CreditsEnd;
@@ -580,6 +583,7 @@ namespace Av1ador
             {
                 File = file,
                 Vf = "",
+                Af = "",
                 Gs = "",
                 Cv = cvComboBox.SelectedIndex,
                 Bits = bitsComboBox.Text,
@@ -1909,6 +1913,28 @@ namespace Av1ador
             Filter_items_update();
         }
 
+        private void CopytoolStripButton_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItems.Count > 0 && (encoder.Vf.Count > 0 || encoder.Af.Count > 0))
+                clipboard = new string[] { (listBox1.SelectedItems[0] as Entry).Vf, (listBox1.SelectedItems[0] as Entry).Af };
+            pastetoolStripButton.Enabled = true;
+        }
+
+        private void PastetoolStripButton_Click(object sender, EventArgs e)
+        {
+            if ((clipboard[0] != "" || clipboard[1] != "") && listBox1.SelectedItems.Count > 0)
+            {
+                foreach (Entry entry in listBox1.SelectedItems)
+                {
+                    entry.Vf = clipboard[0];
+                    entry.Af = clipboard[1];
+                }
+                encoder.Vf = Entry.Filter2List((listBox1.SelectedItems[0] as Entry).Vf);
+                encoder.Af = Entry.Filter2List((listBox1.SelectedItems[0] as Entry).Af);
+                Entry.Save(listBox1, true);
+            }
+        }
+
         private void MultiToolStripMenuItem_Click(object sender, EventArgs e)
         {
             encoder.Vf_add((sender as ToolStripMenuItem).Text);
@@ -2051,7 +2077,7 @@ namespace Av1ador
         private void Entry_update(int field, int track = -1)
         {
             if (primer_video != null)
-                Entry.Update(field, primer_video.File, listBox1, vfListBox, gsUpDown.Value, primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track);
+                Entry.Update(field, primer_video.File, listBox1, vfListBox, afListBox, gsUpDown.Value, primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Av1ador
         private static bool shouldsave;
         public string File { get; set; }
         public string Vf { get; set; }
+        public string Af { get; set; }
         public string Gs { get; set; }
         public double Credits { get; set; }
         public double CreditsEnd { get; set; }
@@ -69,20 +71,24 @@ namespace Av1ador
             }
         }
 
-        public static void Update(int col, string file, ListBox list, ListBox vf, decimal gs, double credits, double creditsend, int cv, string bits, string param, int crf, int ba, string bv, int track)
+        public static void Update(int col, string file, ListBox list, ListBox vf, ListBox af, decimal gs, double credits, double creditsend, int cv, string bits, string param, int crf, int ba, string bv, int track)
         {
             for (int i = 0; i < list.Items.Count; i++)
             {
                 Entry entry = list.Items[i] as Entry;
-                if (entry.File == file)
+                if (file != "" && entry.File == file)
                 {
                     switch (col)
                     {
                         case 1:
                             string j = String.Join("¡", vf.Items.OfType<string>().ToArray());
-                            shouldsave = j != entry.Vf;
+                            string k = String.Join("¡", af.Items.OfType<string>().ToArray());
+                            shouldsave = j != entry.Vf || k != entry.Af;
                             if (shouldsave)
+                            {
                                 entry.Vf = j;
+                                entry.Af = k;
+                            }
                             break;
                         case 2:
                             shouldsave = gs.ToString() != entry.Gs;
@@ -150,6 +156,11 @@ namespace Av1ador
                 entries[i] = list.Items[i] as Entry;
             writer.Serialize(wfile, entries);
             wfile.Close();
+        }
+
+        public static List<string> Filter2List(string f)
+        {
+            return f.Split(new char[] { '¡' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
     }
 }
