@@ -237,6 +237,16 @@ namespace Av1ador
             return Color.FromArgb(r, gb, gb);
         }
 
+        public static int Rule(int min, int max, int x, int l)
+        {
+            int r = max - min;
+            if (x > max)
+                return l;
+            else if (x <= min)
+                return 0;
+            return (x - min) * 100 / r * l / 100;
+        }
+
         public static string Size_unit(double size)
         {
             string unit = "MB";

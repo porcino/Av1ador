@@ -658,7 +658,7 @@ namespace Av1ador
                     if (ffmpeg.HasExited || (crash != null && crash.HasExited))
                         jump = true;
                     output += jump ? ffmpeg.StandardError.ReadToEnd() : ffmpeg.StandardError.ReadLine();
-                    Thread.Sleep(40);
+                    Thread.Sleep(100);
                 }
             };
             bw.RunWorkerAsync();
@@ -677,7 +677,7 @@ namespace Av1ador
                 if (jump || ffmpeg.HasExited || (crash != null && crash.HasExited))
                 {
                     jump = true;
-                    Thread.Sleep(200);
+                    Thread.Sleep(1000);
                 }
 
                 if (output != null)
@@ -705,7 +705,7 @@ namespace Av1ador
                 }
                 if (jump)
                     break;
-                Thread.Sleep(40);
+                Thread.Sleep(100);
             }
             Encoding = false;
             if (Stop)

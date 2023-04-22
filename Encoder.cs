@@ -681,7 +681,7 @@ namespace Av1ador
                 settings.Format = format.Text;
                 settings.Codec_video = codec_video.Text;
                 settings.Speed = speed.Text;
-                if (settings.Resolution != "Default" && int.Parse(resolution.Text.Replace("p", "")) >= int.Parse(settings.Resolution.Replace("p", "")))
+                if (resolution.Text != "" && settings.Resolution != "Default" && int.Parse(resolution.Text.Replace("p", "")) >= int.Parse(settings.Resolution.Replace("p", "")))
                     settings.Resolution = resolution.Text;
                 else
                     settings.Resolution = res_s == "Default" ? settings.Resolution : res_s;

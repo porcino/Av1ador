@@ -47,6 +47,7 @@ namespace Av1ador
         private Encoder encoder;
         private Encode encode;
         private double scale = 1.0;
+        private int usage;
         private PerformanceCounter cpu;
         private PerformanceCounter disk;
         private PerformanceCounter ram;
@@ -368,6 +369,8 @@ namespace Av1ador
 
         private void Get_res()
         {
+            if (primer_video == null)
+                return;
             resComboBox.Items.Clear();
             double[] ur = Func.Upscale_ratio(encoder.Vf);
             int uh = (int)(primer_video.Height * ur[0]);
@@ -1350,7 +1353,7 @@ namespace Av1ador
             }
             if (encodestopButton.Enabled && !statusLabel.Text.Contains("grain"))
             {
-                float usage = (int)cpu.NextValue();
+                usage = (int)cpu.NextValue();
                 if (WindowState != FormWindowState.Minimized)
                 {
                     heat = Func.Heat((int)usage);
@@ -1889,12 +1892,20 @@ namespace Av1ador
         private void WorkersgroupBox_Paint(object sender, PaintEventArgs e)
         {
             var gfx = e.Graphics;
-            Pen pen = new Pen(heat, 1);
-            gfx.DrawLine(pen, 0, 6, 0, e.ClipRectangle.Height - 2);
-            gfx.DrawLine(pen, 0, 6, 8, 6);
-            gfx.DrawLine(pen, e.ClipRectangle.Width - (workersBox.Checked ? e.ClipRectangle.Width - 50 : e.ClipRectangle.Width - (e.ClipRectangle.Width < 91 ? 50 : 80)), 6, e.ClipRectangle.Width - 2, 6);
-            gfx.DrawLine(pen, e.ClipRectangle.Width - 1, 6, e.ClipRectangle.Width - 1, e.ClipRectangle.Height - 2);
-            gfx.DrawLine(pen, e.ClipRectangle.Width - 2, e.ClipRectangle.Height - 2, 0, e.ClipRectangle.Height - 2);
+            Pen pen = new Pen(heat, 2);
+            int[] pt = new int[4] { 4, 25, 72, 73 };
+            int ext = 30;
+            if (workersBox.Checked || e.ClipRectangle.Width < 91)
+            {
+                ext = 0;
+                pt = new int[4] { 3, 21, 62, 80 };
+            }
+            gfx.DrawLine(pen, 8 - Func.Rule(0, pt[0], usage, 8), 6, 8, 6);
+            gfx.DrawLine(pen, 1, 6, 1, Func.Rule(pt[0], pt[1], usage, e.ClipRectangle.Height - 8) + 6);
+            gfx.DrawLine(pen, Func.Rule(pt[1], pt[2], usage, e.ClipRectangle.Width), e.ClipRectangle.Height - 2, 0, e.ClipRectangle.Height - 2);
+            gfx.DrawLine(pen, e.ClipRectangle.Width - 1, e.ClipRectangle.Height - Func.Rule(pt[2], pt[3], usage, e.ClipRectangle.Height - 8) - 2, e.ClipRectangle.Width - 1, e.ClipRectangle.Height - 2);
+            int line = 50 + ext;
+            gfx.DrawLine(pen, e.ClipRectangle.Width - Func.Rule(pt[3], 100, usage, e.ClipRectangle.Width - line), 6, e.ClipRectangle.Width, 6);
         }
 
         private void VfListBox_DragOver(object sender, DragEventArgs e)
