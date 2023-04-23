@@ -497,12 +497,15 @@ namespace Av1ador
         public void Clear_tmp()
         {
             string name = Path.GetFileNameWithoutExtension(File);
-            if (System.IO.File.Exists(name + "_th.webp"))
-                System.IO.File.Delete(name + "_th.webp");
-            if (System.IO.File.Exists(name + "_th_dns.webp"))
-                System.IO.File.Delete(name + "_th_dns.webp");
-            if (System.IO.File.Exists(name + "_th_dnb.webp"))
-                System.IO.File.Delete(name + "_th_dnb.webp");
+            try
+            {
+                if (System.IO.File.Exists(name + "_th.webp"))
+                    System.IO.File.Delete(name + "_th.webp");
+                if (System.IO.File.Exists(name + "_th_dns.webp"))
+                    System.IO.File.Delete(name + "_th_dns.webp");
+                if (System.IO.File.Exists(name + "_th_dnb.webp"))
+                    System.IO.File.Delete(name + "_th_dnb.webp");
+            } catch { }
         }
 
         internal void Predict(Label status, Encoder encoder, ListBox vf)

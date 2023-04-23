@@ -268,6 +268,7 @@ namespace Av1ador
                     if (entry.Af != null && entry.Af != "")
                         encoder.Af = Entry.Filter2List(entry.Af);
                     Get_res();
+                    resComboBox.Text = entry.Resolution ?? resComboBox.Text;
                     primer_video.CreditsTime = entry.Credits;
                     primer_video.CreditsEndTime = entry.CreditsEnd;
                     cvComboBox.SelectedIndex = entry.Cv;
@@ -465,7 +466,8 @@ namespace Av1ador
                 if (before)
                     cvComboBox.Text = settings.Codec_video != "Default" ? settings.Codec_video : cvComboBox.Text;
                 speedComboBox.Text = settings.Speed != "Default" ? settings.Speed : speedComboBox.Text;
-                resComboBox.Text = settings.Resolution != "Default" ? settings.Resolution : resComboBox.Text;
+                if (before)
+                    resComboBox.Text = settings.Resolution != "Default" ? settings.Resolution : resComboBox.Text;
                 hdrComboBox.Text = settings.Hdr != "Default" ? settings.Hdr : hdrComboBox.Text;
                 if (before)
                     bitsComboBox.Text = settings.Bit_depth != "Default" ? settings.Bit_depth : bitsComboBox.Text;
@@ -587,13 +589,14 @@ namespace Av1ador
                 File = file,
                 Vf = "",
                 Af = "",
-                Gs = "",
+                Gs = gsUpDown.Value.ToString(),
                 Cv = cvComboBox.SelectedIndex,
                 Bits = bitsComboBox.Text,
                 Param = paramsBox.Text,
                 Crf = (int)numericUpDown1.Value,
                 Ba = int.Parse(abitrateBox.Text),
-                Bv = bitrateBox.Text
+                Bv = bitrateBox.Text,
+                Resolution = resComboBox.Text
             };
             listBox1.Items.Add(entry);
         }
@@ -612,6 +615,7 @@ namespace Av1ador
 
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Reconnect();
             encodefirstButton.Enabled = listBox1.SelectedIndex > 0;
             Update_Video_txt(false);
             if (listBox1.SelectedIndex > -1)
@@ -1592,6 +1596,12 @@ namespace Av1ador
 
         private void ResComboBox_DropDownClosed(object sender, EventArgs e)
         {
+            ResComboBox_SelectedIndexChanged(sender, e);
+            Entry_update(11);
+        }
+
+        private void ResComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
             Dialogo = false;
             if (primer_video == null)
                 return;
@@ -1829,7 +1839,7 @@ namespace Av1ador
                 };
                 bw.RunWorkerCompleted += (s, ee) =>
                 {
-                    ResComboBox_DropDownClosed(sender, e);
+                    ResComboBox_SelectedIndexChanged(sender, e);
                     Filter_items_update();
                     Filter_preview(encoder.Vf[0]);
                 };
@@ -2102,7 +2112,7 @@ namespace Av1ador
         private void Entry_update(int field, int track = -1)
         {
             if (primer_video != null)
-                Entry.Update(field, primer_video.File, listBox1, vfListBox, afListBox, gsUpDown.Value, primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track);
+                Entry.Update(field, primer_video.File, listBox1, vfListBox, afListBox, gsUpDown.Value.ToString(), primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track, resComboBox.Text);
         }
     }
 }

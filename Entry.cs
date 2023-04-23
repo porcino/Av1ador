@@ -23,6 +23,7 @@ namespace Av1ador
         public int Ba { get; set; }
         public string Bv { get; set; }
         public int Track { get; set; }
+        public string Resolution { get; set; }
 
         
         public static int Index(string file, ListBox list)
@@ -71,7 +72,7 @@ namespace Av1ador
             }
         }
 
-        public static void Update(int col, string file, ListBox list, ListBox vf, ListBox af, decimal gs, double credits, double creditsend, int cv, string bits, string param, int crf, int ba, string bv, int track)
+        public static void Update(int col, string file, ListBox list, ListBox vf, ListBox af, string gs, double credits, double creditsend, int cv, string bits, string param, int crf, int ba, string bv, int track, string res)
         {
             for (int i = 0; i < list.Items.Count; i++)
             {
@@ -91,9 +92,9 @@ namespace Av1ador
                             }
                             break;
                         case 2:
-                            shouldsave = gs.ToString() != entry.Gs;
+                            shouldsave = gs != entry.Gs;
                             if (shouldsave)
-                                entry.Gs = gs.ToString();
+                                entry.Gs = gs;
                             break;
                         case 3:
                             shouldsave = credits != entry.Credits || creditsend != entry.CreditsEnd;
@@ -140,6 +141,11 @@ namespace Av1ador
                             shouldsave = track != entry.Track;
                             if (shouldsave)
                                 entry.Track = track;
+                            break;
+                        case 11:
+                            shouldsave = res != entry.Resolution;
+                            if (shouldsave)
+                                entry.Resolution = res;
                             break;
                     }
                     list.Items[i] = entry;

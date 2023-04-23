@@ -2144,7 +2144,7 @@
             this.resComboBox.Size = new System.Drawing.Size(60, 23);
             this.resComboBox.DropDown += new System.EventHandler(this.FormatComboBox_DropDown);
             this.resComboBox.DropDownClosed += new System.EventHandler(this.ResComboBox_DropDownClosed);
-            this.resComboBox.SelectedIndexChanged += new System.EventHandler(this.ResComboBox_DropDownClosed);
+            this.resComboBox.SelectedIndexChanged += new System.EventHandler(this.ResComboBox_SelectedIndexChanged);
             // 
             // toolStripLabel4
             // 

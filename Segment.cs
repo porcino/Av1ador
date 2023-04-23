@@ -705,7 +705,7 @@ namespace Av1ador
                 }
                 if (jump)
                     break;
-                Thread.Sleep(100);
+                Thread.Sleep(250);
             }
             Encoding = false;
             if (Stop)
