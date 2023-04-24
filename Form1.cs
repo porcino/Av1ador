@@ -29,7 +29,7 @@ namespace Av1ador
         static extern bool GetCursorPos(ref Point point);
 
         private readonly string title = "Av1ador 1.0.7";
-        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$");
+        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$", RegexOptions.IgnoreCase);
         private readonly string mpv_args = " --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
         private static readonly int processID = Process.GetCurrentProcess().Id;
         private Video primer_video, segundo_video;
@@ -59,6 +59,7 @@ namespace Av1ador
         private readonly BackgroundWorker aset = new BackgroundWorker();
         private Color heat = Color.FromArgb(220, 220, 220);
         private string[] clipboard = new string[] { "", "" };
+        private int hover_before = -1;
 
         public static bool Dialogo { get; set; }
 
@@ -1319,6 +1320,7 @@ namespace Av1ador
                 }
                 double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
                 encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps);
+                listBox1.Refresh();
             }
             else if (encodestopButton.Enabled && encode.Finished)
             {
@@ -1346,6 +1348,8 @@ namespace Av1ador
             else if (!encodestopButton.Enabled)
             {
                 encode.Can_run = false;
+                if (statusLabel.Text != "")
+                    listBox1.Refresh();
                 if (!statusLabel.Text.Contains("grain"))
                     statusLabel.Text = "";
                 estimatedLabel.Text = "";
@@ -1896,6 +1900,20 @@ namespace Av1ador
                 }
             }
             catch { }
+
+            int hover = listBox1.IndexFromPoint(mouse_pos.X - listBox1.PointToScreen(Point.Empty).X, mouse_pos.Y - listBox1.PointToScreen(Point.Empty).Y);
+            if (hover_before != hover)
+            {
+                hover_before = hover;
+                if (hover_before > -1)
+                {
+                    toolTip1.Active = false;
+                    toolTip1.SetToolTip(listBox1, ((Entry)listBox1.Items[hover]).File);
+                    toolTip1.Active = true;
+                }
+                else
+                    toolTip1.Active = false;
+            }
         }
 
         private void WorkersgroupBox_Paint(object sender, PaintEventArgs e)

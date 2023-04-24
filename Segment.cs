@@ -48,6 +48,7 @@ namespace Av1ador
         public double Abr { get; set; }
         public double Peak_br { get; set; }
         public int Counter { get; set; }
+        public static string Encoding_file { get; set; }
         public int Progress
         {
             get
@@ -178,6 +179,7 @@ namespace Av1ador
 
         public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0)
         {
+            Encoding_file = file;
             track_delay = delay;
             Dir = dir == "" ? Path.GetDirectoryName(file) + "\\" : dir + "\\";
             File = file;
@@ -517,6 +519,7 @@ namespace Av1ador
                     Directory.Delete(Name, true);
             }
             catch { }
+            Encoding_file = null;
         }
 
         public void Background(Segment chunk)

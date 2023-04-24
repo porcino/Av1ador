@@ -201,6 +201,7 @@
             this.panTimer = new System.Windows.Forms.Timer(this.components);
             this.infoTimer = new System.Windows.Forms.Timer(this.components);
             this.mouseTimer = new System.Windows.Forms.Timer(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -2309,6 +2310,10 @@
             this.mouseTimer.Interval = 16;
             this.mouseTimer.Tick += new System.EventHandler(this.MouseTimer_Tick);
             // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2576,6 +2581,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
         private System.Windows.Forms.ToolStripButton copytoolStripButton;
         private System.Windows.Forms.ToolStripButton pastetoolStripButton;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
