@@ -512,7 +512,7 @@ namespace Av1ador
         {
             try
             {
-                long size = new FileInfo(Dir + Name + "_Av1ador." + Extension).Length;
+                long size = new FileInfo(Dir + Path.GetFileName(Name) + "_Av1ador." + Extension).Length;
                 if (size > 500 && !System.IO.File.Exists("debug"))
                     Directory.Delete(Name, true);
             }

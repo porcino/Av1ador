@@ -28,7 +28,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.0.6";
+        private readonly string title = "Av1ador 1.0.7";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$");
         private readonly string mpv_args = " --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
         private static readonly int processID = Process.GetCurrentProcess().Id;
@@ -1874,8 +1874,6 @@ namespace Av1ador
                 }
                 else
                 {
-                    mouse1 = true;
-
                     int mpv_id = 0, mpv2_id = 0, new_id = 0;
                     GetWindowThreadProcessId(mpv1p.MainWindowHandle, ref mpv_id);
                     if (IsLoaded_mpv2())
@@ -1885,7 +1883,7 @@ namespace Av1ador
                     if (focus_id > 0 || new_id == 0)
                     {
                         click_in = mpv_id == focus_id || mpv2_id == focus_id || Process.GetProcessById(focus_id).ProcessName.ToString() == GetType().Assembly.GetName().Name;
-                        if (click_in || new_id == 0)
+                        if (!mouse1 && (click_in || new_id == 0))
                         {
                             click_pos = mouse_pos;
                             int izq = tableLayoutPanel1.PointToScreen(Point.Empty).X;
@@ -1894,6 +1892,7 @@ namespace Av1ador
                                 panTimer.Enabled = true;
                         }
                     }
+                    mouse1 = true;
                 }
             }
             catch { }
