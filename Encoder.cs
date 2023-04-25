@@ -458,7 +458,7 @@ namespace Av1ador
             {
                 Vf.RemoveAll(s => s.StartsWith("scale=in_color_matrix"));
                 if (v != "" && v != "bt2020")
-                    Vf.Add("scale=in_color_matrix=" + (v == "smpte170m" ? "bt601" : "auto") + ":out_color_matrix=bt709");
+                    Vf.Add("scale=in_color_matrix=" + (v == "smpte170m" ? "bt601" : "auto") + ":out_color_matrix=" + (v == "smpte170m" ? "bt709" : "auto"));
             }
             else if (f == "Color adjustment")
                 Vf.Add("eq=contrast=1.1:brightness=0.05:saturation=1.4:gamma=1.0");
@@ -471,7 +471,7 @@ namespace Av1ador
             else if (f == "Vulkan")
                 Vf.Add("\"curves=m=0/0 0.25/0.3 0.87/0.88 1/1,format=p010,hwupload,libplacebo=minimum_peak=4:gamut_mode=desaturate:tonemapping=hable:tonemapping_mode=rgb:tonemapping_crosstalk=0.04:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             else if (f == "anime4k")
-                Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Clamp_Highlights.glsl',libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
+                Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
             else if (f == "fsrcnnx")
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='w=iw*2:h=ih*2:custom_shader_path=" + resdir + "FSRCNNX_x2_16-0-4-1.glsl',hwdownload," + Bit_Format());
             else if (f == "Stabilization")
