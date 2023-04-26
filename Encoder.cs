@@ -476,6 +476,16 @@ namespace Av1ador
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='w=iw*2:h=ih*2:custom_shader_path=" + resdir + "FSRCNNX_x2_16-0-4-1.glsl',hwdownload," + Bit_Format());
             else if (f == "Stabilization")
                 Vf.Insert(Vf.FindIndex(s => s.Contains("nnedi")) > -1 ? 1 : 0, "\"vidstabtransform=smoothing=6:crop=keep:zoom=0:optzoom=0:input='transforms.trf'\"");
+            else if (f.Contains("90° clock"))
+                Vf.Add("rotate=PI/2:ow=ih:oh=iw");
+            else if (f.Contains("90° anti"))
+                Vf.Add("rotate=-PI/2:ow=ih:oh=iw");
+            else if (f == "180°")
+                Vf.Add("rotate=PI");
+            else if (f.Contains("Horizontal"))
+                Vf.Add("hflip");
+            else if (f.Contains("Vertical"))
+                Vf.Add("vflip");
         }
 
         public void Vf_update(string f, string v, [Optional] string a)

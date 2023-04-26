@@ -1555,7 +1555,7 @@ namespace Av1ador
             vf = encoder.Filter_convert(vf);
             if (Func.Preview(vf))
             {
-                string osd = "Filter preview: " + vf.Substring(0, vf.IndexOf('='));
+                string osd = "Filter preview: " + vf.Split('=')[0];
                 mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
                 mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + vf + "\"] }");
                 mpv_cmd.WriteLine("{ \"command\": [\"show-text\", \"" + osd + "\"] }");

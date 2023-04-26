@@ -220,10 +220,10 @@ namespace Av1ador
 
         public static bool Preview(string vf)
         {
-            string[] filters = new string[] { "crop", "eq", "delogo", "smartblur", "gradfun", "framestep", "fps", "nlmeans", "nlmeans_opencl" };
+            string[] filters = new string[] { "crop", "eq¡", "delogo", "smartblur", "gradfun", "framestep", "fps¡", "nlmeans", "nlmeans_opencl", "hqdn3d", "rotate", "hflip", "vflip" };
             foreach (string filter in filters)
             {
-                if (vf.IndexOf(filter + "=") > -1)
+                if (vf.IndexOf(filter.Replace('¡', '=')) > -1)
                     return true;
             }
             return false;
