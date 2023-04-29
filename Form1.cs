@@ -1348,7 +1348,7 @@ namespace Av1ador
             else if (!encodestopButton.Enabled)
             {
                 encode.Can_run = false;
-                if (statusLabel.Text != "")
+                if (statusLabel.Text.Contains("Encoding"))
                     listBox1.Refresh();
                 if (!statusLabel.Text.Contains("grain"))
                     statusLabel.Text = "";
@@ -1557,7 +1557,7 @@ namespace Av1ador
             {
                 string osd = "Filter preview: " + vf.Split('=')[0];
                 mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
-                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + vf + "\"] }");
+                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + vf.Replace("delogo=","delogo=show=1:") + "\"] }");
                 mpv_cmd.WriteLine("{ \"command\": [\"show-text\", \"" + osd + "\"] }");
             }
             else
@@ -1985,6 +1985,14 @@ namespace Av1ador
                 encoder.Af = Entry.Filter2List((listBox1.SelectedItems[0] as Entry).Af);
                 Entry.Save(listBox1, true);
             }
+        }
+
+        private void FrameInterpolationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (primer_video == null)
+                return;
+            encoder.Vf_add("interpolation", primer_video.Fps.ToString());
+            Filter_items_update();
         }
 
         private void MultiToolStripMenuItem_Click(object sender, EventArgs e)

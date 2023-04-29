@@ -300,6 +300,8 @@ namespace Av1ador
             int l = (int)(bar.Width * starttime / Duration);
             int r = (int)(bar.Width * endtime / Duration);
             g.Clear(Color.Firebrick);
+            if (Duration == 0)
+                return bar;
             if (starttime > 0)
                 g.FillRectangle(Brushes.RosyBrown, 0, 0, l, bar.Height);
             if (endtime < Duration)

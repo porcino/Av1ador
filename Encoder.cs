@@ -486,6 +486,11 @@ namespace Av1ador
                 Vf.Add("hflip");
             else if (f.Contains("Vertical"))
                 Vf.Add("vflip");
+            else if (f == "interpolation")
+            {
+                Out_fps = (Out_fps > 0 ? Out_fps : (int)double.Parse(v)) * 2;
+                Vf.Add("minterpolate=fps=" + Out_fps.ToString() + ":search_param=96");
+            }
         }
 
         public void Vf_update(string f, string v, [Optional] string a)

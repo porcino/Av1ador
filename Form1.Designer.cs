@@ -118,8 +118,16 @@
             this.debandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deinterlaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.delogoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.frameInterpolationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.horizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.verticalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.denoiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pOIaddroiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clockwisetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.anticlockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clockwise180toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.sharpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stabilizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tonemapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -202,13 +210,6 @@
             this.infoTimer = new System.Windows.Forms.Timer(this.components);
             this.mouseTimer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.rotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clockwisetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clockwise180toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.anticlockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.horizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.verticalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -1361,6 +1362,7 @@
             this.debandToolStripMenuItem,
             this.deinterlaceToolStripMenuItem,
             this.delogoToolStripMenuItem,
+            this.frameInterpolationToolStripMenuItem,
             this.flipToolStripMenuItem,
             this.denoiseToolStripMenuItem,
             this.pOIaddroiToolStripMenuItem,
@@ -1425,6 +1427,40 @@
             this.delogoToolStripMenuItem.Text = "Delogo";
             this.delogoToolStripMenuItem.Click += new System.EventHandler(this.DelogoToolStripMenuItem_Click);
             // 
+            // frameInterpolationToolStripMenuItem
+            // 
+            this.frameInterpolationToolStripMenuItem.AutoSize = false;
+            this.frameInterpolationToolStripMenuItem.Name = "frameInterpolationToolStripMenuItem";
+            this.frameInterpolationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.frameInterpolationToolStripMenuItem.Text = "Frame interpolation";
+            this.frameInterpolationToolStripMenuItem.Click += new System.EventHandler(this.FrameInterpolationToolStripMenuItem_Click);
+            // 
+            // flipToolStripMenuItem
+            // 
+            this.flipToolStripMenuItem.AutoSize = false;
+            this.flipToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.horizontalToolStripMenuItem,
+            this.verticalToolStripMenuItem});
+            this.flipToolStripMenuItem.Name = "flipToolStripMenuItem";
+            this.flipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.flipToolStripMenuItem.Text = "Flip";
+            // 
+            // horizontalToolStripMenuItem
+            // 
+            this.horizontalToolStripMenuItem.AutoSize = false;
+            this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
+            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.horizontalToolStripMenuItem.Text = "Horizontal ↔";
+            this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // verticalToolStripMenuItem
+            // 
+            this.verticalToolStripMenuItem.AutoSize = false;
+            this.verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
+            this.verticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.verticalToolStripMenuItem.Text = "Vertical ↕";
+            this.verticalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
             // denoiseToolStripMenuItem
             // 
             this.denoiseToolStripMenuItem.AutoSize = false;
@@ -1440,6 +1476,41 @@
             this.pOIaddroiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pOIaddroiToolStripMenuItem.Text = "POI (addroi)";
             this.pOIaddroiToolStripMenuItem.Click += new System.EventHandler(this.POIaddroiToolStripMenuItem_Click);
+            // 
+            // rotateToolStripMenuItem
+            // 
+            this.rotateToolStripMenuItem.AutoSize = false;
+            this.rotateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clockwisetoolStripMenuItem,
+            this.anticlockwiseToolStripMenuItem,
+            this.clockwise180toolStripMenuItem3});
+            this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
+            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rotateToolStripMenuItem.Text = "Rotate";
+            // 
+            // clockwisetoolStripMenuItem
+            // 
+            this.clockwisetoolStripMenuItem.AutoSize = false;
+            this.clockwisetoolStripMenuItem.Name = "clockwisetoolStripMenuItem";
+            this.clockwisetoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clockwisetoolStripMenuItem.Text = "90° clockwise ↷";
+            this.clockwisetoolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // anticlockwiseToolStripMenuItem
+            // 
+            this.anticlockwiseToolStripMenuItem.AutoSize = false;
+            this.anticlockwiseToolStripMenuItem.Name = "anticlockwiseToolStripMenuItem";
+            this.anticlockwiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.anticlockwiseToolStripMenuItem.Text = "90° anticlockwise ↶";
+            this.anticlockwiseToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // clockwise180toolStripMenuItem3
+            // 
+            this.clockwise180toolStripMenuItem3.AutoSize = false;
+            this.clockwise180toolStripMenuItem3.Name = "clockwise180toolStripMenuItem3";
+            this.clockwise180toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.clockwise180toolStripMenuItem3.Text = "180°";
+            this.clockwise180toolStripMenuItem3.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // sharpenToolStripMenuItem
             // 
@@ -2323,67 +2394,6 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // rotateToolStripMenuItem
-            // 
-            this.rotateToolStripMenuItem.AutoSize = false;
-            this.rotateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clockwisetoolStripMenuItem,
-            this.anticlockwiseToolStripMenuItem,
-            this.clockwise180toolStripMenuItem3});
-            this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
-            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.rotateToolStripMenuItem.Text = "Rotate";
-            // 
-            // clockwisetoolStripMenuItem
-            // 
-            this.clockwisetoolStripMenuItem.AutoSize = false;
-            this.clockwisetoolStripMenuItem.Name = "clockwisetoolStripMenuItem";
-            this.clockwisetoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.clockwisetoolStripMenuItem.Text = "90° clockwise ↷";
-            this.clockwisetoolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // clockwise180toolStripMenuItem3
-            // 
-            this.clockwise180toolStripMenuItem3.AutoSize = false;
-            this.clockwise180toolStripMenuItem3.Name = "clockwise180toolStripMenuItem3";
-            this.clockwise180toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
-            this.clockwise180toolStripMenuItem3.Text = "180°";
-            this.clockwise180toolStripMenuItem3.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // anticlockwiseToolStripMenuItem
-            // 
-            this.anticlockwiseToolStripMenuItem.AutoSize = false;
-            this.anticlockwiseToolStripMenuItem.Name = "anticlockwiseToolStripMenuItem";
-            this.anticlockwiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.anticlockwiseToolStripMenuItem.Text = "90° anticlockwise ↶";
-            this.anticlockwiseToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // flipToolStripMenuItem
-            // 
-            this.flipToolStripMenuItem.AutoSize = false;
-            this.flipToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.horizontalToolStripMenuItem,
-            this.verticalToolStripMenuItem});
-            this.flipToolStripMenuItem.Name = "flipToolStripMenuItem";
-            this.flipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.flipToolStripMenuItem.Text = "Flip";
-            // 
-            // horizontalToolStripMenuItem
-            // 
-            this.horizontalToolStripMenuItem.AutoSize = false;
-            this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
-            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.horizontalToolStripMenuItem.Text = "Horizontal ↔";
-            this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // verticalToolStripMenuItem
-            // 
-            this.verticalToolStripMenuItem.AutoSize = false;
-            this.verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
-            this.verticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.verticalToolStripMenuItem.Text = "Vertical ↕";
-            this.verticalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2659,6 +2669,7 @@
         private System.Windows.Forms.ToolStripMenuItem flipToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem horizontalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verticalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem frameInterpolationToolStripMenuItem;
     }
 }
 
