@@ -150,7 +150,7 @@ namespace Av1ador
             if (compare.Success)
             {
                 Color_matrix = compare.Groups[1].ToString();
-                if (Color_matrix != "mpeg2video")
+                if (Color_matrix.Contains("2020"))
                     Hdr = true;
             }
             else if (Height < 580 && (Sar < 1 || Interlaced))
