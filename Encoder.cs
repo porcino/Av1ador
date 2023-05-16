@@ -521,9 +521,9 @@ namespace Av1ador
                 if (!d)
                 {
                     if (Libplacebo)
-                        Vf_add("tonemap_vk", "");
+                        Vf_add("Vulkan", "");
                     else
-                        Vf_add("tonemap_cl", "");
+                        Vf_add("OpenCL", "");
                 }
             }
         }
