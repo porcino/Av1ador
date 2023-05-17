@@ -62,7 +62,7 @@ namespace Av1ador
                         foreach (var chunk in Chunks.ToList())
                             pct += chunk.Completed ? chunk.Length : chunk.Progress;
                         progress = pct * (double)100 / (Double.Parse(Splits[Splits.Count - 1]) - Double.Parse(Splits[0]));
-                        if (initial_progress == 0 && progress > 0)
+                        if (initial_progress == 0 && progress > 0 && !Running)
                             initial_progress = progress;
                         return (int)Math.Ceiling(progress);
                     }
@@ -356,6 +356,8 @@ namespace Av1ador
 
         public void Encoding()
         {
+            if (Running)
+                return;
             Running = true;
             if (Splits == null)
                 Splits = new List<string>(System.IO.File.ReadAllLines(Name + "\\segments.txt"));
@@ -416,51 +418,57 @@ namespace Av1ador
                     }
                 }
             }
-            int instances = 0;
-            int done = 0;
-            for (int i = 0; i < Order.Count; i++)
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += (ss, e) =>
             {
-                Segment chunk = Chunks[Order[i]];
-                bool skip = true;
-                if (chunk.Encoding)
-                    instances++;
-                if (!chunk.Completed && !chunk.Encoding && chunk.Progress == 0 && Can_run)
+                int instances = 0;
+                int done = 0;
+                for (int i = 0; i < Order.Count; i++)
                 {
-                    
-                    if (System.IO.File.Exists(chunk.Pathfile) && new FileInfo(chunk.Pathfile).Length > 500 && !System.IO.File.Exists(chunk.Pathfile + ".txt")
-                        && Math.Abs(Video.Get_duration(Video.Get_info(chunk.Pathfile), out string _, chunk.Pathfile) - chunk.Length) < 2)
-                    {
-                        skip = false;
-                        chunk.Completed = true;
-                        chunk.Progress = chunk.Progress == 0 ? 1 : chunk.Progress;
-                        chunk.Size = new FileInfo(chunk.Pathfile).Length;
-                        chunk.Bitrate = chunk.Size / (double)1024 * (double)8 / chunk.Length;
-                    }
-                    else
-                    {
+                    Segment chunk = Chunks[Order[i]];
+                    bool skip = true;
+                    if (chunk.Encoding)
                         instances++;
-                        chunk.Encoding = true;
-                        Thread thread = new Thread(() => Background(chunk));
-                        thread.Start();
+                    else if (!chunk.Completed && chunk.Progress == 0 && Can_run)
+                    {
+                        if (System.IO.File.Exists(chunk.Pathfile) && new FileInfo(chunk.Pathfile).Length > 500 && !System.IO.File.Exists(chunk.Pathfile + ".txt")
+                            && Math.Abs(Video.Get_duration(Video.Get_info(chunk.Pathfile), out string _, chunk.Pathfile) - chunk.Length) < 2)
+                        {
+                            skip = false;
+                            chunk.Completed = true;
+                            chunk.Progress = chunk.Progress == 0 ? 1 : chunk.Progress;
+                            chunk.Size = new FileInfo(chunk.Pathfile).Length;
+                            chunk.Bitrate = chunk.Size / (double)1024 * (double)8 / chunk.Length;
+                            watch.Reset();
+                            watch.Start();
+                        }
+                        else
+                        {
+                            instances++;
+                            chunk.Encoding = true;
+                            Thread thread = new Thread(() => Background(chunk));
+                            thread.Start();
+                            Thread.Sleep(100);
+                        }
                     }
+                    if (chunk.Completed)
+                        done++;
+                    if (instances >= Workers && skip)
+                        break;
                 }
-                if (chunk.Completed)
-                    done++;
-                if (instances >= Workers && skip)
-                    break;
-            }
-            if (done == Chunks.Length)
-            {
-                watch.Stop();
-                watch.Reset();
-                Status.RemoveAll(s => s.StartsWith("Encoding video"));
-                Thread trd = new Thread(new ThreadStart(Concatenate))
+                if (done == Chunks.Length)
                 {
-                    IsBackground = true
-                };
-                trd.Start();
-            }
-            Running = false;
+                    watch.Reset();
+                    Status.RemoveAll(s => s.StartsWith("Encoding video"));
+                    Thread trd = new Thread(new ThreadStart(Concatenate))
+                    {
+                        IsBackground = true
+                    };
+                    trd.Start();
+                }
+                Running = false;
+            };
+            bw.RunWorkerAsync();
         }
 
         private void Concatenate()
@@ -590,10 +598,7 @@ namespace Av1ador
         public void Set_state(bool stop = false)
         {
             if (stop)
-            {
-                watch.Stop();
                 watch.Reset();
-            }
             if (Chunks != null)
                 foreach (Segment chunk in Chunks)
                 {
