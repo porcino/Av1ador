@@ -426,7 +426,9 @@ namespace Av1ador
                     instances++;
                 if (!chunk.Completed && !chunk.Encoding && chunk.Progress == 0 && Can_run)
                 {
-                    if (System.IO.File.Exists(chunk.Pathfile) && new FileInfo(chunk.Pathfile).Length > 500 && !System.IO.File.Exists(chunk.Pathfile + ".txt"))
+                    
+                    if (System.IO.File.Exists(chunk.Pathfile) && new FileInfo(chunk.Pathfile).Length > 500 && !System.IO.File.Exists(chunk.Pathfile + ".txt")
+                        && Math.Abs(Video.Get_duration(Video.Get_info(chunk.Pathfile), out string _, chunk.Pathfile) - chunk.Length) < 2)
                     {
                         skip = false;
                         chunk.Completed = true;

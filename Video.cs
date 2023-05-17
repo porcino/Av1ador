@@ -87,9 +87,7 @@ namespace Av1ador
             Match compare = res_regex.Match(output);
             Channels = compare.Success ? int.Parse(compare.Groups[1].Value) : 0;
 
-            ffprobe.StartInfo.Arguments = " \"" + file + "\"";
-            ffprobe.Start();
-            string info = ffprobe.StandardError.ReadToEnd();
+            string info = Get_info(file);
             res_regex = new Regex(" [0-9]{2,5}x[0-9]{2,5}");
             compare = res_regex.Match(info);
             if (compare.Success)
@@ -99,26 +97,7 @@ namespace Av1ador
             }
 
             if (len == 0)
-            {
-                res_regex = new Regex(" ([0-9]*):([0-5][0-9]):([0-5][0-9].[0-9][0-9]), ");
-                compare = res_regex.Match(info);
-                if (compare.Success)
-                {
-                    str_duration = compare.Groups[0].ToString().Split('.')[0].Replace(" ", "");
-                    Duration = Double.Parse(compare.Groups[1].ToString()) * 3600 + Double.Parse(compare.Groups[2].ToString()) * 60 + Double.Parse(compare.Groups[3].ToString());
-                }
-                else
-                {
-                    ffprobe.StartInfo.Arguments = " -v 0 -hide_banner -of compact=p=0:nk=1 -show_entries packet=pts_time -read_intervals 99999%+#1000" + " \"" + file + "\"";
-                    ffprobe.Start();
-                    string pts_time = ffprobe.StandardOutput.ReadToEnd();
-                    res_regex = new Regex("([0-9]+).[0-9]+", RegexOptions.RightToLeft);
-                    compare = res_regex.Match(pts_time);
-                    Duration = compare.Success ? Double.Parse(compare.Groups[1].ToString()) : 0;
-                    TimeSpan ts = TimeSpan.FromSeconds(Duration);
-                    str_duration = ts.ToString().Split('.')[0];
-                }
-            }
+                Duration = Get_duration(info, out str_duration, file);
             else
                 Duration = len;
             endtime = Duration;
@@ -291,6 +270,39 @@ namespace Av1ador
                 Busy = false;
             };
             bw2.RunWorkerAsync();
+        }
+
+        public static string Get_info(string file)
+        {
+            Process ffprobe = new Process();
+            Func.Setinicial(ffprobe, 2, " \"" + file + "\"");
+            ffprobe.Start();
+            return ffprobe.StandardError.ReadToEnd();
+        }
+
+        public static double Get_duration(string info, out string str_duration, string file = "")
+        {
+            Regex res_regex = new Regex(" ([0-9]*):([0-5][0-9]):([0-5][0-9].[0-9][0-9]), ");
+            Match compare = res_regex.Match(info);
+            double duration;
+            if (compare.Success)
+            {
+                str_duration = compare.Groups[0].ToString().Split('.')[0].Replace(" ", "");
+                duration = Double.Parse(compare.Groups[1].ToString()) * 3600 + Double.Parse(compare.Groups[2].ToString()) * 60 + Double.Parse(compare.Groups[3].ToString());
+            }
+            else
+            {
+                Process ffprobe = new Process();
+                Func.Setinicial(ffprobe, 2, " -v 0 -hide_banner -of compact=p=0:nk=1 -show_entries packet=pts_time -read_intervals 99999%+#1000" + " \"" + file + "\"");
+                ffprobe.Start();
+                string pts_time = ffprobe.StandardOutput.ReadToEnd();
+                res_regex = new Regex("([0-9]+).[0-9]+", RegexOptions.RightToLeft);
+                compare = res_regex.Match(pts_time);
+                duration = compare.Success ? Double.Parse(compare.Groups[1].ToString()) : 0;
+                TimeSpan ts = TimeSpan.FromSeconds(duration);
+                str_duration = ts.ToString().Split('.')[0];
+            }
+            return duration;
         }
 
         internal Bitmap Bar(int barra_w, int barra_h, double playtime, [Optional] Encode encode)
