@@ -1376,7 +1376,7 @@ namespace Av1ador
                     if (underload > 4)
                     {
                         underload = -1;
-                        if (workersUpDown.Value + 1 <= workersUpDown.Maximum && encode.Segments_left > 0)
+                        if (workersUpDown.Value + 1 <= workersUpDown.Maximum && encode.Segments_left > 0 && workersUpDown.Value < Environment.ProcessorCount)
                             workersUpDown.Value++;
                     }
                 }
