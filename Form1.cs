@@ -1050,8 +1050,8 @@ namespace Av1ador
             gsgroupBox.Enabled = encoder.Gs > 0;
             gsUpDown.Maximum = encoder.Gs;
             pOIaddroiToolStripMenuItem.Enabled = encoder.Cv.StartsWith("libx");
-            workersUpDown.Maximum = encoder.Cv.Contains("nvenc") ? 1 : encoder.Cores;
-            workersUpDown.Value = workersUpDown.Maximum > 1 ? (workersBox.Checked ? (workersUpDown.Value <= workersUpDown.Maximum ? workersUpDown.Value : workersUpDown.Maximum) : 2) : 1;
+            workersUpDown.Maximum = encoder.Cv.Contains("nvenc") ? 2 : encoder.Cores;
+            workersUpDown.Value = workersUpDown.Maximum > 2 ? (workersBox.Checked ? (workersUpDown.Value <= workersUpDown.Maximum ? workersUpDown.Value : workersUpDown.Maximum) : 2) : 1;
             encoder.Predicted = false;
             Entry_update(4);
         }

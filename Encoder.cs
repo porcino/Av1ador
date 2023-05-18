@@ -13,7 +13,7 @@ namespace Av1ador
         public const string resdir = "resource\\\\";
         private readonly string gpu_name;
         private int ba;
-        private readonly string[] v = new string[] { "AV1 (aom)", "AV1 (svt)", "AV1 (rav1e)", "VP9 (vpx)", "HEVC (x265)", "HEVC (nvenc)", "H264 (x264)", "H264 (nvenc)", "MPEG4 (xvid)" };
+        private readonly string[] v = new string[] { "AV1 (aom)", "AV1 (svt)", "AV1 (rav1e)", "AV1 (nvenc)", "VP9 (vpx)", "HEVC (x265)", "HEVC (nvenc)", "H264 (x264)", "H264 (nvenc)", "MPEG4 (xvid)" };
         private readonly string[] j = new string[] { "mkv", "ivf" };
         private readonly string[] a = new string[] { "aac", "opus", "vorbis", "mp3" };
         private readonly string[] c = new string[] { "2 (stereo)", "6 (surround 5.1)", "8 (surround 7.1)", "1 (mono)" };
@@ -112,7 +112,7 @@ namespace Av1ador
                 return vtags;
             var nonv = new List<string>();
             foreach (var vtag in vtags)
-                if (!vtag.Contains("NVEnc"))
+                if (!vtag.Contains("nvenc"))
                     nonv.Add(vtag);
             return nonv.ToArray();
 
@@ -123,21 +123,21 @@ namespace Av1ador
             {
                 case "mp4":
                     A_codecs = new string[] { a[0], a[1], a[3] };
-                    V_codecs = new string[] { v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8] };
+                    V_codecs = new string[] { v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8], v[9]  };
                     V_codecs = CheckNvidia(V_codecs);
                     break;
                 case "mkv":
                     A_codecs = new string[] { a[0], a[1], a[2], a[3] };
-                    V_codecs = new string[] { v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8] };
+                    V_codecs = new string[] { v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8], v[9] };
                     V_codecs = CheckNvidia(V_codecs);
                     break;
                 case "webm":
                     A_codecs = new string[] { a[1], a[2] };
-                    V_codecs = new string[] { v[0], v[1], v[2], v[3] };
+                    V_codecs = new string[] { v[0], v[1], v[2], v[3], v[4] };
                     break;
                 case "avi":
                     A_codecs = new string[] { a[3], a[1] };
-                    V_codecs = new string[] { v[7], v[3], v[4], v[5], v[6], v[7] };
+                    V_codecs = new string[] { v[9], v[4], v[5], v[6], v[7], v[8] };
                     V_codecs = CheckNvidia(V_codecs);
                     break;
             }
@@ -191,6 +191,17 @@ namespace Av1ador
             }
             else if (codec == v[3])
             {
+                Cv = "av1_nvenc";
+                Crf = 32;
+                Bit_depth = new string[] { "8", "10" };
+                Job = j[0];
+                Presets = new string[] { "*slow", "p7", "p6", "p5", "p4", "p3", "p2", "p1", "fast" };
+                speed_str = "-preset:v ";
+                Params = "-tile-columns 1 -tile-rows 1";
+                Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
+            }
+            else if (codec == v[4])
+            {
                 Cv = "libvpx-vp9";
                 Max_crf = 63;
                 Crf = 36;
@@ -202,7 +213,7 @@ namespace Av1ador
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Rate = 0.95;
             }
-            else if (codec == v[4])
+            else if (codec == v[5])
             {
                 Cv = "libx265";
                 Crf = 28;
@@ -214,7 +225,7 @@ namespace Av1ador
                 Color = ":colorprim=1:transfer=1:colormatrix=1";
                 Rate = 0.9;
             }
-            else if (codec == v[5])
+            else if (codec == v[6])
             {
                 Cv = "hevc_nvenc";
                 Crf = 32;
@@ -225,7 +236,7 @@ namespace Av1ador
                 Params = "-bf:v 3 -spatial-aq 1 -temporal-aq 1 -aq-strength 7 -b_ref_mode 1";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
             }
-            else if (codec == v[6])
+            else if (codec == v[7])
             {
                 Cv = "libx264";
                 Crf = 27;
@@ -237,7 +248,7 @@ namespace Av1ador
                 Color = ":colorprim=bt709:transfer=bt709:colormatrix=bt709";
                 Multipass = "-pass 1 -passlogfile \"!log!\"";
             }
-            else if (codec == v[7])
+            else if (codec == v[8])
             {
                 Cv = "h264_nvenc";
                 Crf = 32;
