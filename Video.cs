@@ -102,14 +102,14 @@ namespace Av1ador
                 Duration = len;
             endtime = Duration;
 
-            res_regex = new Regex("SAR ([0-9]+):([0-9]+)", RegexOptions.RightToLeft);
+            res_regex = new Regex("SAR ([0-9]+):([0-9]+)");
             compare = res_regex.Match(info);
             if (compare.Success)
                 Sar = Double.Parse(compare.Groups[1].ToString()) / Double.Parse(compare.Groups[2].ToString());
             else
                 Sar = 1;
 
-            res_regex = new Regex("DAR ([0-9]+):([0-9]+)", RegexOptions.RightToLeft);
+            res_regex = new Regex("DAR ([0-9]+):([0-9]+)");
             compare = res_regex.Match(info);
             if (compare.Success && (Math.Abs(1.0 - Sar) > 0.01))
                 Dar = Double.Parse(compare.Groups[1].ToString()) / Double.Parse(compare.Groups[2].ToString());
