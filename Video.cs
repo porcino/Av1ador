@@ -206,7 +206,7 @@ namespace Av1ador
                         if (line != "")
                         {
                             for (int i = 0; i < Tracks_delay.Count; i++)
-                                Tracks_delay[i] -= double.Parse(line);
+                                Tracks_delay[i] -= double.Parse(line) * 1000.0;
                         }
                     }
                 }
