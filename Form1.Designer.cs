@@ -2226,6 +2226,7 @@
             this.resComboBox.DropDown += new System.EventHandler(this.FormatComboBox_DropDown);
             this.resComboBox.DropDownClosed += new System.EventHandler(this.ResComboBox_DropDownClosed);
             this.resComboBox.SelectedIndexChanged += new System.EventHandler(this.ResComboBox_SelectedIndexChanged);
+            this.resComboBox.Enter += new System.EventHandler(this.ResComboBox_Enter);
             // 
             // toolStripLabel4
             // 

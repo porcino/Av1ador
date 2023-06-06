@@ -47,7 +47,7 @@ namespace Av1ador
         private Encoder encoder;
         private Encode encode;
         private double scale = 1.0;
-        private int usage;
+        private int usage, prevheight;
         private PerformanceCounter cpu;
         private PerformanceCounter disk;
         private PerformanceCounter ram;
@@ -1369,14 +1369,14 @@ namespace Av1ador
                 }
                 if (!workersBox.Checked && workersUpDown.Maximum > 1 && encode.Counter == 0)
                 {
-                    if (disk != null && usage < 91 && disk.NextValue() < 70 && ram.NextValue() > primer_video.Height)
+                    if (disk != null && usage < 90 && disk.NextValue() < 70 && ram.NextValue() > primer_video.Height)
                         underload++;
                     else
                         underload = 0;
                     if (underload > 4)
                     {
                         underload = -1;
-                        if (workersUpDown.Value + 1 <= workersUpDown.Maximum && encode.Segments_left > 0 && workersUpDown.Value < Environment.ProcessorCount)
+                        if (workersUpDown.Value + 1 <= workersUpDown.Maximum && encode.Segments_left > 0 && workersUpDown.Value < Environment.ProcessorCount * 2 / 3)
                             workersUpDown.Value++;
                     }
                 }
@@ -1598,16 +1598,24 @@ namespace Av1ador
             Filter_items_update();
         }
 
+        private void ResComboBox_Enter(object sender, EventArgs e)
+        {
+            prevheight = int.Parse(resComboBox.Text.Replace("p", ""));
+        }
+
         private void ResComboBox_DropDownClosed(object sender, EventArgs e)
         {
+            if (prevheight + "p" != resComboBox.Text)
+                encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
             ResComboBox_SelectedIndexChanged(sender, e);
             Entry_update(11);
+            ActiveControl = null;
         }
 
         private void ResComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Dialogo = false;
-            if (primer_video == null)
+            if (primer_video == null || encoder.Vf.FindIndex(s => s.StartsWith("scale")) != -1)
                 return;
             double dn = (double)16 / (double)9;
             double h = Double.Parse(resComboBox.Text.Replace("p", "")) * (primer_video.Sar < 1 ? primer_video.Sar : 1.0);
@@ -1617,12 +1625,7 @@ namespace Av1ador
             encoder.Out_h = (int)(Math.Floor(((ow * (double)primer_video.Height / (double)primer_video.Width / primer_video.Sar) + (double)1) / (double)2) * 2);
 
             if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
-            {
-                encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
                 encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
-            }
-            else
-                encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
             
             if (segundo_video == null) {
                 mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + scale + "] }");
@@ -1841,8 +1844,9 @@ namespace Av1ador
                     while (primer_video.Letterbox.Width == 0)
                         Thread.Sleep(30);
                 };
-                bw.RunWorkerCompleted += (s, ee) =>
+                bw.RunWorkerCompleted += (ss, ee) =>
                 {
+                    encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
                     ResComboBox_SelectedIndexChanged(sender, e);
                     Filter_items_update();
                     Filter_preview(encoder.Vf[0]);
