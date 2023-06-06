@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -182,6 +183,22 @@ namespace Av1ador
                 }
             }
             return new string[] { };
+        }
+
+        public static double Get_speed(List<string> list)
+        {
+            Regex regex = new Regex(@"setpts=[pts\*]*([0-9\./]+)", RegexOptions.IgnoreCase);
+            for (int i = 0; i < list.Count; i++)
+            {
+                Match compare = regex.Match(list[i]);
+                try
+                {
+                    if (compare.Success)
+                        return Convert.ToDouble(new DataTable().Compute(compare.Groups[1].Value, null));
+                }
+                catch { }
+            }
+            return 1.0;
         }
 
         public static double[] Upscale_ratio(List<string> list)

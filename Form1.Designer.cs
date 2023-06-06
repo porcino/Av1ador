@@ -210,6 +210,9 @@
             this.infoTimer = new System.Windows.Forms.Timer(this.components);
             this.mouseTimer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.speedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.speedup2xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.slowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -1368,6 +1371,7 @@
             this.pOIaddroiToolStripMenuItem,
             this.rotateToolStripMenuItem,
             this.sharpenToolStripMenuItem,
+            this.speedToolStripMenuItem,
             this.stabilizationToolStripMenuItem,
             this.tonemapToolStripMenuItem,
             this.upscaleToolStripMenuItem});
@@ -2395,6 +2399,32 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
+            // speedToolStripMenuItem
+            // 
+            this.speedToolStripMenuItem.AutoSize = false;
+            this.speedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.speedup2xToolStripMenuItem,
+            this.slowToolStripMenuItem});
+            this.speedToolStripMenuItem.Name = "speedToolStripMenuItem";
+            this.speedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.speedToolStripMenuItem.Text = "Speed";
+            // 
+            // speedup2xToolStripMenuItem
+            // 
+            this.speedup2xToolStripMenuItem.AutoSize = false;
+            this.speedup2xToolStripMenuItem.Name = "speedup2xToolStripMenuItem";
+            this.speedup2xToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.speedup2xToolStripMenuItem.Text = "Speed up";
+            this.speedup2xToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // slowToolStripMenuItem
+            // 
+            this.slowToolStripMenuItem.AutoSize = false;
+            this.slowToolStripMenuItem.Name = "slowToolStripMenuItem";
+            this.slowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.slowToolStripMenuItem.Text = "Slow down";
+            this.slowToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2671,6 +2701,9 @@
         private System.Windows.Forms.ToolStripMenuItem horizontalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verticalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frameInterpolationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem speedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem speedup2xToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem slowToolStripMenuItem;
     }
 }
 

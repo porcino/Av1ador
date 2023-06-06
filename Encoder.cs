@@ -51,6 +51,7 @@ namespace Av1ador
         public int Out_w { get; set; }
         public int Out_h { get; set; }
         public int Out_fps { get; set; }
+        public double Out_spd { get; set; } = 1;
         public bool Predicted { get; set; }
         public bool Libfdk { get; set; }
         public bool Libplacebo { get; set; }
@@ -502,9 +503,26 @@ namespace Av1ador
                 Out_fps = (Out_fps > 0 ? Out_fps : (int)double.Parse(v)) * 2;
                 Vf.Add("minterpolate=fps=" + Out_fps.ToString() + ":search_param=96");
             }
+            else if (f == "Speed up" || f == "Slow down" || f == "Speed update")
+            {
+                double spd = Func.Get_speed(Vf) + (f == "Speed up" ? -0.1 : (f == "Speed update" ? 0.0 : 0.1));
+                spd = spd < 0.1 ? 0.1 : (spd > 100 ? 100 : spd);
+                Vf.RemoveAll(s => s.StartsWith("setpts="));
+                Af.RemoveAll(s => s.StartsWith("atempo="));
+                if (spd == 1)
+                    return;
+                Vf.Add("setpts=" + spd +"*PTS");
+                spd = 1.0 / spd;
+                while (spd < 0.5)
+                {
+                    spd /= 0.5;
+                    Af.Add("atempo=0.5");
+                }
+                Af.Add("atempo=" + spd);
+            }
         }
 
-        public void Vf_update(string f, string v, [Optional] string a)
+        public void Vf_update(string f, [Optional] string v, [Optional] string a)
         {
             if (f == "tonemap")
             {
@@ -537,6 +555,8 @@ namespace Av1ador
                         Vf_add("OpenCL", "");
                 }
             }
+            else if (f.Contains("setpts="))
+                Vf_add("Speed update");
         }
 
         public void Af_add(string f, [Optional] string v)
@@ -573,7 +593,13 @@ namespace Av1ador
         {
             string str = " -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration!";
             str += " -c:v:0 " + Cv;
-            if (Vf.Count > 0)
+            List<string> vf = new List<string>(Vf);
+            if (Vf.Count > 0 && Vf.FindIndex(s => s.StartsWith("setpts=")) > -1)
+            {
+                Out_spd = Func.Get_speed(Vf);
+                vf.RemoveAll(s => s.StartsWith("setpts="));
+            }
+            if (vf.Count > 0)
             {
                 if (Vf.FindIndex(s => s.Contains("vidstabtransform")) > -1)
                     str = " -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration! -vf \"scale='min(640,iw)':-2,vidstabdetect=shakiness=10:accuracy=5:result='transforms.trf'\" -f null NUL && ffmpeg" + str;
@@ -591,7 +617,7 @@ namespace Av1ador
                         break;
                     }
                 }
-                str += " -vf " + String.Join(",", Vf.ToArray());
+                str += " -vf " + String.Join(",", vf.ToArray());
             }
             str += " -pix_fmt " + (Bits == 8 ? "yuv420p" : "yuv420p10le");
             str += " -fps_mode vfr";

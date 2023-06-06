@@ -1319,7 +1319,7 @@ namespace Av1ador
                     delay = primer_video.Tracks_delay[checkedListBox1.CheckedIndices[0]];
                 }
                 double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
-                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps);
+                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps, encoder.Out_spd);
                 listBox1.Refresh();
             }
             else if (encodestopButton.Enabled && encode.Finished)
@@ -1494,6 +1494,8 @@ namespace Av1ador
                     encoder.Vf.RemoveAt(vfListBox.SelectedIndices[i]);
                     if (s.Contains("Anime4K") || s.Contains("FSRCNNX"))
                         Get_res();
+                    if (s.StartsWith("setpts"))
+                        encoder.Af.RemoveAll(ss => ss.StartsWith("atempo="));
                 }
             }
             else
@@ -1534,6 +1536,7 @@ namespace Av1ador
                         encoder.Vf[vfListBox.SelectedIndex] = clTextBox.Text;
                     else if (clTextBox.Text != "")
                         encoder.Vf.Add(clTextBox.Text);
+                    encoder.Vf_update(clTextBox.Text);
                     Filter_items_update(clTextBox.Text.Contains("crop"));
                     Filter_preview(clTextBox.Text);
                     clTextBox.Text = "";

@@ -43,6 +43,7 @@ namespace Av1ador
         public bool Finished { get; set; }
         public double Merge { get; set; }
         public string Fps_filter { get; set; }
+        public double Spd { get; set; }
         public List<string> Status { get; set; }
         public bool Running { get; set; }
         public double Abr { get; set; }
@@ -177,7 +178,7 @@ namespace Av1ador
             bitrate = 0;
         }
 
-        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0)
+        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0, double spd = 1)
         {
             Encoding_file = file;
             track_delay = delay;
@@ -197,6 +198,7 @@ namespace Av1ador
                 }
                 Form1.Dialogo = false;
             }
+            Spd = spd;
             bitrate = br;
             bool vbr = br > 0;
 
@@ -204,6 +206,9 @@ namespace Av1ador
             double seek = ss - Kf_interval;
             string ss1 = seek > 0 ? " -ss " + seek.ToString() : "";
             string ss2 = ss > 0 ? " -ss " + ss.ToString() : "";
+            double ato = to;
+            if (Spd != 1 && (to > 0 || ss > 0))
+                ato = (to - ss) * Spd + ss;
             string audiofile = Name + "\\audio." + A_Job;
 
             if (audio && A_Param != "")
@@ -212,7 +217,7 @@ namespace Av1ador
                 {
                     Status.Add("Encoding audio...");
                     Process ffaudio = new Process();
-                    Func.Setinicial(ffaudio, 3, " -copyts -start_at_zero -y" + ss1 + " -i \"" + file + "\"" + ss2 + " -to " + to.ToString() + A_Param + " \"" + audiofile + "\"");
+                    Func.Setinicial(ffaudio, 3, " -copyts -start_at_zero -y" + ss2 + " -i \"" + file + "\" -to " + ato.ToString() + A_Param + " \"" + audiofile + "\"");
                     ffaudio.Start();
                     string aout = ffaudio.StartInfo.Arguments + Environment.NewLine;
                     BackgroundWorker abw = new BackgroundWorker();
@@ -486,10 +491,11 @@ namespace Av1ador
             Func.Setinicial(ffconcat, 3);
             string b = A_Job == "m4a" ? "-bsf:a aac_adtstoasc " : "";
             b += Extension == "mp4" ? "-movflags faststart " : "";
+            string f = Spd != 1 ? " -itsscale " + Spd : "";
             if (System.IO.File.Exists(Name + "\\audio." + A_Job))
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? -map_metadata -1 " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + " -i \"" + Name + "\\concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? -map_metadata -1 " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
             else
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0 -i \"" + Name + "\\concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + "  -i \"" + Name + "\\concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             ffconcat.Start();
             Regex regex = new Regex("time=([0-9]{2}):([0-9]{2}):([0-9]{2}.[0-9]{2})");
             Match compare;
