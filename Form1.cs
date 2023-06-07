@@ -143,7 +143,7 @@ namespace Av1ador
             bw.RunWorkerCompleted += (s, ee) =>
             {
                 mpv1p = mp;
-                Wait_mpv(5);
+                Wait_mpv(6);
                 SetParent(mpv1p.MainWindowHandle, leftPanel.Handle);
                 MoveWindow(mpv1p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                 mpv_cmd = new StreamWriter(mpv_tubo);
@@ -190,10 +190,8 @@ namespace Av1ador
                 bw.DoWork += (s, ee) =>
                 {
                     bool found = false;
-                    int limit = 0;
                     while (!found)
                     {
-                        limit += 16;
                         Thread.Sleep(16);
                         processes = Process.GetProcessesByName("mpv");
                         foreach (Process p in processes)
@@ -209,7 +207,7 @@ namespace Av1ador
                 bw.RunWorkerCompleted += (s, ee) =>
                 {
                     mpv2p = mp;
-                    Wait_mpv(5);
+                    Wait_mpv(6);
                     SetParent(mpv2p.MainWindowHandle, rightPanel.Handle);
                     MoveWindow(mpv2p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                     mpv2_loaded = true;
@@ -360,8 +358,6 @@ namespace Av1ador
                 backgroundWorker.RunWorkerCompleted += (s, e) =>
                 {
                     segundo_video = video;
-                    /*if (len == 0)
-                        Reset();*/
                 };
                 backgroundWorker.RunWorkerAsync();
             }

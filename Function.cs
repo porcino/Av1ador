@@ -237,7 +237,7 @@ namespace Av1ador
 
         public static bool Preview(string vf)
         {
-            string[] filters = new string[] { "crop", "eq¡", "delogo", "smartblur", "gradfun", "framestep", "fps¡", "nlmeans", "nlmeans_opencl", "hqdn3d", "rotate", "hflip", "vflip" };
+            string[] filters = new string[] { "crop", "eq¡", "delogo", "smartblur", "gradfun", "framestep", "fps¡", "nlmeans", "nlmeans_opencl", "hqdn3d", "rotate", "hflip", "vflip", "setpts" };
             foreach (string filter in filters)
             {
                 if (vf.IndexOf(filter.Replace('¡', '=')) > -1)

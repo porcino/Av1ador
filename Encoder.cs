@@ -503,9 +503,9 @@ namespace Av1ador
                 Out_fps = (Out_fps > 0 ? Out_fps : (int)double.Parse(v)) * 2;
                 Vf.Add("minterpolate=fps=" + Out_fps.ToString() + ":search_param=96");
             }
-            else if (f == "Speed up" || f == "Slow down" || f == "Speed update")
+            else if (f.StartsWith("Speed up") || f.StartsWith("Slow down") || f == "Speed update")
             {
-                double spd = Func.Get_speed(Vf) + (f == "Speed up" ? -0.1 : (f == "Speed update" ? 0.0 : 0.1));
+                double spd = Func.Get_speed(Vf) + (f.StartsWith("Speed up") ? -0.1 : (f == "Speed update" ? 0.0 : 0.1));
                 spd = spd < 0.1 ? 0.1 : (spd > 100 ? 100 : spd);
                 Vf.RemoveAll(s => s.StartsWith("setpts="));
                 Af.RemoveAll(s => s.StartsWith("atempo="));
