@@ -158,7 +158,7 @@ namespace Av1ador
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "2", "3", "*4", "5", "6", "7", "8 (fastest)" };
                 speed_str = "-cpu-used ";
-                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -undershoot-pct 60 -overshoot-pct 0 -minsection-pct 60 -maxsection-pct 96 -aom-params sharpness=3:max-gf-interval=28:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=2:arnr-strength=4:max-reference-frames=4:enable-rect-partitions=0:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:enable-obmc=0 -strict -2";//:global-motion-method=0
+                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -undershoot-pct 60 -overshoot-pct 0 -minsection-pct 60 -maxsection-pct 96 -aom-params sharpness=3:max-gf-interval=24:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=2:arnr-strength=4:max-reference-frames=4:enable-rect-partitions=0:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:enable-obmc=0 -strict -2";//:global-motion-method=0
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Gs = 100;
                 Rate = 0.82;
@@ -222,7 +222,7 @@ namespace Av1ador
                 Job = j[0];
                 Presets = new string[] { "placebo", "veryslow", "*slower", "slow", "medium", "fast", "faster", "veryfast", "superfast", "ultrafast" };
                 speed_str = "-preset ";
-                Params = "-x265-params min-keyint=!minkey!:keyint=!maxkey!:ssim-rd=1:early-skip=1:psy-rd=0.5:rdoq-level=2:psy-rdoq=2:selective-sao=2:rskip-edge-threshold=1:aq-mode=4:rect=0:subme=2:limit-tu=1:amp=0:hme=1:hme-search=star,umh,hex:hme-range=16,32,100:strong-intra-smoothing=0";
+                Params = "-x265-params min-keyint=!minkey!:keyint=!maxkey!:early-skip=1:psy-rd=0.5:rdoq-level=2:psy-rdoq=2:selective-sao=2:rskip-edge-threshold=1:aq-mode=4:rect=0:subme=2:limit-tu=1:amp=0:hme=1:hme-search=star,umh,hex:hme-range=16,32,100:strong-intra-smoothing=0";
                 Color = ":colorprim=1:transfer=1:colormatrix=1";
                 Rate = 0.9;
             }

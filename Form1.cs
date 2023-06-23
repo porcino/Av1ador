@@ -28,7 +28,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.0.7";
+        private readonly string title = "Av1ador 1.0.8";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$", RegexOptions.IgnoreCase);
         private readonly string mpv_args = " --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
         private static readonly int processID = Process.GetCurrentProcess().Id;
@@ -78,6 +78,7 @@ namespace Av1ador
             {
                 infoTimer.Enabled = true;
                 checkedListBox1.Enabled = true;
+                Filter_items_update();
             };
         }
 
@@ -120,7 +121,7 @@ namespace Av1ador
             {
                 bool found = false;
                 int limit = 0;
-                while (!found && limit < 5000)
+                while (!found && limit < 8000)
                 {
                     limit += 16;
                     Thread.Sleep(16);
@@ -134,7 +135,7 @@ namespace Av1ador
                         }
                     }
                 }
-                if (limit >= 5000)
+                if (limit >= 8000)
                 {
                     if (MessageBox.Show("The video player (mpv) failed to start or is unavailable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
                         Environment.Exit(0);
@@ -143,7 +144,8 @@ namespace Av1ador
             bw.RunWorkerCompleted += (s, ee) =>
             {
                 mpv1p = mp;
-                Wait_mpv(6);
+                Wait_mpv(5);
+                Thread.Sleep(16);
                 SetParent(mpv1p.MainWindowHandle, leftPanel.Handle);
                 MoveWindow(mpv1p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                 mpv_cmd = new StreamWriter(mpv_tubo);
@@ -208,6 +210,7 @@ namespace Av1ador
                 {
                     mpv2p = mp;
                     Wait_mpv(6);
+                    Thread.Sleep(16);
                     SetParent(mpv2p.MainWindowHandle, rightPanel.Handle);
                     MoveWindow(mpv2p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
                     mpv2_loaded = true;
@@ -1369,7 +1372,7 @@ namespace Av1ador
                         underload++;
                     else
                         underload = 0;
-                    if (underload > 4)
+                    if (underload > 8)
                     {
                         underload = -1;
                         if (workersUpDown.Value + 1 <= workersUpDown.Maximum && encode.Segments_left > 0 && workersUpDown.Value < Environment.ProcessorCount * 2 / 3)

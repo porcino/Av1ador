@@ -217,6 +217,15 @@ namespace Av1ador
                 var kf = new List<double>();
                 res_regex = new Regex("pts:[ ]*([0-9]{4}[0-9]*)");
                 Regex t_regex;
+                ffprobe.StartInfo.Arguments = " -hide_banner -show_entries frame=best_effort_timestamp_time -read_intervals %+1 -of compact=p=0:nk=0 -v 0 \"" + file + "\"";
+                ffprobe.Start();
+                t_regex = new Regex(@"timestamp_time=-*([0-9\.]+)");
+                compare = t_regex.Match(ffprobe.StandardOutput.ReadToEnd());
+                if (compare.Success)
+                {
+                    First_frame = Double.Parse(compare.Groups[1].ToString());
+                    First_frame = First_frame == 0 ? -1 : First_frame;
+                }
                 while (!ffmpeg.HasExited && kf.Count < 20 && Busy)
                 {
                     output = ffmpeg.StandardError.ReadLine();
@@ -233,7 +242,7 @@ namespace Av1ador
                         {
                             t_regex = new Regex("pts:[ ]*([0-9]+)");
                             compare = t_regex.Match(output);
-                            if (compare.Success) { 
+                            if (compare.Success) {
                                 First_frame = Double.Parse(compare.Groups[1].ToString()) * Timebase;
                                 if (segundo)
                                     Busy = false;
