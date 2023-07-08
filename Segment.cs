@@ -658,6 +658,7 @@ namespace Av1ador
             bw.DoWork += (s, e) =>
             {
                 bool jump = false;
+                Stopwatch stopwatch = new Stopwatch();
                 while (!Stop && !jump)
                 {
                     Process crash = new Process();
@@ -671,11 +672,11 @@ namespace Av1ador
                     }
                     if (ffmpeg.HasExited || (crash != null && crash.HasExited))
                         jump = true;
-                    var stopwatch = new Stopwatch();
                     stopwatch.Start();
                     output += jump ? ffmpeg.StandardError.ReadToEnd() : ffmpeg.StandardError.ReadLine();
                     stopwatch.Stop();
-                    Thread.Sleep((int)(stopwatch.ElapsedMilliseconds / 2));
+                    Thread.Sleep((int)Math.Min(stopwatch.ElapsedMilliseconds / 4, 100));
+                    stopwatch.Reset();
                 }
             };
             bw.RunWorkerAsync();
@@ -699,8 +700,6 @@ namespace Av1ador
 
                 if (output != null)
                 {
-                    if (jump)
-                        output += ffmpeg.StandardError.ReadToEnd();
                     if (output.Length > 1500)
                         output = output.Substring(output.Length - 1500);
 
