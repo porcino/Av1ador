@@ -28,7 +28,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.0.8";
+        private readonly string title = "Av1ador 1.0.9";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$", RegexOptions.IgnoreCase);
         private readonly string mpv_args = " --pause --hr-seek=always -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
         private static readonly int processID = Process.GetCurrentProcess().Id;
@@ -71,8 +71,8 @@ namespace Av1ador
                 int aid = (int)ee.Argument;
                 while (primer_video != null && primer_video.Busy)
                     Thread.Sleep(30);
-                if (primer_video != null && encoder != null)
-                    encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
+                /*if (primer_video != null && encoder != null)
+                    encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());*/
             };
             aset.RunWorkerCompleted += (s, ee) =>
             {

@@ -206,9 +206,7 @@ namespace Av1ador
             double seek = ss - Kf_interval;
             string ss1 = seek > 0 ? " -ss " + seek.ToString() : "";
             string ss2 = ss > 0 ? " -ss " + ss.ToString() : "";
-            double ato = to;
-            if (Spd != 1 && (to > 0 || ss > 0))
-                ato = (to - ss) * Spd + ss;
+            double ato = (to - ss) * Spd;
             string audiofile = Name + "\\audio." + A_Job;
 
             if (audio && A_Param != "")
@@ -217,7 +215,7 @@ namespace Av1ador
                 {
                     Status.Add("Encoding audio...");
                     Process ffaudio = new Process();
-                    Func.Setinicial(ffaudio, 3, " -copyts -start_at_zero -y" + ss2 + " -i \"" + file + "\" -to " + ato.ToString() + A_Param + " \"" + audiofile + "\"");
+                    Func.Setinicial(ffaudio, 3, " -y" + ss2 + " -i \"" + file + "\" -t " + ato.ToString() + A_Param + " \"" + audiofile + "\"");
                     ffaudio.Start();
                     string aout = ffaudio.StartInfo.Arguments + Environment.NewLine;
                     BackgroundWorker abw = new BackgroundWorker();
@@ -673,8 +671,11 @@ namespace Av1ador
                     }
                     if (ffmpeg.HasExited || (crash != null && crash.HasExited))
                         jump = true;
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
                     output += jump ? ffmpeg.StandardError.ReadToEnd() : ffmpeg.StandardError.ReadLine();
-                    Thread.Sleep(100);
+                    stopwatch.Stop();
+                    Thread.Sleep((int)(stopwatch.ElapsedMilliseconds / 2));
                 }
             };
             bw.RunWorkerAsync();
@@ -698,6 +699,8 @@ namespace Av1ador
 
                 if (output != null)
                 {
+                    if (jump)
+                        output += ffmpeg.StandardError.ReadToEnd();
                     if (output.Length > 1500)
                         output = output.Substring(output.Length - 1500);
 
