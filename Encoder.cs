@@ -225,6 +225,7 @@ namespace Av1ador
                 Params = "-x265-params min-keyint=!minkey!:keyint=!maxkey!:early-skip=1:psy-rd=0.5:rdoq-level=2:psy-rdoq=2:selective-sao=2:rskip-edge-threshold=1:aq-mode=4:rect=0:subme=2:limit-tu=1:amp=0:hme=1:hme-search=star,umh,hex:hme-range=16,32,100:strong-intra-smoothing=0";
                 Color = ":colorprim=1:transfer=1:colormatrix=1";
                 Rate = 0.9;
+                Multipass = "-pass 1 -passlogfile \"!log!\"";
             }
             else if (codec == v[6])
             {
@@ -643,11 +644,13 @@ namespace Av1ador
             }
             str += (Cv != "librav1e" ? " " : "") + speed_str + Speed;
             str += (Cv != "librav1e" ? " " : "") + Func.Replace_gs(Param, Gs_level);
+            if (V_kbps > 0 && Multipass != "" && !predict && Cv == "libx265")
+                str += ":!reuse!";
             if (!Hdr)
                 str += Color;
             str += " -an";
             if (V_kbps > 0 && Multipass != "" && !predict)
-                str = str + " -loglevel error -f null NUL && ffmpeg" + str.Replace("pass 1", "pass 2");
+                str = Pass(str) + " -loglevel error -f null NUL && ffmpeg" + Pass(str, 2);
             str += " -map 0:v:0 -muxpreload 0 -muxdelay 0 -mpegts_copyts 1 -bsf:v dump_extra \"!name!\"";
             return str;
         }
@@ -716,6 +719,14 @@ namespace Av1ador
                 astr += " -af " + String.Join(",", Af.ToArray());
             astr += " -map 0:a:" + track;
             return astr;
+        }
+
+        private string Pass(string s, int p = 0)
+        {
+            if (p == 0)
+                return Regex.Replace(s.Replace("!reuse!", "analysis-save=\"!log!.log.reuse\":analysis-save-reuse-level=10"), ":hme[^:]*", "");
+            else
+                return Regex.Replace(s.Replace("!reuse!", "analysis-load=\"!log!.log.reuse\":analysis-load-reuse-level=10:refine-intra=3").Replace("pass 1", "pass 2"), ":hme[^:]*", "");
         }
 
         public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto)

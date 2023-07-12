@@ -565,6 +565,7 @@ namespace Av1ador
             if (bitrate > 0)
             {
                 str = str.Replace("!bitrate!", bitrate.ToString());
+                str = str.Replace("!log!.log", name.Replace("\\", "\\\\") + ".log");
                 str = str.Replace("!log!", name);
             }
             return str.Replace("!name!", name).Replace("transforms.trf", name.Replace(@"\", @"\\") + ".trf");
@@ -765,6 +766,10 @@ namespace Av1ador
                     File.Delete(Pathfile + "-0.log.mbtree");
                 if (File.Exists(Pathfile + ".trf"))
                     File.Delete(Pathfile + ".trf");
+                if (File.Exists(Pathfile + ".log.reuse"))
+                    File.Delete(Pathfile + ".log.reuse");
+                if (File.Exists(Pathfile + ".log.reuse.temp"))
+                    File.Delete(Pathfile + ".log.reuse.temp");
             }
             return "";
         }
