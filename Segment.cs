@@ -434,7 +434,8 @@ namespace Av1ador
                         instances++;
                     else if (!chunk.Completed && chunk.Progress == 0 && Can_run)
                     {
-                        if (System.IO.File.Exists(chunk.Pathfile) && new FileInfo(chunk.Pathfile).Length > 500 && !System.IO.File.Exists(chunk.Pathfile + ".txt")
+                        bool present = System.IO.File.Exists(chunk.Pathfile);
+                        if (present && new FileInfo(chunk.Pathfile).Length > 500 && !System.IO.File.Exists(chunk.Pathfile + ".txt")
                             && Math.Abs(Video.Get_duration(Video.Get_info(chunk.Pathfile), out string _, chunk.Pathfile) - chunk.Length) < 2)
                         {
                             skip = false;
@@ -447,6 +448,12 @@ namespace Av1ador
                         }
                         else
                         {
+                            if (present)
+                                try
+                                {
+                                    System.IO.File.Delete(chunk.Pathfile);
+                                }
+                                catch { }
                             instances++;
                             chunk.Encoding = true;
                             Thread thread = new Thread(() => Background(chunk));
@@ -756,6 +763,8 @@ namespace Av1ador
                     File.AppendAllText(Pathfile + ".txt", output);
                     return output;
                 }
+                if (Math.Abs(Video.Get_duration(Video.Get_info(Pathfile), out string _, Pathfile) - Length) > 2)
+                    return Pathfile + "\r\nThe segment has finished but there is a mismatch in the duration.\r\nUsually this means that ffmpeg crashed.";
             }
             File.Delete(Pathfile + ".txt");
             if (multi)
