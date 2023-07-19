@@ -324,10 +324,10 @@ namespace Av1ador
             Ch = ch.ToString();
         }
 
-        public string[] Calc_kbps(double total, double duracion, int fps)
+        public string[] Calc_kbps(double total, double duracion, int fps, int kbps = 0)
         {
-            int kbps;
-            kbps = (int)Math.Floor(total * 8.0 * 1024.0 / duracion);
+            if (kbps == 0)
+                kbps = (int)Math.Floor(total * 8.0 * 1024.0 / duracion);
             //bitrate=!bitrate!-^(!hertz!/8000^)-^(!framerate!/10^)
             kbps -= fps / 10;
             kbps = kbps < 4 ? 4 : kbps;

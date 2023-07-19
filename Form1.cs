@@ -277,11 +277,15 @@ namespace Av1ador
                     paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : entry.Param;
                     bitsComboBox.Text = entry.Bits;
                     numericUpDown1.Value = entry.Crf;
+                    abitrateBox.Text = entry.Ba.ToString();
                     if (entry.Bv.Length > 0)
+                    {
+                        if (entry.Bv == bitrateBox.Text)
+                            totalBox.Text = "";
                         bitrateBox.Text = entry.Bv;
+                    }
                     else
                         bitrateBox.Text = totalBox.Text = "";
-                    abitrateBox.Text = entry.Ba.ToString();
                     creditsendButton.Enabled = primer_video.CreditsTime > 0;
                     if (entry.Gs != "" && int.Parse(entry.Gs) <= gsUpDown.Maximum)
                         gsUpDown.Value = int.Parse(entry.Gs);
@@ -895,7 +899,7 @@ namespace Av1ador
 
         private void TotalBox_TextChanged(object sender, EventArgs e)
         {
-            if (primer_video == null || totalBox.Text == ".")
+            if (totalBox.Text == ".")
                 return;
             double total = totalBox.Text.Length > 0 ? Double.Parse(totalBox.Text) : 0;
             int bitrate = bitrateBox.Text.Length > 0 ? int.Parse(bitrateBox.Text) : 0;
@@ -923,7 +927,7 @@ namespace Av1ador
                 constantLabel.Enabled = true;
                 betterLabel.Enabled = true;
                 worseLabel.Enabled = true;
-                if (primer_video.Predicted > 0)
+                if (primer_video != null && primer_video.Predicted > 0)
                 {
                     if (encoder.Out_w < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
                         encoder.Vf_add("scale", encoder.Out_w.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
@@ -932,6 +936,8 @@ namespace Av1ador
                     Filter_items_update();
                 }
             }
+            if (primer_video == null)
+                return;
             if (totalBox.Focused)
             {
                 if (totalBox.Text != "")
@@ -949,9 +955,15 @@ namespace Av1ador
             
             if (bitrateBox.Text != "")
             {
-                totalBox.Text = (encoder.Calc_total(int.Parse(bitrateBox.Text), int.Parse(abitrateBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)).ToString();
                 if (bitrateBox.Focused)
-                    abitrateBox.Text = encoder.Calc_kbps(Double.Parse(totalBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)[1];
+                {
+                    if (totalBox.Text == "" && bitrateBox.Text != "")
+                        abitrateBox.Text = encoder.Calc_kbps(0, primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps, int.Parse(bitrateBox.Text))[1];
+                    else if (totalBox.Text != "")
+                        abitrateBox.Text = encoder.Calc_kbps(Double.Parse(totalBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)[1];
+                }
+                if (!totalBox.Focused)
+                    totalBox.Text = (encoder.Calc_total(int.Parse(bitrateBox.Text), int.Parse(abitrateBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)).ToString();
             }
             else
                 totalBox.Text = "";
@@ -1096,7 +1108,7 @@ namespace Av1ador
                     value = trackBar2.Minimum;
                 trackBar2.Value = value;
 
-                if ((abitrateBox.Focused || trackBar2.Focused) && !trackBar1.Enabled)
+                if ((abitrateBox.Focused || trackBar2.Focused) && !trackBar1.Enabled && primer_video != null)
                     totalBox.Text = (encoder.Calc_total(int.Parse(bitrateBox.Text), int.Parse(abitrateBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)).ToString();
                 encoder.Ba = trackBar2.Value;
                 Entry_update(8);
@@ -1107,7 +1119,7 @@ namespace Av1ador
         private void AbitrateBox_Leave(object sender, EventArgs e)
         {
             abitrateBox.Text = trackBar2.Value.ToString();
-            if (bitrateBox.Text != "")
+            if (bitrateBox.Text != "" && primer_video != null)
                 totalBox.Text = (encoder.Calc_total(int.Parse(bitrateBox.Text), int.Parse(abitrateBox.Text), primer_video.EndTime - primer_video.StartTime, (int)primer_video.Fps)).ToString();
         }
 
