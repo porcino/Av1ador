@@ -549,6 +549,7 @@ namespace Av1ador
             if (log != "" && !Failed)
             {
                 Failed = true;
+                Set_state(true);
                 if (MessageBox.Show(log, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
                 {
                     Status = new List<string>
