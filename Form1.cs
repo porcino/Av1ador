@@ -1159,7 +1159,7 @@ namespace Av1ador
             }
         }
 
-        private void Exit()
+        private void Exit(bool stop = false)
         {
             int running = encode.Chunks.Length;
             while (running > 0)
@@ -1172,7 +1172,10 @@ namespace Av1ador
                 }
                 Thread.Sleep(1000);
             }
-            Environment.Exit(0);
+            if (!stop)
+                Environment.Exit(0);
+            else
+                Invoke(new Action(() => { encodestartButton.Enabled = true; }));
         }
 
         private void FormatComboBox_DropDown(object sender, EventArgs e)
@@ -1227,9 +1230,10 @@ namespace Av1ador
         private void EncodestopButton_Click(object sender, EventArgs e)
         {
             encodestopButton.Enabled = false;
-            encodestartButton.Enabled = true;
             if (encode != null)
                 encode.Set_state(true);
+            Thread thread = new Thread(() => Exit(true));
+            thread.Start();
             heat = Func.Heat(0);
             workersgroupBox.Refresh();
         }

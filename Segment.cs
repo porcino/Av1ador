@@ -644,7 +644,7 @@ namespace Av1ador
             {
                 string pass = ffmpeg.StartInfo.Arguments;
                 int pos1 = pass.IndexOf("&& ffmpeg");
-                while (pos1 > -1)
+                while (pos1 > -1 && !Stop)
                 {
                     ffmpeg.StartInfo.Arguments = pass.Substring(0, pos1);
                     pass = pass.Substring(pos1 + 9);
