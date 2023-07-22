@@ -1161,7 +1161,7 @@ namespace Av1ador
 
         private void Exit(bool stop = false)
         {
-            int running = encode.Chunks.Length;
+            int running = encode.Chunks == null ? 0 : encode.Chunks.Length;
             while (running > 0)
             {
                 running = encode.Chunks.Length;
