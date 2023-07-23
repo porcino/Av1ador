@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="av1ador.ico" />
+    <None Include="Resources\GoToError.png" />
     <None Include="Resources\Paste.png" />
     <None Include="Resources\Copy.png" />
     <None Include="Resources\HelpTableOfContents.png" />

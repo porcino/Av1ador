@@ -815,6 +815,11 @@ namespace Av1ador
             }
             playtimeLabel.Text = current_time;
             encoder.Playtime = timespan.TotalSeconds;
+            if (encoder.Playtime != primer_video.CreditsTime || primer_video.CreditsTime == 0)
+            {
+                creditsResetButton.Visible = false;
+                creditsstartButton.Visible = true;
+            }
         }
 
         private void PicBoxBarra_MouseClick(object sender, MouseEventArgs e)
@@ -1010,11 +1015,27 @@ namespace Av1ador
                     primer_video.CreditsTime = encoder.Playtime;
                     if (primer_video.CreditsEndTime > 0 && primer_video.CreditsEndTime < primer_video.CreditsTime)
                         primer_video.CreditsEndTime = 0;
+                    else
+                    {
+                        creditsstartButton.Visible = false;
+                        creditsResetButton.Visible = true;
+                    }
                     Entry_update(3);
                 }
                 UpdateBar();
                 creditsendButton.Enabled = primer_video.CreditsTime > 0;
             }
+        }
+
+        private void CreditsResetButton_Click(object sender, EventArgs e)
+        {
+            if (primer_video == null)
+                return;
+            primer_video.CreditsTime = 0;
+            primer_video.CreditsEndTime = 0;
+            creditsResetButton.Visible = false;
+            creditsstartButton.Visible = true;
+            Entry_update(3);
         }
 
         private void CreditsendButton_Click(object sender, EventArgs e)

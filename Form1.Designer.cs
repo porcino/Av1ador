@@ -34,32 +34,17 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.encodestopButton = new System.Windows.Forms.ToolStripButton();
-            this.ssButton = new System.Windows.Forms.ToolStripButton();
-            this.toStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-            this.creditsstartButton = new System.Windows.Forms.ToolStripButton();
-            this.creditsendButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-            this.encodestartButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.addfilesButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.removeButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.encodefirstButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.origfolderButton = new System.Windows.Forms.ToolStripButton();
-            this.outfolderButton = new System.Windows.Forms.ToolStripButton();
-            this.encodelistButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
-            this.copytoolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.pastetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -111,6 +96,73 @@
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.clTextBox = new System.Windows.Forms.TextBox();
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
+            this.vfListBox = new System.Windows.Forms.ListBox();
+            this.afListBox = new System.Windows.Forms.ListBox();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.playtimeLabel = new System.Windows.Forms.Label();
+            this.mediainfoLabel = new System.Windows.Forms.Label();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.statusLabel = new System.Windows.Forms.Label();
+            this.estimatedLabel = new System.Windows.Forms.Label();
+            this.mpvsPanel = new System.Windows.Forms.Panel();
+            this.splitterPanel = new System.Windows.Forms.Panel();
+            this.leftPanel = new System.Windows.Forms.Panel();
+            this.rightPanel = new System.Windows.Forms.Panel();
+            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.formatComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.cvComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
+            this.speedComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.resComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.fpsComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel7 = new System.Windows.Forms.ToolStripLabel();
+            this.hdrComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.bitsComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel8 = new System.Windows.Forms.ToolStripLabel();
+            this.caComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel11 = new System.Windows.Forms.ToolStripLabel();
+            this.chComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.mpvTimer = new System.Windows.Forms.Timer(this.components);
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.panTimer = new System.Windows.Forms.Timer(this.components);
+            this.infoTimer = new System.Windows.Forms.Timer(this.components);
+            this.mouseTimer = new System.Windows.Forms.Timer(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.encodestopButton = new System.Windows.Forms.ToolStripButton();
+            this.ssButton = new System.Windows.Forms.ToolStripButton();
+            this.toStripButton = new System.Windows.Forms.ToolStripButton();
+            this.creditsstartButton = new System.Windows.Forms.ToolStripButton();
+            this.creditsendButton = new System.Windows.Forms.ToolStripButton();
+            this.encodestartButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.creditsResetButton = new System.Windows.Forms.ToolStripButton();
+            this.addfilesButton = new System.Windows.Forms.ToolStripButton();
+            this.removeButton = new System.Windows.Forms.ToolStripButton();
+            this.encodefirstButton = new System.Windows.Forms.ToolStripButton();
+            this.origfolderButton = new System.Windows.Forms.ToolStripButton();
+            this.outfolderButton = new System.Windows.Forms.ToolStripButton();
+            this.encodelistButton = new System.Windows.Forms.ToolStripButton();
+            this.copytoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.pastetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.filteraddDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeBlackBarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -146,73 +198,22 @@
             this.normalizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.volumeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filternewButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.filterupButton = new System.Windows.Forms.ToolStripButton();
             this.filterdownButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.filterremoveButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
             this.filterdocButton = new System.Windows.Forms.ToolStripButton();
             this.togglefButton = new System.Windows.Forms.ToolStripButton();
-            this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
-            this.vfListBox = new System.Windows.Forms.ListBox();
-            this.afListBox = new System.Windows.Forms.ListBox();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.syncButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.prevframeButton = new System.Windows.Forms.ToolStripButton();
             this.pauseButton = new System.Windows.Forms.ToolStripButton();
             this.playButton = new System.Windows.Forms.ToolStripButton();
             this.nextframeButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.audiounmuteButton = new System.Windows.Forms.ToolStripButton();
             this.audiomuteButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.zoomButton = new System.Windows.Forms.ToolStripButton();
             this.expandButton = new System.Windows.Forms.ToolStripButton();
             this.restoreButton = new System.Windows.Forms.ToolStripButton();
-            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.playtimeLabel = new System.Windows.Forms.Label();
-            this.mediainfoLabel = new System.Windows.Forms.Label();
-            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
-            this.statusLabel = new System.Windows.Forms.Label();
-            this.estimatedLabel = new System.Windows.Forms.Label();
-            this.mpvsPanel = new System.Windows.Forms.Panel();
-            this.splitterPanel = new System.Windows.Forms.Panel();
-            this.leftPanel = new System.Windows.Forms.Panel();
-            this.rightPanel = new System.Windows.Forms.Panel();
-            this.toolStrip4 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-            this.formatComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.cvComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
-            this.speedComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.resComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
-            this.fpsComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel7 = new System.Windows.Forms.ToolStripLabel();
-            this.hdrComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
-            this.bitsComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabel8 = new System.Windows.Forms.ToolStripLabel();
-            this.caComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel11 = new System.Windows.Forms.ToolStripLabel();
-            this.chComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.picBoxBarra = new System.Windows.Forms.PictureBox();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.mpvTimer = new System.Windows.Forms.Timer(this.components);
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.panTimer = new System.Windows.Forms.Timer(this.components);
-            this.infoTimer = new System.Windows.Forms.Timer(this.components);
-            this.mouseTimer = new System.Windows.Forms.Timer(this.components);
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -336,6 +337,7 @@
             this.toStripButton,
             this.toolStripSeparator13,
             this.creditsstartButton,
+            this.creditsResetButton,
             this.creditsendButton,
             this.toolStripSeparator12,
             this.encodestartButton,
@@ -349,102 +351,15 @@
             this.toolStrip1.Text = "toolStrip1";
             this.toolStrip1.MouseEnter += new System.EventHandler(this.ToolStrip1_MouseEnter);
             // 
-            // encodestopButton
-            // 
-            this.encodestopButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.encodestopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.encodestopButton.Enabled = false;
-            this.encodestopButton.Image = global::Av1ador.Properties.Resources.Stop;
-            this.encodestopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.encodestopButton.Name = "encodestopButton";
-            this.encodestopButton.Size = new System.Drawing.Size(23, 33);
-            this.encodestopButton.Text = "Stop";
-            this.encodestopButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.encodestopButton.ToolTipText = "Stop encoding";
-            this.encodestopButton.Click += new System.EventHandler(this.EncodestopButton_Click);
-            // 
-            // ssButton
-            // 
-            this.ssButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ssButton.Image = global::Av1ador.Properties.Resources.GoToFirst;
-            this.ssButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ssButton.Name = "ssButton";
-            this.ssButton.Size = new System.Drawing.Size(23, 33);
-            this.ssButton.Text = "Begin";
-            this.ssButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.ssButton.ToolTipText = "Begin at current time";
-            this.ssButton.Click += new System.EventHandler(this.SsButton_Click);
-            // 
-            // toStripButton
-            // 
-            this.toStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toStripButton.Image = global::Av1ador.Properties.Resources.GoToLast;
-            this.toStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toStripButton.Name = "toStripButton";
-            this.toStripButton.Size = new System.Drawing.Size(23, 33);
-            this.toStripButton.Text = "End";
-            this.toStripButton.ToolTipText = "End at current time";
-            this.toStripButton.Click += new System.EventHandler(this.ToStripButton_Click);
-            // 
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
             this.toolStripSeparator13.Size = new System.Drawing.Size(6, 36);
             // 
-            // creditsstartButton
-            // 
-            this.creditsstartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.creditsstartButton.Image = global::Av1ador.Properties.Resources.GoToDeclaration;
-            this.creditsstartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.creditsstartButton.Name = "creditsstartButton";
-            this.creditsstartButton.Size = new System.Drawing.Size(23, 33);
-            this.creditsstartButton.Text = "Credits";
-            this.creditsstartButton.ToolTipText = "Credits start at current time (lower quality)";
-            this.creditsstartButton.Click += new System.EventHandler(this.CreditsstartButton_Click);
-            // 
-            // creditsendButton
-            // 
-            this.creditsendButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.creditsendButton.Enabled = false;
-            this.creditsendButton.Image = global::Av1ador.Properties.Resources.GoToNextUncovered;
-            this.creditsendButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.creditsendButton.Name = "creditsendButton";
-            this.creditsendButton.Size = new System.Drawing.Size(23, 33);
-            this.creditsendButton.Text = "Credits end";
-            this.creditsendButton.ToolTipText = "Credits end at current time";
-            this.creditsendButton.Click += new System.EventHandler(this.CreditsendButton_Click);
-            // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
             this.toolStripSeparator12.Size = new System.Drawing.Size(6, 36);
-            // 
-            // encodestartButton
-            // 
-            this.encodestartButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.encodestartButton.AutoSize = false;
-            this.encodestartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.encodestartButton.Image = global::Av1ador.Properties.Resources.Play;
-            this.encodestartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.encodestartButton.Name = "encodestartButton";
-            this.encodestartButton.Size = new System.Drawing.Size(42, 35);
-            this.encodestartButton.Text = "Start";
-            this.encodestartButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.encodestartButton.ToolTipText = "Start encoding";
-            this.encodestartButton.Click += new System.EventHandler(this.EncodestartButton_Click);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.Checked = true;
-            this.toolStripButton2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::Av1ador.Properties.Resources.ProcessModel;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 33);
-            this.toolStripButton2.Text = "cfgButton";
-            this.toolStripButton2.ToolTipText = "Encoder settings";
-            this.toolStripButton2.Click += new System.EventHandler(this.ToolStripButton2_Click);
             // 
             // toolStripSeparator6
             // 
@@ -518,117 +433,25 @@
             this.toolStrip3.Text = "toolStrip3";
             this.toolStrip3.MouseEnter += new System.EventHandler(this.ToolStrip3_MouseEnter);
             // 
-            // addfilesButton
-            // 
-            this.addfilesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.addfilesButton.Image = global::Av1ador.Properties.Resources.AddDocumentGroup;
-            this.addfilesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addfilesButton.Name = "addfilesButton";
-            this.addfilesButton.Size = new System.Drawing.Size(23, 21);
-            this.addfilesButton.Text = "Add files to the queue";
-            this.addfilesButton.Click += new System.EventHandler(this.AddfilesButton_Click);
-            // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(6, 24);
-            // 
-            // removeButton
-            // 
-            this.removeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.removeButton.Enabled = false;
-            this.removeButton.Image = global::Av1ador.Properties.Resources.ClearCollection;
-            this.removeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(23, 21);
-            this.removeButton.Text = "Remove selected";
-            this.removeButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 24);
             // 
-            // encodefirstButton
-            // 
-            this.encodefirstButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.encodefirstButton.Enabled = false;
-            this.encodefirstButton.Image = global::Av1ador.Properties.Resources.BatchCheckIn;
-            this.encodefirstButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.encodefirstButton.Name = "encodefirstButton";
-            this.encodefirstButton.Size = new System.Drawing.Size(23, 21);
-            this.encodefirstButton.Text = "Encode first";
-            this.encodefirstButton.Click += new System.EventHandler(this.EncodefirstButton_Click);
-            // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(6, 24);
             // 
-            // origfolderButton
-            // 
-            this.origfolderButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.origfolderButton.Checked = true;
-            this.origfolderButton.CheckOnClick = true;
-            this.origfolderButton.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.origfolderButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.origfolderButton.Image = global::Av1ador.Properties.Resources.FolderOffline;
-            this.origfolderButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.origfolderButton.Name = "origfolderButton";
-            this.origfolderButton.Size = new System.Drawing.Size(23, 21);
-            this.origfolderButton.Text = "Original folder";
-            this.origfolderButton.ToolTipText = "Store files in their original folder";
-            this.origfolderButton.Click += new System.EventHandler(this.OrigfolderButton_Click);
-            // 
-            // outfolderButton
-            // 
-            this.outfolderButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.outfolderButton.CheckOnClick = true;
-            this.outfolderButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.outfolderButton.Image = global::Av1ador.Properties.Resources.MoveToFolder;
-            this.outfolderButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.outfolderButton.Name = "outfolderButton";
-            this.outfolderButton.Size = new System.Drawing.Size(23, 21);
-            this.outfolderButton.Text = "Folder";
-            this.outfolderButton.ToolTipText = "Select output folder";
-            this.outfolderButton.Click += new System.EventHandler(this.OutfolderButton_Click);
-            // 
-            // encodelistButton
-            // 
-            this.encodelistButton.CheckOnClick = true;
-            this.encodelistButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.encodelistButton.Image = global::Av1ador.Properties.Resources.DebugHistorySeekToFrame2;
-            this.encodelistButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.encodelistButton.Name = "encodelistButton";
-            this.encodelistButton.Size = new System.Drawing.Size(23, 21);
-            this.encodelistButton.Text = "Encode list";
-            this.encodelistButton.ToolTipText = "Encode entire list";
-            // 
             // toolStripSeparator15
             // 
             this.toolStripSeparator15.Name = "toolStripSeparator15";
             this.toolStripSeparator15.Size = new System.Drawing.Size(6, 24);
-            // 
-            // copytoolStripButton
-            // 
-            this.copytoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.copytoolStripButton.Image = global::Av1ador.Properties.Resources.Copy;
-            this.copytoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.copytoolStripButton.Name = "copytoolStripButton";
-            this.copytoolStripButton.Size = new System.Drawing.Size(23, 21);
-            this.copytoolStripButton.Text = "Copy filters";
-            this.copytoolStripButton.Click += new System.EventHandler(this.CopytoolStripButton_Click);
-            // 
-            // pastetoolStripButton
-            // 
-            this.pastetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.pastetoolStripButton.Enabled = false;
-            this.pastetoolStripButton.Image = global::Av1ador.Properties.Resources.Paste;
-            this.pastetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.pastetoolStripButton.Name = "pastetoolStripButton";
-            this.pastetoolStripButton.Size = new System.Drawing.Size(23, 21);
-            this.pastetoolStripButton.Text = "Paste filters";
-            this.pastetoolStripButton.Click += new System.EventHandler(this.PastetoolStripButton_Click);
             // 
             // listBox1
             // 
@@ -1357,394 +1180,20 @@
             this.toolStrip5.TabIndex = 1;
             this.toolStrip5.Text = "toolStrip5";
             // 
-            // filteraddDropDownButton
-            // 
-            this.filteraddDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filteraddDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.colorToolStripMenuItem,
-            this.removeBlackBarsToolStripMenuItem,
-            this.cropToolStripMenuItem,
-            this.debandToolStripMenuItem,
-            this.deinterlaceToolStripMenuItem,
-            this.delogoToolStripMenuItem,
-            this.frameInterpolationToolStripMenuItem,
-            this.flipToolStripMenuItem,
-            this.denoiseToolStripMenuItem,
-            this.pOIaddroiToolStripMenuItem,
-            this.rotateToolStripMenuItem,
-            this.sharpenToolStripMenuItem,
-            this.speedToolStripMenuItem,
-            this.stabilizationToolStripMenuItem,
-            this.tonemapToolStripMenuItem,
-            this.upscaleToolStripMenuItem});
-            this.filteraddDropDownButton.Image = global::Av1ador.Properties.Resources.RecommendedTest;
-            this.filteraddDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filteraddDropDownButton.Name = "filteraddDropDownButton";
-            this.filteraddDropDownButton.Size = new System.Drawing.Size(29, 21);
-            this.filteraddDropDownButton.Text = "Add video filter";
-            this.filteraddDropDownButton.ToolTipText = "Add video filter";
-            this.filteraddDropDownButton.DropDownOpening += new System.EventHandler(this.FilteraddDropDownButton_DropDownOpening);
-            // 
-            // colorToolStripMenuItem
-            // 
-            this.colorToolStripMenuItem.AutoSize = false;
-            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.colorToolStripMenuItem.Text = "Color adjustment";
-            this.colorToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // removeBlackBarsToolStripMenuItem
-            // 
-            this.removeBlackBarsToolStripMenuItem.AutoSize = false;
-            this.removeBlackBarsToolStripMenuItem.Name = "removeBlackBarsToolStripMenuItem";
-            this.removeBlackBarsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.removeBlackBarsToolStripMenuItem.Text = "Remove black bars";
-            this.removeBlackBarsToolStripMenuItem.Click += new System.EventHandler(this.RemoveBlackBarsToolStripMenuItem_Click);
-            // 
-            // cropToolStripMenuItem
-            // 
-            this.cropToolStripMenuItem.AutoSize = false;
-            this.cropToolStripMenuItem.Name = "cropToolStripMenuItem";
-            this.cropToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.cropToolStripMenuItem.Text = "Crop";
-            this.cropToolStripMenuItem.Click += new System.EventHandler(this.CropToolStripMenuItem_Click);
-            // 
-            // debandToolStripMenuItem
-            // 
-            this.debandToolStripMenuItem.AutoSize = false;
-            this.debandToolStripMenuItem.Name = "debandToolStripMenuItem";
-            this.debandToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.debandToolStripMenuItem.Text = "Deband";
-            this.debandToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // deinterlaceToolStripMenuItem
-            // 
-            this.deinterlaceToolStripMenuItem.AutoSize = false;
-            this.deinterlaceToolStripMenuItem.Name = "deinterlaceToolStripMenuItem";
-            this.deinterlaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.deinterlaceToolStripMenuItem.Text = "Deinterlace";
-            this.deinterlaceToolStripMenuItem.Click += new System.EventHandler(this.DeinterlaceToolStripMenuItem_Click);
-            // 
-            // delogoToolStripMenuItem
-            // 
-            this.delogoToolStripMenuItem.AutoSize = false;
-            this.delogoToolStripMenuItem.Name = "delogoToolStripMenuItem";
-            this.delogoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.delogoToolStripMenuItem.Text = "Delogo";
-            this.delogoToolStripMenuItem.Click += new System.EventHandler(this.DelogoToolStripMenuItem_Click);
-            // 
-            // frameInterpolationToolStripMenuItem
-            // 
-            this.frameInterpolationToolStripMenuItem.AutoSize = false;
-            this.frameInterpolationToolStripMenuItem.Name = "frameInterpolationToolStripMenuItem";
-            this.frameInterpolationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.frameInterpolationToolStripMenuItem.Text = "Frame interpolation";
-            this.frameInterpolationToolStripMenuItem.Click += new System.EventHandler(this.FrameInterpolationToolStripMenuItem_Click);
-            // 
-            // flipToolStripMenuItem
-            // 
-            this.flipToolStripMenuItem.AutoSize = false;
-            this.flipToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.horizontalToolStripMenuItem,
-            this.verticalToolStripMenuItem});
-            this.flipToolStripMenuItem.Name = "flipToolStripMenuItem";
-            this.flipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.flipToolStripMenuItem.Text = "Flip";
-            // 
-            // horizontalToolStripMenuItem
-            // 
-            this.horizontalToolStripMenuItem.AutoSize = false;
-            this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
-            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.horizontalToolStripMenuItem.Text = "Horizontal ↔";
-            this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // verticalToolStripMenuItem
-            // 
-            this.verticalToolStripMenuItem.AutoSize = false;
-            this.verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
-            this.verticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.verticalToolStripMenuItem.Text = "Vertical ↕";
-            this.verticalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // denoiseToolStripMenuItem
-            // 
-            this.denoiseToolStripMenuItem.AutoSize = false;
-            this.denoiseToolStripMenuItem.Name = "denoiseToolStripMenuItem";
-            this.denoiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.denoiseToolStripMenuItem.Text = "Denoise";
-            this.denoiseToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // pOIaddroiToolStripMenuItem
-            // 
-            this.pOIaddroiToolStripMenuItem.AutoSize = false;
-            this.pOIaddroiToolStripMenuItem.Name = "pOIaddroiToolStripMenuItem";
-            this.pOIaddroiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.pOIaddroiToolStripMenuItem.Text = "POI (addroi)";
-            this.pOIaddroiToolStripMenuItem.Click += new System.EventHandler(this.POIaddroiToolStripMenuItem_Click);
-            // 
-            // rotateToolStripMenuItem
-            // 
-            this.rotateToolStripMenuItem.AutoSize = false;
-            this.rotateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clockwisetoolStripMenuItem,
-            this.anticlockwiseToolStripMenuItem,
-            this.clockwise180toolStripMenuItem3});
-            this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
-            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.rotateToolStripMenuItem.Text = "Rotate";
-            // 
-            // clockwisetoolStripMenuItem
-            // 
-            this.clockwisetoolStripMenuItem.AutoSize = false;
-            this.clockwisetoolStripMenuItem.Name = "clockwisetoolStripMenuItem";
-            this.clockwisetoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.clockwisetoolStripMenuItem.Text = "90° clockwise ↷";
-            this.clockwisetoolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // anticlockwiseToolStripMenuItem
-            // 
-            this.anticlockwiseToolStripMenuItem.AutoSize = false;
-            this.anticlockwiseToolStripMenuItem.Name = "anticlockwiseToolStripMenuItem";
-            this.anticlockwiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.anticlockwiseToolStripMenuItem.Text = "90° anticlockwise ↶";
-            this.anticlockwiseToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // clockwise180toolStripMenuItem3
-            // 
-            this.clockwise180toolStripMenuItem3.AutoSize = false;
-            this.clockwise180toolStripMenuItem3.Name = "clockwise180toolStripMenuItem3";
-            this.clockwise180toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
-            this.clockwise180toolStripMenuItem3.Text = "180°";
-            this.clockwise180toolStripMenuItem3.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // sharpenToolStripMenuItem
-            // 
-            this.sharpenToolStripMenuItem.AutoSize = false;
-            this.sharpenToolStripMenuItem.Name = "sharpenToolStripMenuItem";
-            this.sharpenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sharpenToolStripMenuItem.Text = "Sharpen";
-            this.sharpenToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // speedToolStripMenuItem
-            // 
-            this.speedToolStripMenuItem.AutoSize = false;
-            this.speedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.speedupToolStripMenuItem,
-            this.slowToolStripMenuItem});
-            this.speedToolStripMenuItem.Name = "speedToolStripMenuItem";
-            this.speedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.speedToolStripMenuItem.Text = "Speed";
-            // 
-            // speedupToolStripMenuItem
-            // 
-            this.speedupToolStripMenuItem.AutoSize = false;
-            this.speedupToolStripMenuItem.Name = "speedupToolStripMenuItem";
-            this.speedupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.speedupToolStripMenuItem.Text = "Speed up 10%";
-            this.speedupToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // slowToolStripMenuItem
-            // 
-            this.slowToolStripMenuItem.AutoSize = false;
-            this.slowToolStripMenuItem.Name = "slowToolStripMenuItem";
-            this.slowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.slowToolStripMenuItem.Text = "Slow down 10%";
-            this.slowToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // stabilizationToolStripMenuItem
-            // 
-            this.stabilizationToolStripMenuItem.AutoSize = false;
-            this.stabilizationToolStripMenuItem.Name = "stabilizationToolStripMenuItem";
-            this.stabilizationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.stabilizationToolStripMenuItem.Text = "Stabilization";
-            this.stabilizationToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // tonemapToolStripMenuItem
-            // 
-            this.tonemapToolStripMenuItem.AutoSize = false;
-            this.tonemapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openclToolStripMenuItem,
-            this.vulkanToolStripMenuItem});
-            this.tonemapToolStripMenuItem.Name = "tonemapToolStripMenuItem";
-            this.tonemapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.tonemapToolStripMenuItem.Text = "Tonemap";
-            // 
-            // openclToolStripMenuItem
-            // 
-            this.openclToolStripMenuItem.AutoSize = false;
-            this.openclToolStripMenuItem.Name = "openclToolStripMenuItem";
-            this.openclToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openclToolStripMenuItem.Text = "OpenCL";
-            this.openclToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // vulkanToolStripMenuItem
-            // 
-            this.vulkanToolStripMenuItem.AutoSize = false;
-            this.vulkanToolStripMenuItem.Name = "vulkanToolStripMenuItem";
-            this.vulkanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.vulkanToolStripMenuItem.Text = "Vulkan";
-            this.vulkanToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
-            // 
-            // upscaleToolStripMenuItem
-            // 
-            this.upscaleToolStripMenuItem.AutoSize = false;
-            this.upscaleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.anime4kToolStripMenuItem,
-            this.anime4kX2ToolStripMenuItem,
-            this.fSRCNNXToolStripMenuItem});
-            this.upscaleToolStripMenuItem.Name = "upscaleToolStripMenuItem";
-            this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.upscaleToolStripMenuItem.Text = "Upscale";
-            // 
-            // anime4kToolStripMenuItem
-            // 
-            this.anime4kToolStripMenuItem.AutoSize = false;
-            this.anime4kToolStripMenuItem.Name = "anime4kToolStripMenuItem";
-            this.anime4kToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.anime4kToolStripMenuItem.Text = "Anime4K x1.5";
-            this.anime4kToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
-            // 
-            // anime4kX2ToolStripMenuItem
-            // 
-            this.anime4kX2ToolStripMenuItem.AutoSize = false;
-            this.anime4kX2ToolStripMenuItem.Name = "anime4kX2ToolStripMenuItem";
-            this.anime4kX2ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.anime4kX2ToolStripMenuItem.Text = "Anime4k x2";
-            this.anime4kX2ToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
-            // 
-            // fSRCNNXToolStripMenuItem
-            // 
-            this.fSRCNNXToolStripMenuItem.AutoSize = false;
-            this.fSRCNNXToolStripMenuItem.Name = "fSRCNNXToolStripMenuItem";
-            this.fSRCNNXToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.fSRCNNXToolStripMenuItem.Text = "FSRCNNX x2";
-            this.fSRCNNXToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
-            // 
-            // filteraddaDropDownButton
-            // 
-            this.filteraddaDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filteraddaDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.downmixToolStripMenuItem,
-            this.noiseReductionToolStripMenuItem,
-            this.normalizeToolStripMenuItem,
-            this.volumeToolStripMenuItem});
-            this.filteraddaDropDownButton.Image = global::Av1ador.Properties.Resources.RecommendedTest;
-            this.filteraddaDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filteraddaDropDownButton.Name = "filteraddaDropDownButton";
-            this.filteraddaDropDownButton.Size = new System.Drawing.Size(29, 21);
-            this.filteraddaDropDownButton.Text = "Add audio filter";
-            this.filteraddaDropDownButton.Visible = false;
-            // 
-            // downmixToolStripMenuItem
-            // 
-            this.downmixToolStripMenuItem.AutoSize = false;
-            this.downmixToolStripMenuItem.Name = "downmixToolStripMenuItem";
-            this.downmixToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.downmixToolStripMenuItem.Text = "Downmix";
-            this.downmixToolStripMenuItem.Click += new System.EventHandler(this.DownmixToolStripMenuItem_Click);
-            // 
-            // noiseReductionToolStripMenuItem
-            // 
-            this.noiseReductionToolStripMenuItem.AutoSize = false;
-            this.noiseReductionToolStripMenuItem.Name = "noiseReductionToolStripMenuItem";
-            this.noiseReductionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.noiseReductionToolStripMenuItem.Text = "Noise reduction";
-            this.noiseReductionToolStripMenuItem.Click += new System.EventHandler(this.NoiseReductionToolStripMenuItem_Click);
-            // 
-            // normalizeToolStripMenuItem
-            // 
-            this.normalizeToolStripMenuItem.AutoSize = false;
-            this.normalizeToolStripMenuItem.Name = "normalizeToolStripMenuItem";
-            this.normalizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.normalizeToolStripMenuItem.Text = "Normalize";
-            this.normalizeToolStripMenuItem.Click += new System.EventHandler(this.NormalizeToolStripMenuItem_Click);
-            // 
-            // volumeToolStripMenuItem
-            // 
-            this.volumeToolStripMenuItem.AutoSize = false;
-            this.volumeToolStripMenuItem.Name = "volumeToolStripMenuItem";
-            this.volumeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.volumeToolStripMenuItem.Text = "Volume";
-            this.volumeToolStripMenuItem.Click += new System.EventHandler(this.VolumeToolStripMenuItem_Click);
-            // 
-            // filternewButton
-            // 
-            this.filternewButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filternewButton.Image = global::Av1ador.Properties.Resources.NewWebTestPlugin;
-            this.filternewButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filternewButton.Name = "filternewButton";
-            this.filternewButton.Size = new System.Drawing.Size(23, 21);
-            this.filternewButton.Text = "New filter";
-            this.filternewButton.Click += new System.EventHandler(this.FilternewButton_Click);
-            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 24);
-            // 
-            // filterupButton
-            // 
-            this.filterupButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filterupButton.Image = global::Av1ador.Properties.Resources.MoveUp;
-            this.filterupButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filterupButton.Name = "filterupButton";
-            this.filterupButton.Size = new System.Drawing.Size(23, 21);
-            this.filterupButton.Text = "Move up";
-            this.filterupButton.Click += new System.EventHandler(this.FilterupButton_Click);
-            // 
-            // filterdownButton
-            // 
-            this.filterdownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filterdownButton.Image = global::Av1ador.Properties.Resources.MoveDown;
-            this.filterdownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filterdownButton.Name = "filterdownButton";
-            this.filterdownButton.Size = new System.Drawing.Size(23, 21);
-            this.filterdownButton.Text = "Move down";
-            this.filterdownButton.Click += new System.EventHandler(this.FilterdownButton_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 24);
             // 
-            // filterremoveButton
-            // 
-            this.filterremoveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filterremoveButton.Image = global::Av1ador.Properties.Resources.RemoveTestGroup;
-            this.filterremoveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filterremoveButton.Name = "filterremoveButton";
-            this.filterremoveButton.Size = new System.Drawing.Size(23, 21);
-            this.filterremoveButton.Text = "Remove selected filters";
-            this.filterremoveButton.Click += new System.EventHandler(this.FilterremoveButton_Click);
-            // 
             // toolStripSeparator14
             // 
             this.toolStripSeparator14.Name = "toolStripSeparator14";
             this.toolStripSeparator14.Size = new System.Drawing.Size(6, 24);
-            // 
-            // filterdocButton
-            // 
-            this.filterdocButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filterdocButton.Image = global::Av1ador.Properties.Resources.HelpTableOfContents;
-            this.filterdocButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filterdocButton.Name = "filterdocButton";
-            this.filterdocButton.Size = new System.Drawing.Size(23, 21);
-            this.filterdocButton.Text = "Documentation";
-            this.filterdocButton.Click += new System.EventHandler(this.FilterdocButton_Click);
-            // 
-            // togglefButton
-            // 
-            this.togglefButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.togglefButton.AutoSize = false;
-            this.togglefButton.Checked = true;
-            this.togglefButton.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.togglefButton.Image = global::Av1ador.Properties.Resources.Image;
-            this.togglefButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.togglefButton.Name = "togglefButton";
-            this.togglefButton.Size = new System.Drawing.Size(56, 21);
-            this.togglefButton.Text = "Video";
-            this.togglefButton.Click += new System.EventHandler(this.TogglefButton_Click);
             // 
             // tableLayoutPanel18
             // 
@@ -1859,140 +1308,20 @@
             this.toolStrip2.Text = "toolStrip2";
             this.toolStrip2.MouseEnter += new System.EventHandler(this.ToolStrip2_MouseEnter);
             // 
-            // syncButton
-            // 
-            this.syncButton.AutoSize = false;
-            this.syncButton.CheckOnClick = true;
-            this.syncButton.Enabled = false;
-            this.syncButton.Image = global::Av1ador.Properties.Resources.Sync;
-            this.syncButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.syncButton.Name = "syncButton";
-            this.syncButton.Size = new System.Drawing.Size(39, 35);
-            this.syncButton.Text = "Sync";
-            this.syncButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.syncButton.ToolTipText = "Manually align left with right video";
-            this.syncButton.CheckStateChanged += new System.EventHandler(this.SyncButton_CheckStateChanged);
-            // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
             this.toolStripSeparator10.Size = new System.Drawing.Size(6, 38);
-            // 
-            // prevframeButton
-            // 
-            this.prevframeButton.AutoSize = false;
-            this.prevframeButton.Image = global::Av1ador.Properties.Resources.PreviousFrame;
-            this.prevframeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.prevframeButton.Name = "prevframeButton";
-            this.prevframeButton.Size = new System.Drawing.Size(90, 35);
-            this.prevframeButton.Text = "Previous frame";
-            this.prevframeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.prevframeButton.Click += new System.EventHandler(this.PrevframeButton_Click);
-            // 
-            // pauseButton
-            // 
-            this.pauseButton.AutoSize = false;
-            this.pauseButton.Image = global::Av1ador.Properties.Resources.Pause;
-            this.pauseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.pauseButton.Name = "pauseButton";
-            this.pauseButton.Size = new System.Drawing.Size(42, 35);
-            this.pauseButton.Text = "Pause";
-            this.pauseButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.pauseButton.Visible = false;
-            this.pauseButton.Click += new System.EventHandler(this.PauseButton_Click);
-            // 
-            // playButton
-            // 
-            this.playButton.AutoSize = false;
-            this.playButton.Image = global::Av1ador.Properties.Resources.PlayVideo;
-            this.playButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.playButton.Name = "playButton";
-            this.playButton.Size = new System.Drawing.Size(42, 35);
-            this.playButton.Text = "Play";
-            this.playButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.playButton.Click += new System.EventHandler(this.PlayButton_Click);
-            this.playButton.VisibleChanged += new System.EventHandler(this.PlayButton_VisibleChanged);
-            // 
-            // nextframeButton
-            // 
-            this.nextframeButton.AutoSize = false;
-            this.nextframeButton.Image = global::Av1ador.Properties.Resources.NextFrame;
-            this.nextframeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.nextframeButton.Name = "nextframeButton";
-            this.nextframeButton.Size = new System.Drawing.Size(90, 35);
-            this.nextframeButton.Text = "Next frame";
-            this.nextframeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.nextframeButton.Click += new System.EventHandler(this.NextframeButton_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
             // 
-            // audiounmuteButton
-            // 
-            this.audiounmuteButton.AutoSize = false;
-            this.audiounmuteButton.Image = global::Av1ador.Properties.Resources.Volume;
-            this.audiounmuteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.audiounmuteButton.Name = "audiounmuteButton";
-            this.audiounmuteButton.Size = new System.Drawing.Size(54, 35);
-            this.audiounmuteButton.Text = "Audio";
-            this.audiounmuteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.audiounmuteButton.Click += new System.EventHandler(this.AudiounmuteButton_Click);
-            // 
-            // audiomuteButton
-            // 
-            this.audiomuteButton.AutoSize = false;
-            this.audiomuteButton.Image = global::Av1ador.Properties.Resources.AudioMute;
-            this.audiomuteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.audiomuteButton.Name = "audiomuteButton";
-            this.audiomuteButton.Size = new System.Drawing.Size(54, 35);
-            this.audiomuteButton.Text = "Mute";
-            this.audiomuteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.audiomuteButton.ToolTipText = "Mute";
-            this.audiomuteButton.Visible = false;
-            this.audiomuteButton.Click += new System.EventHandler(this.AudiomuteButton2_Click);
-            // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
             this.toolStripSeparator9.Size = new System.Drawing.Size(6, 38);
-            // 
-            // zoomButton
-            // 
-            this.zoomButton.AutoSize = false;
-            this.zoomButton.CheckOnClick = true;
-            this.zoomButton.Image = global::Av1ador.Properties.Resources.ZoomToggle;
-            this.zoomButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.zoomButton.Name = "zoomButton";
-            this.zoomButton.Size = new System.Drawing.Size(43, 35);
-            this.zoomButton.Text = "Zoom";
-            this.zoomButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.zoomButton.CheckStateChanged += new System.EventHandler(this.ZoomButton_CheckStateChanged);
-            // 
-            // expandButton
-            // 
-            this.expandButton.AutoSize = false;
-            this.expandButton.Image = global::Av1ador.Properties.Resources.ViewLandscape;
-            this.expandButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.expandButton.Name = "expandButton";
-            this.expandButton.Size = new System.Drawing.Size(50, 34);
-            this.expandButton.Text = "Expand";
-            this.expandButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.expandButton.Click += new System.EventHandler(this.ExpandButton_Click);
-            // 
-            // restoreButton
-            // 
-            this.restoreButton.AutoSize = false;
-            this.restoreButton.Image = global::Av1ador.Properties.Resources.ViewFull;
-            this.restoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.restoreButton.Name = "restoreButton";
-            this.restoreButton.Size = new System.Drawing.Size(50, 35);
-            this.restoreButton.Text = "Restore";
-            this.restoreButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.restoreButton.ToolTipText = "Restore";
-            this.restoreButton.Visible = false;
-            this.restoreButton.Click += new System.EventHandler(this.RestoreButton_Click);
             // 
             // tableLayoutPanel8
             // 
@@ -2384,18 +1713,6 @@
             this.panel1.Size = new System.Drawing.Size(1264, 24);
             this.panel1.TabIndex = 4;
             // 
-            // picBoxBarra
-            // 
-            this.picBoxBarra.BackColor = System.Drawing.Color.Firebrick;
-            this.picBoxBarra.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picBoxBarra.Location = new System.Drawing.Point(0, 0);
-            this.picBoxBarra.Margin = new System.Windows.Forms.Padding(0);
-            this.picBoxBarra.Name = "picBoxBarra";
-            this.picBoxBarra.Size = new System.Drawing.Size(1264, 24);
-            this.picBoxBarra.TabIndex = 0;
-            this.picBoxBarra.TabStop = false;
-            this.picBoxBarra.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PicBoxBarra_MouseClick);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.Filter = "Video Files|*.mkv;*.mp4;*.avi;*.webm;*.m2ts;*.wmv;*.mpg;*.mov;*.3gp;*.ts;*.mpeg;*" +
@@ -2426,6 +1743,702 @@
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
+            // 
+            // encodestopButton
+            // 
+            this.encodestopButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.encodestopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.encodestopButton.Enabled = false;
+            this.encodestopButton.Image = global::Av1ador.Properties.Resources.Stop;
+            this.encodestopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.encodestopButton.Name = "encodestopButton";
+            this.encodestopButton.Size = new System.Drawing.Size(23, 33);
+            this.encodestopButton.Text = "Stop";
+            this.encodestopButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.encodestopButton.ToolTipText = "Stop encoding";
+            this.encodestopButton.Click += new System.EventHandler(this.EncodestopButton_Click);
+            // 
+            // ssButton
+            // 
+            this.ssButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ssButton.Image = global::Av1ador.Properties.Resources.GoToFirst;
+            this.ssButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ssButton.Name = "ssButton";
+            this.ssButton.Size = new System.Drawing.Size(23, 33);
+            this.ssButton.Text = "Begin";
+            this.ssButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.ssButton.ToolTipText = "Begin at current time";
+            this.ssButton.Click += new System.EventHandler(this.SsButton_Click);
+            // 
+            // toStripButton
+            // 
+            this.toStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toStripButton.Image = global::Av1ador.Properties.Resources.GoToLast;
+            this.toStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toStripButton.Name = "toStripButton";
+            this.toStripButton.Size = new System.Drawing.Size(23, 33);
+            this.toStripButton.Text = "End";
+            this.toStripButton.ToolTipText = "End at current time";
+            this.toStripButton.Click += new System.EventHandler(this.ToStripButton_Click);
+            // 
+            // creditsstartButton
+            // 
+            this.creditsstartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.creditsstartButton.Image = global::Av1ador.Properties.Resources.GoToDeclaration;
+            this.creditsstartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.creditsstartButton.Name = "creditsstartButton";
+            this.creditsstartButton.Size = new System.Drawing.Size(23, 33);
+            this.creditsstartButton.Text = "Credits";
+            this.creditsstartButton.ToolTipText = "Credits start at current time (lower quality)";
+            this.creditsstartButton.Click += new System.EventHandler(this.CreditsstartButton_Click);
+            // 
+            // creditsendButton
+            // 
+            this.creditsendButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.creditsendButton.Enabled = false;
+            this.creditsendButton.Image = global::Av1ador.Properties.Resources.GoToNextUncovered;
+            this.creditsendButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.creditsendButton.Name = "creditsendButton";
+            this.creditsendButton.Size = new System.Drawing.Size(23, 33);
+            this.creditsendButton.Text = "Credits end";
+            this.creditsendButton.ToolTipText = "Credits end at current time";
+            this.creditsendButton.Click += new System.EventHandler(this.CreditsendButton_Click);
+            // 
+            // encodestartButton
+            // 
+            this.encodestartButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.encodestartButton.AutoSize = false;
+            this.encodestartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.encodestartButton.Image = global::Av1ador.Properties.Resources.Play;
+            this.encodestartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.encodestartButton.Name = "encodestartButton";
+            this.encodestartButton.Size = new System.Drawing.Size(42, 35);
+            this.encodestartButton.Text = "Start";
+            this.encodestartButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.encodestartButton.ToolTipText = "Start encoding";
+            this.encodestartButton.Click += new System.EventHandler(this.EncodestartButton_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Checked = true;
+            this.toolStripButton2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::Av1ador.Properties.Resources.ProcessModel;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 33);
+            this.toolStripButton2.Text = "cfgButton";
+            this.toolStripButton2.ToolTipText = "Encoder settings";
+            this.toolStripButton2.Click += new System.EventHandler(this.ToolStripButton2_Click);
+            // 
+            // creditsResetButton
+            // 
+            this.creditsResetButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.creditsResetButton.Image = global::Av1ador.Properties.Resources.GoToError;
+            this.creditsResetButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.creditsResetButton.Name = "creditsResetButton";
+            this.creditsResetButton.Size = new System.Drawing.Size(23, 33);
+            this.creditsResetButton.Text = "toolStripButton1";
+            this.creditsResetButton.Visible = false;
+            this.creditsResetButton.Click += new System.EventHandler(this.CreditsResetButton_Click);
+            // 
+            // addfilesButton
+            // 
+            this.addfilesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addfilesButton.Image = global::Av1ador.Properties.Resources.AddDocumentGroup;
+            this.addfilesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addfilesButton.Name = "addfilesButton";
+            this.addfilesButton.Size = new System.Drawing.Size(23, 21);
+            this.addfilesButton.Text = "Add files to the queue";
+            this.addfilesButton.Click += new System.EventHandler(this.AddfilesButton_Click);
+            // 
+            // removeButton
+            // 
+            this.removeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.removeButton.Enabled = false;
+            this.removeButton.Image = global::Av1ador.Properties.Resources.ClearCollection;
+            this.removeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(23, 21);
+            this.removeButton.Text = "Remove selected";
+            this.removeButton.Click += new System.EventHandler(this.RemoveButton_Click);
+            // 
+            // encodefirstButton
+            // 
+            this.encodefirstButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.encodefirstButton.Enabled = false;
+            this.encodefirstButton.Image = global::Av1ador.Properties.Resources.BatchCheckIn;
+            this.encodefirstButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.encodefirstButton.Name = "encodefirstButton";
+            this.encodefirstButton.Size = new System.Drawing.Size(23, 21);
+            this.encodefirstButton.Text = "Encode first";
+            this.encodefirstButton.Click += new System.EventHandler(this.EncodefirstButton_Click);
+            // 
+            // origfolderButton
+            // 
+            this.origfolderButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.origfolderButton.Checked = true;
+            this.origfolderButton.CheckOnClick = true;
+            this.origfolderButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.origfolderButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.origfolderButton.Image = global::Av1ador.Properties.Resources.FolderOffline;
+            this.origfolderButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.origfolderButton.Name = "origfolderButton";
+            this.origfolderButton.Size = new System.Drawing.Size(23, 21);
+            this.origfolderButton.Text = "Original folder";
+            this.origfolderButton.ToolTipText = "Store files in their original folder";
+            this.origfolderButton.Click += new System.EventHandler(this.OrigfolderButton_Click);
+            // 
+            // outfolderButton
+            // 
+            this.outfolderButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.outfolderButton.CheckOnClick = true;
+            this.outfolderButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.outfolderButton.Image = global::Av1ador.Properties.Resources.MoveToFolder;
+            this.outfolderButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.outfolderButton.Name = "outfolderButton";
+            this.outfolderButton.Size = new System.Drawing.Size(23, 21);
+            this.outfolderButton.Text = "Folder";
+            this.outfolderButton.ToolTipText = "Select output folder";
+            this.outfolderButton.Click += new System.EventHandler(this.OutfolderButton_Click);
+            // 
+            // encodelistButton
+            // 
+            this.encodelistButton.CheckOnClick = true;
+            this.encodelistButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.encodelistButton.Image = global::Av1ador.Properties.Resources.DebugHistorySeekToFrame2;
+            this.encodelistButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.encodelistButton.Name = "encodelistButton";
+            this.encodelistButton.Size = new System.Drawing.Size(23, 21);
+            this.encodelistButton.Text = "Encode list";
+            this.encodelistButton.ToolTipText = "Encode entire list";
+            // 
+            // copytoolStripButton
+            // 
+            this.copytoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.copytoolStripButton.Image = global::Av1ador.Properties.Resources.Copy;
+            this.copytoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.copytoolStripButton.Name = "copytoolStripButton";
+            this.copytoolStripButton.Size = new System.Drawing.Size(23, 21);
+            this.copytoolStripButton.Text = "Copy filters";
+            this.copytoolStripButton.Click += new System.EventHandler(this.CopytoolStripButton_Click);
+            // 
+            // pastetoolStripButton
+            // 
+            this.pastetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.pastetoolStripButton.Enabled = false;
+            this.pastetoolStripButton.Image = global::Av1ador.Properties.Resources.Paste;
+            this.pastetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.pastetoolStripButton.Name = "pastetoolStripButton";
+            this.pastetoolStripButton.Size = new System.Drawing.Size(23, 21);
+            this.pastetoolStripButton.Text = "Paste filters";
+            this.pastetoolStripButton.Click += new System.EventHandler(this.PastetoolStripButton_Click);
+            // 
+            // filteraddDropDownButton
+            // 
+            this.filteraddDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filteraddDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.colorToolStripMenuItem,
+            this.removeBlackBarsToolStripMenuItem,
+            this.cropToolStripMenuItem,
+            this.debandToolStripMenuItem,
+            this.deinterlaceToolStripMenuItem,
+            this.delogoToolStripMenuItem,
+            this.frameInterpolationToolStripMenuItem,
+            this.flipToolStripMenuItem,
+            this.denoiseToolStripMenuItem,
+            this.pOIaddroiToolStripMenuItem,
+            this.rotateToolStripMenuItem,
+            this.sharpenToolStripMenuItem,
+            this.speedToolStripMenuItem,
+            this.stabilizationToolStripMenuItem,
+            this.tonemapToolStripMenuItem,
+            this.upscaleToolStripMenuItem});
+            this.filteraddDropDownButton.Image = global::Av1ador.Properties.Resources.RecommendedTest;
+            this.filteraddDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filteraddDropDownButton.Name = "filteraddDropDownButton";
+            this.filteraddDropDownButton.Size = new System.Drawing.Size(29, 21);
+            this.filteraddDropDownButton.Text = "Add video filter";
+            this.filteraddDropDownButton.ToolTipText = "Add video filter";
+            this.filteraddDropDownButton.DropDownOpening += new System.EventHandler(this.FilteraddDropDownButton_DropDownOpening);
+            // 
+            // colorToolStripMenuItem
+            // 
+            this.colorToolStripMenuItem.AutoSize = false;
+            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.colorToolStripMenuItem.Text = "Color adjustment";
+            this.colorToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // removeBlackBarsToolStripMenuItem
+            // 
+            this.removeBlackBarsToolStripMenuItem.AutoSize = false;
+            this.removeBlackBarsToolStripMenuItem.Name = "removeBlackBarsToolStripMenuItem";
+            this.removeBlackBarsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeBlackBarsToolStripMenuItem.Text = "Remove black bars";
+            this.removeBlackBarsToolStripMenuItem.Click += new System.EventHandler(this.RemoveBlackBarsToolStripMenuItem_Click);
+            // 
+            // cropToolStripMenuItem
+            // 
+            this.cropToolStripMenuItem.AutoSize = false;
+            this.cropToolStripMenuItem.Name = "cropToolStripMenuItem";
+            this.cropToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cropToolStripMenuItem.Text = "Crop";
+            this.cropToolStripMenuItem.Click += new System.EventHandler(this.CropToolStripMenuItem_Click);
+            // 
+            // debandToolStripMenuItem
+            // 
+            this.debandToolStripMenuItem.AutoSize = false;
+            this.debandToolStripMenuItem.Name = "debandToolStripMenuItem";
+            this.debandToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.debandToolStripMenuItem.Text = "Deband";
+            this.debandToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // deinterlaceToolStripMenuItem
+            // 
+            this.deinterlaceToolStripMenuItem.AutoSize = false;
+            this.deinterlaceToolStripMenuItem.Name = "deinterlaceToolStripMenuItem";
+            this.deinterlaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deinterlaceToolStripMenuItem.Text = "Deinterlace";
+            this.deinterlaceToolStripMenuItem.Click += new System.EventHandler(this.DeinterlaceToolStripMenuItem_Click);
+            // 
+            // delogoToolStripMenuItem
+            // 
+            this.delogoToolStripMenuItem.AutoSize = false;
+            this.delogoToolStripMenuItem.Name = "delogoToolStripMenuItem";
+            this.delogoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.delogoToolStripMenuItem.Text = "Delogo";
+            this.delogoToolStripMenuItem.Click += new System.EventHandler(this.DelogoToolStripMenuItem_Click);
+            // 
+            // frameInterpolationToolStripMenuItem
+            // 
+            this.frameInterpolationToolStripMenuItem.AutoSize = false;
+            this.frameInterpolationToolStripMenuItem.Name = "frameInterpolationToolStripMenuItem";
+            this.frameInterpolationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.frameInterpolationToolStripMenuItem.Text = "Frame interpolation";
+            this.frameInterpolationToolStripMenuItem.Click += new System.EventHandler(this.FrameInterpolationToolStripMenuItem_Click);
+            // 
+            // flipToolStripMenuItem
+            // 
+            this.flipToolStripMenuItem.AutoSize = false;
+            this.flipToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.horizontalToolStripMenuItem,
+            this.verticalToolStripMenuItem});
+            this.flipToolStripMenuItem.Name = "flipToolStripMenuItem";
+            this.flipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.flipToolStripMenuItem.Text = "Flip";
+            // 
+            // horizontalToolStripMenuItem
+            // 
+            this.horizontalToolStripMenuItem.AutoSize = false;
+            this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
+            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.horizontalToolStripMenuItem.Text = "Horizontal ↔";
+            this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // verticalToolStripMenuItem
+            // 
+            this.verticalToolStripMenuItem.AutoSize = false;
+            this.verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
+            this.verticalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.verticalToolStripMenuItem.Text = "Vertical ↕";
+            this.verticalToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // denoiseToolStripMenuItem
+            // 
+            this.denoiseToolStripMenuItem.AutoSize = false;
+            this.denoiseToolStripMenuItem.Name = "denoiseToolStripMenuItem";
+            this.denoiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.denoiseToolStripMenuItem.Text = "Denoise";
+            this.denoiseToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // pOIaddroiToolStripMenuItem
+            // 
+            this.pOIaddroiToolStripMenuItem.AutoSize = false;
+            this.pOIaddroiToolStripMenuItem.Name = "pOIaddroiToolStripMenuItem";
+            this.pOIaddroiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pOIaddroiToolStripMenuItem.Text = "POI (addroi)";
+            this.pOIaddroiToolStripMenuItem.Click += new System.EventHandler(this.POIaddroiToolStripMenuItem_Click);
+            // 
+            // rotateToolStripMenuItem
+            // 
+            this.rotateToolStripMenuItem.AutoSize = false;
+            this.rotateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clockwisetoolStripMenuItem,
+            this.anticlockwiseToolStripMenuItem,
+            this.clockwise180toolStripMenuItem3});
+            this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
+            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rotateToolStripMenuItem.Text = "Rotate";
+            // 
+            // clockwisetoolStripMenuItem
+            // 
+            this.clockwisetoolStripMenuItem.AutoSize = false;
+            this.clockwisetoolStripMenuItem.Name = "clockwisetoolStripMenuItem";
+            this.clockwisetoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clockwisetoolStripMenuItem.Text = "90° clockwise ↷";
+            this.clockwisetoolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // anticlockwiseToolStripMenuItem
+            // 
+            this.anticlockwiseToolStripMenuItem.AutoSize = false;
+            this.anticlockwiseToolStripMenuItem.Name = "anticlockwiseToolStripMenuItem";
+            this.anticlockwiseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.anticlockwiseToolStripMenuItem.Text = "90° anticlockwise ↶";
+            this.anticlockwiseToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // clockwise180toolStripMenuItem3
+            // 
+            this.clockwise180toolStripMenuItem3.AutoSize = false;
+            this.clockwise180toolStripMenuItem3.Name = "clockwise180toolStripMenuItem3";
+            this.clockwise180toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.clockwise180toolStripMenuItem3.Text = "180°";
+            this.clockwise180toolStripMenuItem3.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // sharpenToolStripMenuItem
+            // 
+            this.sharpenToolStripMenuItem.AutoSize = false;
+            this.sharpenToolStripMenuItem.Name = "sharpenToolStripMenuItem";
+            this.sharpenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sharpenToolStripMenuItem.Text = "Sharpen";
+            this.sharpenToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // speedToolStripMenuItem
+            // 
+            this.speedToolStripMenuItem.AutoSize = false;
+            this.speedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.speedupToolStripMenuItem,
+            this.slowToolStripMenuItem});
+            this.speedToolStripMenuItem.Name = "speedToolStripMenuItem";
+            this.speedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.speedToolStripMenuItem.Text = "Speed";
+            // 
+            // speedupToolStripMenuItem
+            // 
+            this.speedupToolStripMenuItem.AutoSize = false;
+            this.speedupToolStripMenuItem.Name = "speedupToolStripMenuItem";
+            this.speedupToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.speedupToolStripMenuItem.Text = "Speed up 10%";
+            this.speedupToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // slowToolStripMenuItem
+            // 
+            this.slowToolStripMenuItem.AutoSize = false;
+            this.slowToolStripMenuItem.Name = "slowToolStripMenuItem";
+            this.slowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.slowToolStripMenuItem.Text = "Slow down 10%";
+            this.slowToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // stabilizationToolStripMenuItem
+            // 
+            this.stabilizationToolStripMenuItem.AutoSize = false;
+            this.stabilizationToolStripMenuItem.Name = "stabilizationToolStripMenuItem";
+            this.stabilizationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stabilizationToolStripMenuItem.Text = "Stabilization";
+            this.stabilizationToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // tonemapToolStripMenuItem
+            // 
+            this.tonemapToolStripMenuItem.AutoSize = false;
+            this.tonemapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openclToolStripMenuItem,
+            this.vulkanToolStripMenuItem});
+            this.tonemapToolStripMenuItem.Name = "tonemapToolStripMenuItem";
+            this.tonemapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tonemapToolStripMenuItem.Text = "Tonemap";
+            // 
+            // openclToolStripMenuItem
+            // 
+            this.openclToolStripMenuItem.AutoSize = false;
+            this.openclToolStripMenuItem.Name = "openclToolStripMenuItem";
+            this.openclToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openclToolStripMenuItem.Text = "OpenCL";
+            this.openclToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // vulkanToolStripMenuItem
+            // 
+            this.vulkanToolStripMenuItem.AutoSize = false;
+            this.vulkanToolStripMenuItem.Name = "vulkanToolStripMenuItem";
+            this.vulkanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.vulkanToolStripMenuItem.Text = "Vulkan";
+            this.vulkanToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // upscaleToolStripMenuItem
+            // 
+            this.upscaleToolStripMenuItem.AutoSize = false;
+            this.upscaleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.anime4kToolStripMenuItem,
+            this.anime4kX2ToolStripMenuItem,
+            this.fSRCNNXToolStripMenuItem});
+            this.upscaleToolStripMenuItem.Name = "upscaleToolStripMenuItem";
+            this.upscaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.upscaleToolStripMenuItem.Text = "Upscale";
+            // 
+            // anime4kToolStripMenuItem
+            // 
+            this.anime4kToolStripMenuItem.AutoSize = false;
+            this.anime4kToolStripMenuItem.Name = "anime4kToolStripMenuItem";
+            this.anime4kToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.anime4kToolStripMenuItem.Text = "Anime4K x1.5";
+            this.anime4kToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
+            // 
+            // anime4kX2ToolStripMenuItem
+            // 
+            this.anime4kX2ToolStripMenuItem.AutoSize = false;
+            this.anime4kX2ToolStripMenuItem.Name = "anime4kX2ToolStripMenuItem";
+            this.anime4kX2ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.anime4kX2ToolStripMenuItem.Text = "Anime4k x2";
+            this.anime4kX2ToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
+            // 
+            // fSRCNNXToolStripMenuItem
+            // 
+            this.fSRCNNXToolStripMenuItem.AutoSize = false;
+            this.fSRCNNXToolStripMenuItem.Name = "fSRCNNXToolStripMenuItem";
+            this.fSRCNNXToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.fSRCNNXToolStripMenuItem.Text = "FSRCNNX x2";
+            this.fSRCNNXToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
+            // 
+            // filteraddaDropDownButton
+            // 
+            this.filteraddaDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filteraddaDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.downmixToolStripMenuItem,
+            this.noiseReductionToolStripMenuItem,
+            this.normalizeToolStripMenuItem,
+            this.volumeToolStripMenuItem});
+            this.filteraddaDropDownButton.Image = global::Av1ador.Properties.Resources.RecommendedTest;
+            this.filteraddaDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filteraddaDropDownButton.Name = "filteraddaDropDownButton";
+            this.filteraddaDropDownButton.Size = new System.Drawing.Size(29, 21);
+            this.filteraddaDropDownButton.Text = "Add audio filter";
+            this.filteraddaDropDownButton.Visible = false;
+            // 
+            // downmixToolStripMenuItem
+            // 
+            this.downmixToolStripMenuItem.AutoSize = false;
+            this.downmixToolStripMenuItem.Name = "downmixToolStripMenuItem";
+            this.downmixToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.downmixToolStripMenuItem.Text = "Downmix";
+            this.downmixToolStripMenuItem.Click += new System.EventHandler(this.DownmixToolStripMenuItem_Click);
+            // 
+            // noiseReductionToolStripMenuItem
+            // 
+            this.noiseReductionToolStripMenuItem.AutoSize = false;
+            this.noiseReductionToolStripMenuItem.Name = "noiseReductionToolStripMenuItem";
+            this.noiseReductionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.noiseReductionToolStripMenuItem.Text = "Noise reduction";
+            this.noiseReductionToolStripMenuItem.Click += new System.EventHandler(this.NoiseReductionToolStripMenuItem_Click);
+            // 
+            // normalizeToolStripMenuItem
+            // 
+            this.normalizeToolStripMenuItem.AutoSize = false;
+            this.normalizeToolStripMenuItem.Name = "normalizeToolStripMenuItem";
+            this.normalizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.normalizeToolStripMenuItem.Text = "Normalize";
+            this.normalizeToolStripMenuItem.Click += new System.EventHandler(this.NormalizeToolStripMenuItem_Click);
+            // 
+            // volumeToolStripMenuItem
+            // 
+            this.volumeToolStripMenuItem.AutoSize = false;
+            this.volumeToolStripMenuItem.Name = "volumeToolStripMenuItem";
+            this.volumeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.volumeToolStripMenuItem.Text = "Volume";
+            this.volumeToolStripMenuItem.Click += new System.EventHandler(this.VolumeToolStripMenuItem_Click);
+            // 
+            // filternewButton
+            // 
+            this.filternewButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filternewButton.Image = global::Av1ador.Properties.Resources.NewWebTestPlugin;
+            this.filternewButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filternewButton.Name = "filternewButton";
+            this.filternewButton.Size = new System.Drawing.Size(23, 21);
+            this.filternewButton.Text = "New filter";
+            this.filternewButton.Click += new System.EventHandler(this.FilternewButton_Click);
+            // 
+            // filterupButton
+            // 
+            this.filterupButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filterupButton.Image = global::Av1ador.Properties.Resources.MoveUp;
+            this.filterupButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filterupButton.Name = "filterupButton";
+            this.filterupButton.Size = new System.Drawing.Size(23, 21);
+            this.filterupButton.Text = "Move up";
+            this.filterupButton.Click += new System.EventHandler(this.FilterupButton_Click);
+            // 
+            // filterdownButton
+            // 
+            this.filterdownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filterdownButton.Image = global::Av1ador.Properties.Resources.MoveDown;
+            this.filterdownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filterdownButton.Name = "filterdownButton";
+            this.filterdownButton.Size = new System.Drawing.Size(23, 21);
+            this.filterdownButton.Text = "Move down";
+            this.filterdownButton.Click += new System.EventHandler(this.FilterdownButton_Click);
+            // 
+            // filterremoveButton
+            // 
+            this.filterremoveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filterremoveButton.Image = global::Av1ador.Properties.Resources.RemoveTestGroup;
+            this.filterremoveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filterremoveButton.Name = "filterremoveButton";
+            this.filterremoveButton.Size = new System.Drawing.Size(23, 21);
+            this.filterremoveButton.Text = "Remove selected filters";
+            this.filterremoveButton.Click += new System.EventHandler(this.FilterremoveButton_Click);
+            // 
+            // filterdocButton
+            // 
+            this.filterdocButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filterdocButton.Image = global::Av1ador.Properties.Resources.HelpTableOfContents;
+            this.filterdocButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filterdocButton.Name = "filterdocButton";
+            this.filterdocButton.Size = new System.Drawing.Size(23, 21);
+            this.filterdocButton.Text = "Documentation";
+            this.filterdocButton.Click += new System.EventHandler(this.FilterdocButton_Click);
+            // 
+            // togglefButton
+            // 
+            this.togglefButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.togglefButton.AutoSize = false;
+            this.togglefButton.Checked = true;
+            this.togglefButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.togglefButton.Image = global::Av1ador.Properties.Resources.Image;
+            this.togglefButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.togglefButton.Name = "togglefButton";
+            this.togglefButton.Size = new System.Drawing.Size(56, 21);
+            this.togglefButton.Text = "Video";
+            this.togglefButton.Click += new System.EventHandler(this.TogglefButton_Click);
+            // 
+            // syncButton
+            // 
+            this.syncButton.AutoSize = false;
+            this.syncButton.CheckOnClick = true;
+            this.syncButton.Enabled = false;
+            this.syncButton.Image = global::Av1ador.Properties.Resources.Sync;
+            this.syncButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.syncButton.Name = "syncButton";
+            this.syncButton.Size = new System.Drawing.Size(39, 35);
+            this.syncButton.Text = "Sync";
+            this.syncButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.syncButton.ToolTipText = "Manually align left with right video";
+            this.syncButton.CheckStateChanged += new System.EventHandler(this.SyncButton_CheckStateChanged);
+            // 
+            // prevframeButton
+            // 
+            this.prevframeButton.AutoSize = false;
+            this.prevframeButton.Image = global::Av1ador.Properties.Resources.PreviousFrame;
+            this.prevframeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.prevframeButton.Name = "prevframeButton";
+            this.prevframeButton.Size = new System.Drawing.Size(90, 35);
+            this.prevframeButton.Text = "Previous frame";
+            this.prevframeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.prevframeButton.Click += new System.EventHandler(this.PrevframeButton_Click);
+            // 
+            // pauseButton
+            // 
+            this.pauseButton.AutoSize = false;
+            this.pauseButton.Image = global::Av1ador.Properties.Resources.Pause;
+            this.pauseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.pauseButton.Name = "pauseButton";
+            this.pauseButton.Size = new System.Drawing.Size(42, 35);
+            this.pauseButton.Text = "Pause";
+            this.pauseButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.pauseButton.Visible = false;
+            this.pauseButton.Click += new System.EventHandler(this.PauseButton_Click);
+            // 
+            // playButton
+            // 
+            this.playButton.AutoSize = false;
+            this.playButton.Image = global::Av1ador.Properties.Resources.PlayVideo;
+            this.playButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(42, 35);
+            this.playButton.Text = "Play";
+            this.playButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.playButton.Click += new System.EventHandler(this.PlayButton_Click);
+            this.playButton.VisibleChanged += new System.EventHandler(this.PlayButton_VisibleChanged);
+            // 
+            // nextframeButton
+            // 
+            this.nextframeButton.AutoSize = false;
+            this.nextframeButton.Image = global::Av1ador.Properties.Resources.NextFrame;
+            this.nextframeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.nextframeButton.Name = "nextframeButton";
+            this.nextframeButton.Size = new System.Drawing.Size(90, 35);
+            this.nextframeButton.Text = "Next frame";
+            this.nextframeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.nextframeButton.Click += new System.EventHandler(this.NextframeButton_Click);
+            // 
+            // audiounmuteButton
+            // 
+            this.audiounmuteButton.AutoSize = false;
+            this.audiounmuteButton.Image = global::Av1ador.Properties.Resources.Volume;
+            this.audiounmuteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.audiounmuteButton.Name = "audiounmuteButton";
+            this.audiounmuteButton.Size = new System.Drawing.Size(54, 35);
+            this.audiounmuteButton.Text = "Audio";
+            this.audiounmuteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.audiounmuteButton.Click += new System.EventHandler(this.AudiounmuteButton_Click);
+            // 
+            // audiomuteButton
+            // 
+            this.audiomuteButton.AutoSize = false;
+            this.audiomuteButton.Image = global::Av1ador.Properties.Resources.AudioMute;
+            this.audiomuteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.audiomuteButton.Name = "audiomuteButton";
+            this.audiomuteButton.Size = new System.Drawing.Size(54, 35);
+            this.audiomuteButton.Text = "Mute";
+            this.audiomuteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.audiomuteButton.ToolTipText = "Mute";
+            this.audiomuteButton.Visible = false;
+            this.audiomuteButton.Click += new System.EventHandler(this.AudiomuteButton2_Click);
+            // 
+            // zoomButton
+            // 
+            this.zoomButton.AutoSize = false;
+            this.zoomButton.CheckOnClick = true;
+            this.zoomButton.Image = global::Av1ador.Properties.Resources.ZoomToggle;
+            this.zoomButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomButton.Name = "zoomButton";
+            this.zoomButton.Size = new System.Drawing.Size(43, 35);
+            this.zoomButton.Text = "Zoom";
+            this.zoomButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.zoomButton.CheckStateChanged += new System.EventHandler(this.ZoomButton_CheckStateChanged);
+            // 
+            // expandButton
+            // 
+            this.expandButton.AutoSize = false;
+            this.expandButton.Image = global::Av1ador.Properties.Resources.ViewLandscape;
+            this.expandButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.expandButton.Name = "expandButton";
+            this.expandButton.Size = new System.Drawing.Size(50, 34);
+            this.expandButton.Text = "Expand";
+            this.expandButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.expandButton.Click += new System.EventHandler(this.ExpandButton_Click);
+            // 
+            // restoreButton
+            // 
+            this.restoreButton.AutoSize = false;
+            this.restoreButton.Image = global::Av1ador.Properties.Resources.ViewFull;
+            this.restoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.restoreButton.Name = "restoreButton";
+            this.restoreButton.Size = new System.Drawing.Size(50, 35);
+            this.restoreButton.Text = "Restore";
+            this.restoreButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.restoreButton.ToolTipText = "Restore";
+            this.restoreButton.Visible = false;
+            this.restoreButton.Click += new System.EventHandler(this.RestoreButton_Click);
+            // 
+            // picBoxBarra
+            // 
+            this.picBoxBarra.BackColor = System.Drawing.Color.Firebrick;
+            this.picBoxBarra.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picBoxBarra.Location = new System.Drawing.Point(0, 0);
+            this.picBoxBarra.Margin = new System.Windows.Forms.Padding(0);
+            this.picBoxBarra.Name = "picBoxBarra";
+            this.picBoxBarra.Size = new System.Drawing.Size(1264, 24);
+            this.picBoxBarra.TabIndex = 0;
+            this.picBoxBarra.TabStop = false;
+            this.picBoxBarra.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PicBoxBarra_MouseClick);
             // 
             // Form1
             // 
@@ -2706,6 +2719,7 @@
         private System.Windows.Forms.ToolStripMenuItem speedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem speedupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem slowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton creditsResetButton;
     }
 }
 
