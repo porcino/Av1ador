@@ -221,7 +221,7 @@ namespace Av1ador
                 ffprobe.Start();
                 t_regex = new Regex(@"timestamp_time=-*([0-9\.]+)");
                 compare = t_regex.Match(ffprobe.StandardOutput.ReadToEnd());
-                if (compare.Success)
+                if (compare.Success && !info.Contains("estimate_timings_from_pts"))
                 {
                     First_frame = Double.Parse(compare.Groups[1].ToString());
                     First_frame = First_frame == 0 ? -1 : First_frame;
