@@ -148,7 +148,7 @@ namespace Av1ador
                 return int.Parse(cb.Text.Split(' ')[0]);
         }
 
-        public static void DrawItems(ListBox list, DrawItemEventArgs e, bool entry = false)
+        public static void DrawItems(ListBox list, DrawItemEventArgs e)
         {
             e.DrawBackground();
 
@@ -156,13 +156,7 @@ namespace Av1ador
             if (e.Index >= 0 && e.Index < list.Items.Count)
             {
                 e.Graphics.FillRectangle(isItemSelected ? Brushes.LightSteelBlue : (e.Index % 2 == 0 ? Brushes.OldLace : Brushes.White), e.Bounds);
-                if (entry)
-                {
-                    Entry en = (Entry)list.Items[e.Index];
-                    e.Graphics.DrawString(en.File, e.Font, Brushes.Black, e.Bounds);
-                }
-                else
-                    e.Graphics.DrawString(list.Items[e.Index].ToString(), e.Font, Brushes.Black, e.Bounds);
+                e.Graphics.DrawString(list.Items[e.Index].ToString(), e.Font, Brushes.Black, e.Bounds);
             }
         }
 

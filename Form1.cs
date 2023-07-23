@@ -1015,7 +1015,7 @@ namespace Av1ador
                     primer_video.CreditsTime = encoder.Playtime;
                     if (primer_video.CreditsEndTime > 0 && primer_video.CreditsEndTime < primer_video.CreditsTime)
                         primer_video.CreditsEndTime = 0;
-                    else
+                    if (primer_video.CreditsTime > 0)
                     {
                         creditsstartButton.Visible = false;
                         creditsResetButton.Visible = true;
@@ -1256,8 +1256,7 @@ namespace Av1ador
         private void EncodestopButton_Click(object sender, EventArgs e)
         {
             encodestopButton.Enabled = false;
-            if (encode != null)
-                encode.Set_state(true);
+            encode?.Set_state(true);
             Thread thread = new Thread(() => Exit(true));
             thread.Start();
             heat = Func.Heat(0);

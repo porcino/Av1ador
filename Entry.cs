@@ -37,6 +37,11 @@ namespace Av1ador
             return -1;
         }
 
+        public static Brush Brush_bg(bool selected, int index)
+        {
+            return selected ? Brushes.LightSteelBlue : (index % 2 == 0 ? Brushes.OldLace : Brushes.White);
+        }
+
         public static void Draw(ListBox list, DrawItemEventArgs e)
         {
             e.DrawBackground();
@@ -44,7 +49,7 @@ namespace Av1ador
             bool isItemSelected = ((e.State & DrawItemState.Selected) == DrawItemState.Selected);
             if (e.Index >= 0 && e.Index < list.Items.Count)
             {
-                e.Graphics.FillRectangle(isItemSelected ? Brushes.LightSteelBlue : (e.Index % 2 == 0 ? Brushes.OldLace : Brushes.White), e.Bounds);
+                e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index), e.Bounds);
                 if (Encode.Encoding_file != null && Encode.Encoding_file == (list.Items[e.Index] as Entry).File)
                     e.Graphics.DrawRectangle(new Pen(SystemColors.Highlight, 1), e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 1);
                 Entry entry = (Entry)list.Items[e.Index];
