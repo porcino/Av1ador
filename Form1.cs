@@ -269,7 +269,7 @@ namespace Av1ador
                         encoder.Vf = Entry.Filter2List(entry.Vf);
                     if (entry.Af != null && entry.Af != "")
                         encoder.Af = Entry.Filter2List(entry.Af);
-                    Get_res();
+                    Get_res(entry.Resolution);
                     resComboBox.Text = entry.Resolution ?? resComboBox.Text;
                     primer_video.CreditsTime = entry.Credits;
                     primer_video.CreditsEndTime = entry.CreditsEnd;
@@ -372,7 +372,7 @@ namespace Av1ador
                 mpv2_cmd.WriteLine("set pause yes;seek " + (seek + segundo_video.First_frame).ToString() + " absolute+exact");
         }
 
-        private void Get_res()
+        private void Get_res(string entry_res = "")
         {
             if (primer_video == null)
                 return;
@@ -385,8 +385,13 @@ namespace Av1ador
                 if (alto <= uh || alto <= uh / primer_video.Sar || alto <= primer_video.Width * ur[1] * 9 / 15)
                 {
                     resComboBox.Items.Add(encoder.Resos[i]);
-                    if (resComboBox.SelectedIndex < 0 && (alto <= Screen.FromControl(this).Bounds.Height || alto <= Screen.FromControl(this).Bounds.Height))
-                        resComboBox.Text = encoder.Resos[i];
+                    if (resComboBox.SelectedIndex < 0)
+                    {
+                        if (entry_res != "")
+                            resComboBox.Text = entry_res;
+                        else if (alto <= Screen.FromControl(this).Bounds.Height || alto <= Screen.FromControl(this).Bounds.Height)
+                            resComboBox.Text = encoder.Resos[i];
+                    }
                 }
             }
             if (uh / primer_video.Sar > int.Parse(resComboBox.Items[0].ToString().Replace("p", "")))
@@ -840,6 +845,8 @@ namespace Av1ador
                     Detener();
                     Mpv2_load(name, "set pause yes", pos - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
                     mpv_cmd.WriteLine("set pause yes;seek " + pos.ToString() + " absolute+exact");
+                    if (!encode.Chunks[segment].Completed)
+                        segundo_video = null;
                 }
                 else
                 {
@@ -1652,6 +1659,7 @@ namespace Av1ador
                 encoder.Vf.RemoveAll(s => s.StartsWith("scale"));
             ResComboBox_SelectedIndexChanged(sender, e);
             Entry_update(11);
+            Entry.Save(listBox1);
             ActiveControl = null;
         }
 
