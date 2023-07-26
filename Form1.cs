@@ -28,7 +28,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.0.10";
+        private readonly string title = "Av1ador 1.0.11";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$", RegexOptions.IgnoreCase);
         private readonly string mpv_args = " --pause --cache=yes --hr-seek=always --hr-seek-demuxer-offset=5 -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
         private static readonly int processID = Process.GetCurrentProcess().Id;
@@ -1337,7 +1337,7 @@ namespace Av1ador
                 primer_video.Grain_detect(gsUpDown, statusLabel, encoder.Gs, mediainfoLabel, encoder.Vf);
                 return;
             }
-            else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && entry.Param != "" && (encoder.Vf.Count == 0 || !encoder.Vf[0].Contains("crop=D")))
+            else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && (entry.Param != "" || paramsBox.Text != "") && (encoder.Vf.Count == 0 || !encoder.Vf[0].Contains("crop=D")))
             {
                 encoder.Params = paramsBox.Text;
                 paramsBox.Text = encoder.Params_replace((int)primer_video.Fps);
@@ -1658,7 +1658,7 @@ namespace Av1ador
         private void ResComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Dialogo = false;
-            if (primer_video == null || encoder.Vf.FindIndex(s => s.StartsWith("scale")) != -1)
+            if (primer_video == null)
                 return;
             double dn = (double)16 / (double)9;
             double h = Double.Parse(resComboBox.Text.Replace("p", "")) * (primer_video.Sar < 1 ? primer_video.Sar : 1.0);
@@ -1666,20 +1666,19 @@ namespace Av1ador
             double ow = ((double)primer_video.Width * (primer_video.Sar > 1 ? primer_video.Sar : 1.0) * scale);
             encoder.Out_w = (int)ow;
             encoder.Out_h = (int)(Math.Floor(((ow * (double)primer_video.Height / (double)primer_video.Width / primer_video.Sar) + (double)1) / (double)2) * 2);
-
-            if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
-                encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
-            
-            if (segundo_video == null) {
+            if (segundo_video == null)
+            {
                 mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + scale + "] }");
                 mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + scale + "] }");
             }
-            if (primer_video != null)
-            {
-                encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString());
-                encoder.Vf_add("deinterlace", primer_video.Interlaced.ToString());
-                encoder.Vf_add("autocolor", primer_video.Color_matrix);
-            }
+            if (encoder.Vf.FindIndex(s => s.StartsWith("scale")) != -1)
+                return;
+            if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
+                encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
+            
+            encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString());
+            encoder.Vf_add("deinterlace", primer_video.Interlaced.ToString());
+            encoder.Vf_add("autocolor", primer_video.Color_matrix);
             Filter_items_update();
         }
 
