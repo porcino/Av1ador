@@ -153,6 +153,7 @@ namespace Av1ador
                 mpv_cmd.AutoFlush = true;
 
                 Entry.Load(listBox1);
+                listBox1.SelectedIndex = Entry.Index("-1", listBox1);
 
                 underload = -2;
                 Program.Log = true;
@@ -388,7 +389,7 @@ namespace Av1ador
                     resComboBox.Items.Add(encoder.Resos[i]);
                     if (resComboBox.SelectedIndex < 0)
                     {
-                        if (entry_res != "")
+                        if (entry_res != "" && int.Parse(entry_res.Replace("p", "")) <= alto)
                             resComboBox.Text = entry_res;
                         else if (alto <= Screen.FromControl(this).Bounds.Height || alto <= Screen.FromControl(this).Bounds.Height)
                             resComboBox.Text = encoder.Resos[i];
@@ -1256,8 +1257,7 @@ namespace Av1ador
             encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox);
             encodestopButton.Enabled = true;
             encodestartButton.Enabled = false;
-            if (encode != null)
-                encode.Set_state();
+            encode?.Set_state();
             Filter_remove();
         }
 
@@ -1368,10 +1368,12 @@ namespace Av1ador
                 }
                 double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
                 encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps, encoder.Out_spd);
+                (listBox1.Items[Entry.Index(primer_video.File, listBox1)] as Entry).Status = 1;
                 listBox1.Refresh();
             }
             else if (encodestopButton.Enabled && encode.Finished)
             {
+                (listBox1.Items[Entry.Index(encode.File, listBox1)] as Entry).Status = 2;
                 if (encodelistButton.Checked && Entry.Index(primer_video.File, listBox1) < listBox1.Items.Count - 1)
                 {
                     listBox1.SelectedIndex = -1;
@@ -1404,6 +1406,7 @@ namespace Av1ador
             }
             else if (encode.Failed)
             {
+                (listBox1.Items[Entry.Index(encode.File, listBox1)] as Entry).Status = -1;
                 encodestopButton.Enabled = false;
                 encodestartButton.Enabled = true;
             }

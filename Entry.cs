@@ -10,6 +10,7 @@ namespace Av1ador
     public class Entry
     {
         private static bool shouldsave;
+        public int Status { get; set; }
         public string File { get; set; }
         public string Vf { get; set; }
         public string Af { get; set; }
@@ -31,6 +32,8 @@ namespace Av1ador
             for (int i = 0; i < list.Items.Count; i++)
             {
                 Entry entry = list.Items[i] as Entry;
+                if (file == "-1" && entry.Status == 1)
+                    return i;
                 if (entry.File == file)
                     return i;
             }
@@ -50,10 +53,21 @@ namespace Av1ador
             if (e.Index >= 0 && e.Index < list.Items.Count)
             {
                 e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index), e.Bounds);
-                if (Encode.Encoding_file != null && Encode.Encoding_file == (list.Items[e.Index] as Entry).File)
-                    e.Graphics.DrawRectangle(new Pen(SystemColors.Highlight, 1), e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 1);
                 Entry entry = (Entry)list.Items[e.Index];
-                e.Graphics.DrawString(entry.File, e.Font, Brushes.Black, e.Bounds);
+                if (entry.Status == 1)
+                    e.Graphics.DrawRectangle(new Pen(SystemColors.Highlight, 1), e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 1);
+                string dir = Path.GetDirectoryName(entry.File);
+                string name = Path.GetFileName(entry.File);
+                int limit = e.Bounds.Width * 3 / 7;
+                if (entry.File.Length > limit)
+                {
+                    int dif = entry.File.Length - limit + 3;
+                    dir = "..." + dir.Substring(dir.Length > dif ? dif : dir.Length - 1);
+                    dif = (dir + name).Length - limit;
+                    if (dif > 0)
+                        name = name.Substring(0, name.Length > dif ? name.Length - dif : name.Length) + "...";
+                }
+                e.Graphics.DrawString(dir + "\\" + name, e.Font, Brushes.Black, e.Bounds);
             }
         }
 
