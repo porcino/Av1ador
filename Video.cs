@@ -47,6 +47,7 @@ namespace Av1ador
         public double CreditsTime { get; set; }
         public double CreditsEndTime { get; set; }
 
+        public int Default { get; set; } = 1;
         public int Width { get; }
         public int Height { get; }
         public double Sar { get; }
@@ -88,6 +89,11 @@ namespace Av1ador
             Channels = compare.Success ? int.Parse(compare.Groups[1].Value) : 0;
 
             string info = Get_info(file);
+            res_regex = new Regex(@"Stream #0:([0-9]+).*Video:.*\(default\)");
+            compare = res_regex.Match(info);
+            if (compare.Success)
+                Default = int.Parse(compare.Groups[1].ToString()) + 1;
+
             res_regex = new Regex(" [0-9]{2,5}x[0-9]{2,5}");
             compare = res_regex.Match(info);
             if (compare.Success)

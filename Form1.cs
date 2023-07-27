@@ -251,6 +251,7 @@ namespace Av1ador
                     picBoxBarra.Cursor = Cursors.Hand;
                     primer_video = new Video(entry.File);
                     mpv_cmd.WriteLine("loadfile \"" + primer_video.File.Replace(@"\", @"\\").Replace(@"'", @"\'") + "\";set pause yes;set fullscreen yes");
+                    mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"vid\", " + primer_video.Default + "] }");
                     mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", 1] }");
                     mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", 1] }");
                     zoomButton.Checked = false;
