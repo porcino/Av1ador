@@ -168,6 +168,14 @@ namespace Av1ador
             }
         }
 
+        public TimeSpan Elapsed
+        {
+            get
+            {
+                return TimeSpan.FromMilliseconds(watch.ElapsedMilliseconds);
+            }
+        }
+
         public Encode()
         {
             Split_min_time = 6;
@@ -737,13 +745,15 @@ namespace Av1ador
                 while (File.Exists(Pathfile))
                 {
                     try
-                    { 
-                        ffmpeg.Kill();
-                        Thread.Sleep(1000);
+                    {
                         File.Delete(Pathfile);
                         break;
                     }
-                    catch { }
+                    catch
+                    {
+                        ffmpeg.Kill();
+                        Thread.Sleep(1000);
+                    }
                 }
                 Progress = 0;
                 Stop = false;

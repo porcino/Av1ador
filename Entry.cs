@@ -10,8 +10,10 @@ namespace Av1ador
     public class Entry
     {
         private static bool shouldsave;
-        public int Status { get; set; }
+        private static int lastupdate;
         public string File { get; set; }
+        public int Status { get; set; }
+        public int Elapsed { get; set; }
         public string Vf { get; set; }
         public string Af { get; set; }
         public string Gs { get; set; }
@@ -40,12 +42,16 @@ namespace Av1ador
             return -1;
         }
 
-        public static Brush Brush_bg(bool selected, int index)
+        public static Brush Brush_bg(bool selected, int index, int status = 0)
         {
+            if (status > 1)
+                return Brushes.LightGreen;
+            else if (status < 0)
+                return Brushes.LightCoral;
             return selected ? Brushes.LightSteelBlue : (index % 2 == 0 ? Brushes.OldLace : Brushes.White);
         }
 
-        public static void Draw(ListBox list, DrawItemEventArgs e)
+        public static void Draw(ListBox list, DrawItemEventArgs e, TimeSpan ts)
         {
             e.DrawBackground();
 
@@ -68,7 +74,41 @@ namespace Av1ador
                         name = name.Substring(0, name.Length > dif ? name.Length - dif : name.Length) + "...";
                 }
                 e.Graphics.DrawString(dir + "\\" + name, e.Font, Brushes.Black, e.Bounds);
+                if (entry.Elapsed > 0 || entry.Status == 1)
+                {
+                    int x = e.Bounds.Right - 52;
+                    int y = e.Bounds.Bottom - 16;
+                    e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index, entry.Status), x, y, 51, 15);
+                    string t = ((entry.Status == 1 ? ts : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed)).ToString().Split('.')[0];
+                    e.Graphics.DrawString("[" + t + "]", e.Font, Brushes.Black, x, y);
+                }
             }
+        }
+
+        public static void Set_status(ListBox list, string file, TimeSpan ts, bool running = false, bool failed = false, bool finished = false, bool restart = false)
+        {
+            lastupdate = (int)(ts.TotalMilliseconds > 0 ? ts.TotalMilliseconds : lastupdate);
+            for (int i = 0; i < list.Items.Count; i++)
+            {
+                Entry entry = list.Items[i] as Entry;
+                if (entry.File == file)
+                {
+                    if (restart)
+                        entry.Elapsed = 0;
+                    int status = entry.Status;
+                    entry.Status = running ? 1 : failed ? -1 : finished ? 2 : status != -1 && status != 2 ? 0 : entry.Status;
+                    if (status != entry.Status)
+                    {
+                        if (entry.Status == 2 || entry.Status == -1 || (status == 1 && entry.Status == 0))
+                            entry.Elapsed += lastupdate;
+                        Save(list, true);
+                        if (!running && entry.Status != 1)
+                            list.Refresh();
+                    }
+                }
+            }
+            if (running)
+                list.Refresh();
         }
 
         public static void Save(ListBox list, bool save = false)

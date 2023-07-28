@@ -28,7 +28,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.0.11";
+        private readonly string title = "Av1ador 1.0.12";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v)$", RegexOptions.IgnoreCase);
         private readonly string mpv_args = " --pause --cache=yes --hr-seek=always --hr-seek-demuxer-offset=5 -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
         private static readonly int processID = Process.GetCurrentProcess().Id;
@@ -94,6 +94,7 @@ namespace Av1ador
             };
             workersUpDown.Maximum = encoder.Cores;
             workersgroupBox.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(workersgroupBox, true, null);
+            listBox1.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(listBox1, true, null);
 
             playtimeLabel.Text = "";
             mediainfoLabel.Text = "";
@@ -517,7 +518,7 @@ namespace Av1ador
 
         private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
         {
-            Entry.Draw(listBox1, e);
+            Entry.Draw(listBox1, e, encode != null ? encode.Elapsed : new TimeSpan(0));
         }
 
         private void VfListBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -1167,8 +1168,7 @@ namespace Av1ador
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (primer_video != null)
-                primer_video.Clear_tmp();
+            primer_video?.Clear_tmp();
             if (encodestopButton.Enabled && encode.Chunks != null)
             {
                 e.Cancel = true;
@@ -1253,7 +1253,6 @@ namespace Av1ador
         {
             if (primer_video == null)
                 return;
-            Update_Video_txt();
             encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox);
             encodestopButton.Enabled = true;
             encodestartButton.Enabled = false;
@@ -1368,12 +1367,11 @@ namespace Av1ador
                 }
                 double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
                 encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps, encoder.Out_spd);
-                (listBox1.Items[Entry.Index(primer_video.File, listBox1)] as Entry).Status = 1;
                 listBox1.Refresh();
             }
             else if (encodestopButton.Enabled && encode.Finished)
             {
-                (listBox1.Items[Entry.Index(encode.File, listBox1)] as Entry).Status = 2;
+                Entry.Set_status(listBox1, encode.File, encode.Elapsed, false, false, true);
                 if (encodelistButton.Checked && Entry.Index(primer_video.File, listBox1) < listBox1.Items.Count - 1)
                 {
                     listBox1.SelectedIndex = -1;
@@ -1403,15 +1401,17 @@ namespace Av1ador
                 if (!statusLabel.Text.Contains("grain"))
                     statusLabel.Text = "";
                 estimatedLabel.Text = "";
+                Entry.Set_status(listBox1, encode.File, encode.Elapsed, false, false, false);
             }
             else if (encode.Failed)
             {
-                (listBox1.Items[Entry.Index(encode.File, listBox1)] as Entry).Status = -1;
+                Entry.Set_status(listBox1, encode.File, encode.Elapsed, false, true);
                 encodestopButton.Enabled = false;
                 encodestartButton.Enabled = true;
             }
             if (encodestopButton.Enabled && !statusLabel.Text.Contains("grain"))
             {
+                Entry.Set_status(listBox1, encode.File, encode.Elapsed, encode.Status.Count > 0, false, false, encode.Chunks != null && encode.Chunks[0].Encoding);
                 usage = (int)cpu.NextValue();
                 if (WindowState != FormWindowState.Minimized)
                 {
