@@ -11,6 +11,7 @@ namespace Av1ador
     {
         private static bool shouldsave;
         private static int lastupdate;
+        private static int refresh;
         public string File { get; set; }
         public int Status { get; set; }
         public int Elapsed { get; set; }
@@ -53,8 +54,6 @@ namespace Av1ador
 
         public static void Draw(ListBox list, DrawItemEventArgs e, TimeSpan ts)
         {
-            e.DrawBackground();
-
             bool isItemSelected = ((e.State & DrawItemState.Selected) == DrawItemState.Selected);
             if (e.Index >= 0 && e.Index < list.Items.Count)
             {
@@ -108,7 +107,12 @@ namespace Av1ador
                 }
             }
             if (running)
+                refresh--;
+            if (refresh < 1)
+            {
+                refresh = 10;
                 list.Refresh();
+            }
         }
 
         public static void Save(ListBox list, bool save = false)
