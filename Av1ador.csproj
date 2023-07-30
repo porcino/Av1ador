@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Entry.cs" />
     <Compile Include="Function.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Segment.cs" />
     <Compile Include="Encoder.cs" />
     <Compile Include="ProjectInstaller.cs">

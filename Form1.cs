@@ -1,6 +1,5 @@
 ﻿using Av1ador.Properties;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,10 +14,6 @@ namespace Av1ador
 {
     public partial class Form1 : Form
     {
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
-        [DllImport("user32.dll")]
-        static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
         [DllImport("user32.dll")]
         static extern int GetForegroundWindow();
         [DllImport("user32.dll")]
@@ -30,18 +25,10 @@ namespace Av1ador
 
         private readonly string title = "Av1ador 1.0.12";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v|flv|3gp)$", RegexOptions.IgnoreCase);
-        private readonly string mpv_args = " --priority=abovenormal --pause --cache=yes --hr-seek=always --hr-seek-demuxer-offset=5 -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no";
-        private static readonly int processID = Process.GetCurrentProcess().Id;
+        private Player mpv;
         private Video primer_video, segundo_video;
-        public Process mpv2 = new Process();
-        private System.IO.Pipes.NamedPipeClientStream mpv_tubo = new System.IO.Pipes.NamedPipeClientStream("mpvsocket" + processID.ToString());
-        private System.IO.Pipes.NamedPipeClientStream mpv2_tubo = new System.IO.Pipes.NamedPipeClientStream("mpv2socket" + processID.ToString());
-        private StreamWriter mpv_cmd, mpv2_cmd;
-        private StreamReader mpv_out;
-        private Process mpv1p, mpv2p;
-        private bool mpv2_loaded = false;
         private double panx, pany, panx_ratio, pany_ratio;
-        private bool click_in, mouse1, moviendo_divisor, reading, can_sync;
+        private bool click_in, mouse1, moviendo_divisor, can_sync;
         private Point click_pos, mouse_pos, mouse_pos_antes;
         private int focus_id, mpv_left, me_x, underload;
         private Encoder encoder;
@@ -109,58 +96,24 @@ namespace Av1ador
             leftPanel.Width = mpvsPanel.Width;
             rightPanel.Width = Screen.FromControl(this).Bounds.Width;
             Show_filter(true);
+            Entry.Load(listBox1);
+            listBox1.SelectedIndex = Entry.Index("-1", listBox1);
 
-            Process[] processes = Process.GetProcessesByName("mpv");
-            List<IntPtr> ignore = new List<IntPtr>();
-            foreach (Process p in processes)
-                ignore.Add(p.MainWindowHandle);
-            Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "socket" + processID.ToString()));
             BackgroundWorker bw = new BackgroundWorker();
             BackgroundWorker bw2 = new BackgroundWorker();
-            Process mp = mpv1p;
+
             bw.DoWork += (s, ee) =>
             {
-                bool found = false;
-                int limit = 0;
-                while (!found && limit < 8000)
-                {
-                    limit += 16;
-                    Thread.Sleep(16);
-                    processes = Process.GetProcessesByName("mpv");
-                    foreach (Process p in processes)
-                    {
-                        if (!ignore.Contains(p.MainWindowHandle))
-                        {
-                            mp = p;
-                            found = true;
-                        }
-                    }
-                }
-                if (limit >= 8000)
-                {
-                    if (MessageBox.Show("The video player (mpv) failed to start or is unavailable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
-                        Environment.Exit(0);
-                }
+                mpv = new Player(this, leftPanel, rightPanel);
             };
             bw.RunWorkerCompleted += (s, ee) =>
             {
-                mpv1p = mp;
-                Wait_mpv(5);
-                Thread.Sleep(16);
-                SetParent(mpv1p.MainWindowHandle, leftPanel.Handle);
-                MoveWindow(mpv1p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
-                mpv_cmd = new StreamWriter(mpv_tubo);
-                mpv_tubo.Connect();
-                mpv_cmd.AutoFlush = true;
-
-                Entry.Load(listBox1);
-                listBox1.SelectedIndex = Entry.Index("-1", listBox1);
-
                 underload = -2;
                 Program.Log = true;
                 Restore_settings(true);
                 Mpv_load_first();
                 infoTimer.Enabled = true;
+                mouseTimer.Enabled = true;
             };
             bw.RunWorkerAsync();
 
@@ -178,54 +131,6 @@ namespace Av1ador
                 ram = new PerformanceCounter("Memory", "Available MBytes");
             };
             bw2.RunWorkerAsync();
-        }
-
-        private void Mpv2_load(string file, string args = "", double seek = 0)
-        {
-            if (!IsLoaded_mpv2())
-            {
-                Process[] processes = Process.GetProcessesByName("mpv");
-                List<IntPtr> ignore = new List<IntPtr>();
-                foreach (Process p in processes)
-                    ignore.Add(p.MainWindowHandle);
-                Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "2socket" + processID.ToString()));
-                BackgroundWorker bw = new BackgroundWorker();
-                Process mp = mpv2p;
-                bw.DoWork += (s, ee) =>
-                {
-                    bool found = false;
-                    while (!found)
-                    {
-                        Thread.Sleep(16);
-                        processes = Process.GetProcessesByName("mpv");
-                        foreach (Process p in processes)
-                        {
-                            if (!ignore.Contains(p.MainWindowHandle))
-                            {
-                                mp = p;
-                                found = true;
-                            }
-                        }
-                    }
-                };
-                bw.RunWorkerCompleted += (s, ee) =>
-                {
-                    mpv2p = mp;
-                    Wait_mpv(6);
-                    Thread.Sleep(16);
-                    SetParent(mpv2p.MainWindowHandle, rightPanel.Handle);
-                    MoveWindow(mpv2p.MainWindowHandle, 0, 0, Screen.FromControl(this).Bounds.Width, Screen.FromControl(this).Bounds.Height, true);
-                    mpv2_loaded = true;
-                    mpv2_cmd = new StreamWriter(mpv2_tubo);
-                    mpv2_tubo.Connect();
-                    mpv2_cmd.AutoFlush = true;
-
-                    Mpv_load_second(file, args, seek);
-                };
-                bw.RunWorkerAsync();
-            }
-            else
-                Mpv_load_second(file, args, seek);
         }
 
         private void Mpv_load_first()
@@ -252,10 +157,9 @@ namespace Av1ador
                     removeButton.Enabled = true;
                     picBoxBarra.Cursor = Cursors.Hand;
                     primer_video = new Video(entry.File);
-                    mpv_cmd.WriteLine("loadfile \"" + primer_video.File.Replace(@"\", @"\\").Replace(@"'", @"\'") + "\";set pause yes;set fullscreen yes");
-                    mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"vid\", " + primer_video.Default + "] }");
-                    mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", 1] }");
-                    mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", 1] }");
+                    mpv.Cmd("loadfile \"" + primer_video.File.Replace(@"\", @"\\").Replace(@"'", @"\'") + "\";set pause yes;set fullscreen yes");
+                    mpv.Cmd("{ \"command\": [\"set_property\", \"vid\", " + primer_video.Default + "] }");
+                    mpv.Scale(1.0, 1.0);
                     zoomButton.Checked = false;
                     encoder.Playtime = 0;
                     mediainfoLabel.Text = primer_video.Mediainfo();
@@ -317,12 +221,12 @@ namespace Av1ador
             else
             {
                 picBoxBarra.Cursor = Cursors.Default;
-                mpv_cmd.WriteLine("playlist-play-index none");
+                mpv.Cmd("playlist-play-index none");
                 primer_video = null;
             }
-            if (IsLoaded_mpv2())
+            if (mpv.Mpv2_loaded)
             {
-                mpv2_cmd.WriteLine("playlist-play-index none");
+                mpv.Cmd("playlist-play-index none", 2);
                 segundo_video = null;
                 leftPanel.Width = mpvsPanel.Width;
             }
@@ -330,7 +234,7 @@ namespace Av1ador
             Restore_settings();
         }
 
-        private void Mpv_load_second(string file, string cmds, double seek, [Optional] double len)
+        public void Mpv_load_second(string file, string cmds, double seek, [Optional] double len)
         {
             if (primer_video == null || !File.Exists(file))
                 return;
@@ -353,16 +257,14 @@ namespace Av1ador
                         cmds = cmds == null ? "" : ";" + cmds;
                         scale = zoomButton.Checked ? 2.0 : 1.0;
                         double zoom = Func.Scale(primer_video, video, scale, primer_video.Sar != video.Sar && encoder.Vf.Count > 0 && Func.Find_w_h(encoder.Vf).Count() > 0 ? Double.Parse(Func.Find_w_h(encoder.Vf)[0]) : 0);
-                        mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + zoom + "] }");
-                        mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + zoom + "] }");
+                        mpv.Scale(zoom, zoom);
                         panx_ratio = ((Double)primer_video.Width * (zoom / scale) * (primer_video.Sar > 1 ? primer_video.Sar : 1.0)) / ((Double)video.Width * video.Sar);
                         pany_ratio = ((Double)primer_video.Height * (zoom / scale) / (primer_video.Sar < 1 ? primer_video.Sar : 1.0)) / ((Double)video.Height / video.Sar);
-                        mpv2_cmd.WriteLine("loadfile \"" + file.Replace(@"\", @"\\").Replace(@"'", @"\'") + "\";set pause yes;set fullscreen yes;set video-pan-x " + (panx * panx_ratio) + ";set video-pan-y " + (pany * pany_ratio) + cmds);
-                        mpv2_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + scale + "] }");
-                        mpv2_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + scale + "] }");
-                        Wait_mpv();
+                        mpv.Cmd("loadfile \"" + file.Replace(@"\", @"\\").Replace(@"'", @"\'") + "\";set pause yes;set fullscreen yes;set video-pan-x " + (panx * panx_ratio) + ";set video-pan-y " + (pany * pany_ratio) + cmds, 2);
+                        mpv.Scale(scale, scale, 2);
+                        mpv.Wait_mpv();
                         if (seek != 0)
-                            mpv2_cmd.WriteLine("seek " + (seek + video.First_frame).ToString() + " absolute+exact");
+                            mpv.Cmd("seek " + (seek + video.First_frame).ToString() + " absolute+exact", 2);
                     }
                 };
                 backgroundWorker.RunWorkerCompleted += (s, e) =>
@@ -372,7 +274,7 @@ namespace Av1ador
                 backgroundWorker.RunWorkerAsync();
             }
             else if (seek != 0)
-                mpv2_cmd.WriteLine("set pause yes;seek " + (seek + segundo_video.First_frame).ToString() + " absolute+exact");
+                mpv.Cmd("set pause yes;seek " + (seek + segundo_video.First_frame).ToString() + " absolute+exact", 2);
         }
 
         private void Get_res(string entry_res = "")
@@ -406,47 +308,11 @@ namespace Av1ador
             }
         }
 
-        private bool IsLoaded_mpv2()
-        {
-            return mpv2_loaded;
-        }
-
         private void Detener()
         {
             mpvTimer.Enabled = false;
             playButton.Visible = true;
             pauseButton.Visible = false;
-        }
-
-        private bool Wait_mpv(int times = 1)
-        {
-            bool idle1 = false;
-            bool idle2 = false;
-            int limit = 0;
-            while ((!idle1 || !idle2) && limit < 5000)
-            {
-                TimeSpan mpv1_b = mpv1p.TotalProcessorTime;
-                TimeSpan mpv2_b = mpv1_b;
-                if (IsLoaded_mpv2())
-                    mpv2_b = mpv2p.TotalProcessorTime;
-                Thread.Sleep(20 * times);
-                limit += 20 * times;
-                mpv1p.Refresh();
-                TimeSpan mpv1_e = mpv1p.TotalProcessorTime;
-                TimeSpan mpv2_e = mpv1_e;
-                if (IsLoaded_mpv2())
-                {
-                    mpv2p.Refresh();
-                    mpv2_e = mpv2p.TotalProcessorTime;
-                }
-                if (mpv1_e == mpv1_b)
-                    idle1 = true;
-                if (!IsLoaded_mpv2())
-                    idle2 = true;
-                else if (mpv2_e == mpv2_b)
-                    idle2 = true;
-            }
-            return true;
         }
 
         private void UpdateLayout(bool hide = false)
@@ -570,11 +436,11 @@ namespace Av1ador
             if (listBox1.Items.Count == 0)
             {
                 Detener();
-                mpv_cmd.WriteLine("playlist-play-index none");
+                mpv.Cmd("playlist-play-index none");
                 primer_video = null;
-                if (IsLoaded_mpv2())
+                if (mpv.Mpv2_loaded)
                 {
-                    mpv2_cmd.WriteLine("playlist-play-index none");
+                    mpv.Cmd("playlist-play-index none", 2);
                     segundo_video = null;
                 }
             }
@@ -629,7 +495,7 @@ namespace Av1ador
 
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Reconnect();
+            mpv.Reconnect();
             encodefirstButton.Enabled = listBox1.SelectedIndex > 0;
             Update_Video_txt(false);
             if (listBox1.SelectedIndex > -1)
@@ -649,10 +515,7 @@ namespace Av1ador
             playButton.Visible = false;
             pauseButton.Visible = true;
             mpvTimer.Enabled = true;
-
-            mpv_cmd.WriteLine("set pause no");
-            if (IsLoaded_mpv2())
-                mpv2_cmd.WriteLine("set pause no");
+            mpv.Cmd("set pause no", 0);
         }
 
         private void PauseButton_Click(object sender, EventArgs e)
@@ -660,10 +523,7 @@ namespace Av1ador
             mpvTimer.Enabled = false;
             playButton.Visible = true;
             pauseButton.Visible = false;
-
-            mpv_cmd.WriteLine("set pause yes");
-            if (IsLoaded_mpv2())
-                mpv2_cmd.WriteLine("set pause yes");
+            mpv.Cmd("set pause yes", 0);
         }
         private void PrevframeButton_Click(object sender, EventArgs e)
         {
@@ -673,17 +533,14 @@ namespace Av1ador
                     Detener();
                 nextframeButton.Enabled = false;
                 prevframeButton.Enabled = false;
-                mpv_cmd.WriteLine("frame-back-step");
+                mpv.Cmd("frame-back-step");
                 if (!syncButton.Checked)
-                {
-                    if (IsLoaded_mpv2())
-                        mpv2_cmd.WriteLine("frame-back-step");
-                }
+                    mpv.Cmd("frame-back-step", 2);
                 else
                     primer_video.First_frame -= 1.0 / primer_video.Fps;
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += (s, ee) => {
-                    Wait_mpv();
+                    mpv.Wait_mpv();
                 };
                 bw.RunWorkerCompleted += (s, ee) => {
                     nextframeButton.Enabled = true;
@@ -701,16 +558,14 @@ namespace Av1ador
                     Detener();
                 nextframeButton.Enabled = false;
                 prevframeButton.Enabled = false;
-                mpv_cmd.WriteLine("frame-step");
+                mpv.Cmd("frame-step");
                 if (!syncButton.Checked)
-                {
-                    if (IsLoaded_mpv2())
-                        mpv2_cmd.WriteLine("frame-step");
-                } else
+                    mpv.Cmd("frame-step", 2);
+                else
                     primer_video.First_frame += 1.0 / primer_video.Fps;
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += (s, ee) => {
-                    Wait_mpv();
+                    mpv.Wait_mpv();
                 };
                 bw.RunWorkerCompleted += (s, ee) => {
                     nextframeButton.Enabled = true;
@@ -777,37 +632,24 @@ namespace Av1ador
         {
             audiounmuteButton.Visible = false;
             audiomuteButton.Visible = true;
-            mpv_cmd.WriteLine("cycle mute");
+            mpv.Cmd("cycle mute");
         }
 
         private void AudiomuteButton2_Click(object sender, EventArgs e)
         {
             audiounmuteButton.Visible = true;
             audiomuteButton.Visible = false;
-            mpv_cmd.WriteLine("cycle mute");
+            mpv.Cmd("cycle mute");
         }
 
         private void MpvTimer_Tick(object sender, EventArgs e)
         {
-            if (reading)
-                return;
-            mpv_cmd.WriteLine("{ \"command\": [\"get_property\", \"playback-time\"] }");
-            mpv_out = new StreamReader(mpv_tubo);
-            string recibo = "";
-            Regex tiempo = new Regex("data\":([0-9\\.]+)");
-            reading = true;
+            string in_str;
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, ee) => {
-                while (mpv_out.Peek() > -1)
-                    recibo = mpv_out.ReadLine();
-            };
-            bw.RunWorkerCompleted += (s, ee) => {
-                reading = false;
-                try
-                {
-                    Update_current_time(Double.Parse(tiempo.Match(recibo).Groups[1].Value.ToString()));
-                }
-                catch { }
+                in_str = mpv.Time();
+                if (in_str != "")
+                    Invoke(new Action(() => { Update_current_time(Double.Parse(in_str)); }));
             };
             bw.RunWorkerAsync();   
         }
@@ -838,7 +680,7 @@ namespace Av1ador
                 return;
             syncButton.Checked = false;
             can_sync = true;
-            Reconnect();
+            mpv.Reconnect();
             double pos = primer_video.Duration * e.Location.X / picBoxBarra.Width;
             Update_current_time(pos);
             if (encodestopButton.Enabled && encode != null && encode.Splits != null && encode.Chunks != null && encode.File == primer_video.File)
@@ -848,37 +690,22 @@ namespace Av1ador
                 if (segment > -1 && (encode.Chunks[segment].Completed || (encode.Chunks[segment].Encoding && encode.Chunks[segment].Progress > 0)) && File.Exists(name))
                 {
                     Detener();
-                    Mpv2_load(name, "set pause yes", pos - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
-                    mpv_cmd.WriteLine("set pause yes;seek " + pos.ToString() + " absolute+exact");
+                    mpv.Mpv2_load(this, name, "set pause yes", pos - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
+                    mpv.Cmd("set pause yes;seek " + pos.ToString() + " absolute+exact");
                     if (!encode.Chunks[segment].Completed)
                         segundo_video = null;
                 }
                 else
                 {
                     leftPanel.Width = mpvsPanel.Width;
-                    mpv_cmd.WriteLine("seek " + pos.ToString() + " absolute+exact");
+                    mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
                 }
             }
             else
             {
-                mpv_cmd.WriteLine("seek " + pos.ToString() + " absolute+exact");
-                if (IsLoaded_mpv2() && segundo_video != null)
-                    mpv2_cmd.WriteLine("seek " + (pos + segundo_video.First_frame - primer_video.First_frame - primer_video.StartTime).ToString() + " absolute+exact");
-            }
-        }
-
-        private void Reconnect()
-        {
-            mpv_tubo = new System.IO.Pipes.NamedPipeClientStream("mpvsocket" + processID.ToString());
-            mpv_cmd = new StreamWriter(mpv_tubo);
-            mpv_tubo.Connect();
-            mpv_cmd.AutoFlush = true;
-            if (IsLoaded_mpv2())
-            {
-                mpv2_tubo = new System.IO.Pipes.NamedPipeClientStream("mpv2socket" + processID.ToString());
-                mpv2_cmd = new StreamWriter(mpv2_tubo);
-                mpv2_tubo.Connect();
-                mpv2_cmd.AutoFlush = true;
+                mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
+                if (mpv.Mpv2_loaded && segundo_video != null)
+                    mpv.Cmd("seek " + (pos + segundo_video.First_frame - primer_video.First_frame - primer_video.StartTime).ToString() + " absolute+exact", 2);
             }
         }
 
@@ -1185,10 +1012,8 @@ namespace Av1ador
                 }
                 Dialogo = false;
             }
-            else if (mpv_cmd != null)
-            {
+            else if (mpv.Mpv_loaded)
                 encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox);
-            }
         }
 
         private void Exit(bool stop = false)
@@ -1388,8 +1213,8 @@ namespace Av1ador
                     heat = Func.Heat(0);
                     workersgroupBox.Refresh();
                     Detener();
-                    Mpv2_load(encode.Dir + Path.GetFileNameWithoutExtension(encode.Name) + "_Av1ador." + encode.Extension, "set pause yes");
-                    mpv_cmd.WriteLine("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
+                    mpv.Mpv2_load(this, encode.Dir + Path.GetFileNameWithoutExtension(encode.Name) + "_Av1ador." + encode.Extension, "set pause yes");
+                    mpv.Cmd("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
                     Update_current_time(primer_video.StartTime);
                 }
                 if (!workersUpDown.Enabled && workersUpDown.Value > 1)
@@ -1612,9 +1437,9 @@ namespace Av1ador
             if (Func.Preview(vf))
             {
                 string osd = "Filter preview: " + vf.Split('=')[0];
-                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
-                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"" + vf.Replace("delogo=","delogo=show=1:") + "\"] }");
-                mpv_cmd.WriteLine("{ \"command\": [\"show-text\", \"" + osd + "\"] }");
+                mpv.Cmd("{ \"command\": [\"vf\", \"set\", \"\"] }");
+                mpv.Cmd("{ \"command\": [\"vf\", \"add\", \"" + vf.Replace("delogo=","delogo=show=1:") + "\"] }");
+                mpv.Cmd("{ \"command\": [\"show-text\", \"" + osd + "\"] }");
             }
             else
                 Filter_remove();
@@ -1622,8 +1447,8 @@ namespace Av1ador
 
         private void Filter_remove()
         {
-            mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"set\", \"\"] }");
-            mpv_cmd.WriteLine("{ \"command\": [\"show-text\", \"\"] }");
+            mpv.Cmd("{ \"command\": [\"vf\", \"set\", \"\"] }");
+            mpv.Cmd("{ \"command\": [\"show-text\", \"\"] }");
         }
 
         private void FilternewButton_Click(object sender, EventArgs e)
@@ -1681,10 +1506,7 @@ namespace Av1ador
             encoder.Out_w = (int)ow;
             encoder.Out_h = (int)(Math.Floor(((ow * (double)primer_video.Height / (double)primer_video.Width / primer_video.Sar) + (double)1) / (double)2) * 2);
             if (segundo_video == null)
-            {
-                mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + scale + "] }");
-                mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + scale + "] }");
-            }
+                mpv.Scale(scale, scale);
             if (encoder.Vf.FindIndex(s => s.StartsWith("scale")) != -1)
                 return;
             if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
@@ -1810,13 +1632,11 @@ namespace Av1ador
             if (segundo_video != null)
             {
                 zoom = Func.Scale(primer_video, segundo_video, scale, encoder.Vf.Count > 0 && Func.Find_w_h(encoder.Vf).Count() > 0 ? Double.Parse(Func.Find_w_h(encoder.Vf)[0]) : 0);
-                mpv2_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + scale + "] }");
-                mpv2_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + scale + "] }");
+                mpv.Scale(scale, scale, 2);
             }
             else
                 zoom = scale;
-            mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-x\", " + zoom + "] }");
-            mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"video-scale-y\", " + zoom + "] }");
+            mpv.Scale(zoom, zoom);
         }
 
         private void FilteraddDropDownButton_DropDownOpening(object sender, EventArgs e)
@@ -1847,10 +1667,7 @@ namespace Av1ador
             playButton.Enabled = !syncButton.Checked;
             nextframeButton.BackColor = syncButton.Checked ? Color.LightGreen : Color.Transparent;
             prevframeButton.BackColor = syncButton.Checked ? Color.LightGreen : Color.Transparent;
-            if (syncButton.Checked)
-                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"add\", \"curves=g=0/0.2 1/1\"] }");
-            else
-                mpv_cmd.WriteLine("{ \"command\": [\"vf\", \"remove\", \"curves=g=0/0.2 1/1\"] }");
+            mpv.Sync(syncButton.Checked);
         }
 
         private void PlayButton_VisibleChanged(object sender, EventArgs e)
@@ -1878,7 +1695,7 @@ namespace Av1ador
                 else if (e.NewValue == CheckState.Checked && !aset.IsBusy)
                     aset.RunWorkerAsync(e.Index);
             }
-            mpv_cmd.WriteLine("{ \"command\": [\"set_property\", \"aid\", " + (e.Index + 1) + "] }");
+            mpv.Cmd("{ \"command\": [\"set_property\", \"aid\", " + (e.Index + 1) + "] }");
             Entry_update(10, e.NewValue == CheckState.Checked ? e.Index : -1);
         }
 
@@ -1938,10 +1755,9 @@ namespace Av1ador
                 }
                 else
                 {
-                    int mpv_id = 0, mpv2_id = 0, new_id = 0;
-                    GetWindowThreadProcessId(mpv1p.MainWindowHandle, ref mpv_id);
-                    if (IsLoaded_mpv2())
-                        GetWindowThreadProcessId(mpv2p.MainWindowHandle, ref mpv2_id);
+                    int new_id = 0;
+                    int mpv_id = mpv.Mpv_id;
+                    int mpv2_id = mpv.Mpv2_id;
                     GetWindowThreadProcessId((IntPtr)GetForegroundWindow(), ref new_id);
                     focus_id = new_id != 0 ? new_id : focus_id;
                     if (focus_id > 0 || new_id == 0)
@@ -2135,7 +1951,7 @@ namespace Av1ador
             {
                 string[] file = (string[])(e.Data.GetData(DataFormats.FileDrop));
                 if (formatos.Match(file[0]).Success && File.Exists(file[0]))
-                    Mpv2_load(file[0], "", encoder != null ? encoder.Playtime : 0);
+                    mpv.Mpv2_load(this, file[0], "", encoder != null ? encoder.Playtime : 0);
             }
         }
 
@@ -2185,9 +2001,8 @@ namespace Av1ador
                     pany += ((Double)mouse_pos.Y - (Double)mouse_pos_antes.Y) / (Double)Screen.FromControl(this).Bounds.Height * 1.5;
                     if (panx != 0 || pany != 0)
                     {
-                        mpv_cmd.WriteLine("set video-pan-x " + panx + ";set video-pan-y " + pany);
-                        if (IsLoaded_mpv2())
-                            mpv2_cmd.WriteLine("set video-pan-x " + (panx * panx_ratio) + ";set video-pan-y " + (pany * pany_ratio));
+                        mpv.Cmd("set video-pan-x " + panx + ";set video-pan-y " + pany);
+                        mpv.Cmd("set video-pan-x " + (panx * panx_ratio) + ";set video-pan-y " + (pany * pany_ratio), 2);
                     }
                 }
                 mouse_pos_antes = mouse_pos;

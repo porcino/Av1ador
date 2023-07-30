@@ -2433,7 +2433,6 @@
             // 
             // mouseTimer
             // 
-            this.mouseTimer.Enabled = true;
             this.mouseTimer.Interval = 16;
             this.mouseTimer.Tick += new System.EventHandler(this.MouseTimer_Tick);
             // 
