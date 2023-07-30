@@ -35,7 +35,7 @@ namespace Av1ador
             for (int i = 0; i < list.Items.Count; i++)
             {
                 Entry entry = list.Items[i] as Entry;
-                if (file == "-1" && entry.Status == 1)
+                if (file == "-1" && (entry.Status == 1 || (entry.Elapsed > 0 && entry.Status == 0)))
                     return i;
                 if (entry.File == file)
                     return i;

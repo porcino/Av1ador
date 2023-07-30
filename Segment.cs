@@ -660,7 +660,7 @@ namespace Av1ador
                 }
                 ffmpeg.StartInfo.Arguments = pass;
             }
-            File.WriteAllText(Pathfile + ".txt", "ffmpeg" + Arguments);
+            File.WriteAllText(Pathfile + ".txt", "ffmpeg" + Arguments + "\r\n");
             Stopwatch watch = Stopwatch.StartNew();
             watch.Start();
             ffmpeg.Start();
