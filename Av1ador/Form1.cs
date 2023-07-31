@@ -23,7 +23,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1";
+        private readonly string title = "Av1ador 1.1.1";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -817,9 +817,13 @@ namespace Av1ador
             {
                 encoder.V_kbps = int.Parse(bitrateBox.Text);
                 encoder.Predicted = false;
+                paramsBox.Text = encoder.Params_vbr(paramsBox.Text, encoder.Vbr_str);
             }
             else
+            {
                 encoder.V_kbps = 0;
+                paramsBox.Text = encoder.Params_vbr(paramsBox.Text, encoder.Vbr_str, true);
+            }
             Entry_update(9);
         }
 

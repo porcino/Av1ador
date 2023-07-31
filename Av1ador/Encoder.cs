@@ -57,6 +57,7 @@ namespace Av1ador
         public bool Libplacebo { get; set; }
         public double Rate { get; set; }
         public string Multipass { get; set; }
+        public string Vbr_str { get; set; }
 
         public int Ba
         {
@@ -158,10 +159,11 @@ namespace Av1ador
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "2", "3", "*4", "5", "6", "7", "8 (fastest)" };
                 speed_str = "-cpu-used ";
-                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -undershoot-pct 60 -overshoot-pct 0 -minsection-pct 60 -maxsection-pct 96 -aom-params sharpness=4:max-gf-interval=28:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=2:arnr-strength=4:max-reference-frames=4:enable-rect-partitions=0:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:enable-obmc=0 -strict -2";//:global-motion-method=0
+                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -aom-params sharpness=4:max-gf-interval=28:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=2:arnr-strength=4:max-reference-frames=4:enable-rect-partitions=0:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:enable-obmc=0 -strict -2";//:global-motion-method=0
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Gs = 100;
                 Rate = 0.82;
+                Vbr_str = "-undershoot-pct 60 -overshoot-pct 0 -minsection-pct 60 -maxsection-pct 96";
             }
             else if (codec == v[1])
             {
@@ -172,10 +174,11 @@ namespace Av1ador
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "2", "3", "4", "5", "*6", "7", "8", "9", "10", "11", "12 (fastest)" };
                 speed_str = "-preset ";
-                Params = "-svtav1-params tune=0:fast-decode=0:irefresh-type=2:keyint=!maxkey!:enable-overlays=1:undershoot-pct=60:overshoot-pct=0:minsection-pct=60:maxsection-pct=97:enable-restoration=0:film-grain-denoise=0:film-grain=!gs!";
+                Params = "-svtav1-params tune=0:fast-decode=0:irefresh-type=2:keyint=!maxkey!:enable-overlays=1:enable-restoration=0:film-grain-denoise=0:film-grain=!gs!";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Gs = 50;
                 Rate = 0.85;
+                Vbr_str = "undershoot-pct=60:overshoot-pct=0:minsection-pct=60:maxsection-pct=97";
             }
             else if (codec == v[2])
             {
@@ -210,9 +213,10 @@ namespace Av1ador
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "*2", "3", "4", "5 (fastest)" };
                 speed_str = "-speed ";
-                Params = "-tile-columns 2 -tile-rows 1 -frame-parallel 0 -row-mt 1 -auto-alt-ref 6 -lag-in-frames 25 -keyint_min !minkey! -g !maxkey! -max-intra-rate 0 -undershoot-pct 60 -overshoot-pct 0 -enable-tpl 1 -arnr-maxframes 4 -arnr-strength 2";
+                Params = "-tile-columns 2 -tile-rows 1 -frame-parallel 0 -row-mt 1 -auto-alt-ref 6 -lag-in-frames 25 -keyint_min !minkey! -g !maxkey! -max-intra-rate 0 -enable-tpl 1 -arnr-maxframes 4 -arnr-strength 2";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Rate = 0.95;
+                Vbr_str = "-undershoot-pct 60 -overshoot-pct 0";
             }
             else if (codec == v[5])
             {
@@ -737,6 +741,26 @@ namespace Av1ador
                 return Regex.Replace(s.Replace("!reuse!", "analysis-save=\"!log!.log.reuse\":analysis-save-reuse-level=10"), ":hme[^:]*", "");
             else
                 return Regex.Replace(s.Replace("!reuse!", "analysis-load=\"!log!.log.reuse\":analysis-load-reuse-level=10:refine-intra=3").Replace("pass 1", "pass 2"), ":hme[-=][^:]*", "");
+        }
+
+        public string Params_vbr(string str, string vbr_str, bool remove = false)
+        {
+            if (vbr_str == null || vbr_str == "")
+                return str;
+            bool g = vbr_str[0] == '-';
+            string[] param = g ? vbr_str.Substring(1).Split(new string[] { " -" }, StringSplitOptions.None) : vbr_str.Split(':');
+            foreach (string p in param)
+            {
+                string[] arr = p.Replace('=', ' ').Split(' ');
+                if (remove)
+                    str = Func.Param_replace(str, arr[0], "");
+                else
+                {
+                    if (!str.Contains(arr[0]))
+                        str = g ? ("-" + arr[0] + " " + arr[1] + " " + str) : Regex.Replace(str, "params ([a-z])", m => "params " + arr[0] + "=" + arr[1] + ":" + m.Groups[1].Value);
+                }
+            }
+            return str;
         }
 
         public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto)

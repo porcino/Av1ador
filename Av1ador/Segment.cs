@@ -653,7 +653,7 @@ namespace Av1ador
                 if (Retry > 0)
                 {
                     output = "";
-                    ffmpeg.StartInfo.Arguments = Func.Replace_threads(ffmpeg.StartInfo.Arguments, 1);
+                    ffmpeg.StartInfo.Arguments = Func.Param_replace(ffmpeg.StartInfo.Arguments, "threads", 1.ToString());
                 }
             }
             bool multi = ffmpeg.StartInfo.Arguments.Contains("&& ffmpeg");

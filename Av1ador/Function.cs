@@ -108,16 +108,17 @@ namespace Av1ador
             }
         }
 
-        public static string Replace_gs(string param, int gs_level)
+        public static string Param_replace(string str, string param, string replace)
         {
-            param = Regex.Replace(param, "(denoise-noise-level=)[0-9]+", m => m.Groups[1].Value + gs_level.ToString());
-            return Regex.Replace(param, "(film-grain=)[0-9]+", m => m.Groups[1].Value + gs_level.ToString());
+            str = Regex.Replace(str, "-(" + param + " )[0-9]+ ", m => replace == "" ? "" : "-" + m.Groups[1].Value + replace + " ");
+            str = Regex.Replace(str, "(" + param + "=)[0-9]+", m => replace == "" ? "" : m.Groups[1].Value + replace);
+            return str.Replace("::", ":").Replace("params :", "params ");
         }
 
-        public static string Replace_threads(string param, int threads)
+        public static string Replace_gs(string str, int gs_level)
         {
-            param = Regex.Replace(param, "(threads=)[0-9]+", m => m.Groups[1].Value + threads.ToString());
-            return Regex.Replace(param, "(-threads )[0-9]+", m => m.Groups[1].Value + threads.ToString());
+            str = Param_replace(str, "denoise-noise-level", gs_level.ToString());
+            return Param_replace(str, "film-grain", gs_level.ToString());
         }
 
         public static string Worsen_crf(string param)
