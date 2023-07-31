@@ -297,13 +297,14 @@ namespace Av1ador
 
         public static double Get_duration(string info, out string str_duration, string file = "")
         {
-            Regex res_regex = new Regex(" ([0-9]*):([0-5][0-9]):([0-5][0-9].[0-9][0-9]), ");
+            Regex res_regex = new Regex(" ([0-9]{0,3}):([0-5][0-9]):([0-5][0-9].[0-9][0-9]), ");
             Match compare = res_regex.Match(info);
             double duration;
             if (compare.Success)
             {
+                Double.TryParse(compare.Groups[1].ToString(), out double hours);
                 str_duration = compare.Groups[0].ToString().Split('.')[0].Replace(" ", "");
-                duration = Double.Parse(compare.Groups[1].ToString()) * 3600 + Double.Parse(compare.Groups[2].ToString()) * 60 + Double.Parse(compare.Groups[3].ToString());
+                duration = hours * 3600 + Double.Parse(compare.Groups[2].ToString()) * 60 + Double.Parse(compare.Groups[3].ToString());
             }
             else
             {
