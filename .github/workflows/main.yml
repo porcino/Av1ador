@@ -18,13 +18,13 @@ jobs:
         tag: "v1.0.11"
         fileName: "Av1ador.zip"
     - name: Extract Release
-      run: 7z x Av1ador.zip -oD:bin\Release\
+      run: 7z x Av1ador.zip -oD:Av1ador\bin\Release\
     - name: Build DotNET35
       run: |
         cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\"
         .\MSBuild.exe $Env:GITHUB_WORKSPACE\Av1ador.sln /p:Configuration=Release
     - name: Archive Release
-      run: 7z a -tzip Av1ador-nightly.zip .\bin\Release\*.exe .\bin\Release\bin .\bin\Release\resource
+      run: 7z a -tzip Av1ador-nightly.zip .\Av1ador\bin\Release\*.exe .\Av1ador\bin\Release\bin .\Av1ador\bin\Release\resource
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "Av1ador-nightly.zip"
