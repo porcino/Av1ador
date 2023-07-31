@@ -23,8 +23,8 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.0.12";
-        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v|flv|3gp)$", RegexOptions.IgnoreCase);
+        private readonly string title = "Av1ador 1.1";
+        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
         private double panx, pany, panx_ratio, pany_ratio;
@@ -96,8 +96,6 @@ namespace Av1ador
             leftPanel.Width = mpvsPanel.Width;
             rightPanel.Width = Screen.FromControl(this).Bounds.Width;
             Show_filter(true);
-            Entry.Load(listBox1);
-            listBox1.SelectedIndex = Entry.Index("-1", listBox1);
 
             BackgroundWorker bw = new BackgroundWorker();
             BackgroundWorker bw2 = new BackgroundWorker();
@@ -108,6 +106,9 @@ namespace Av1ador
             };
             bw.RunWorkerCompleted += (s, ee) =>
             {
+                Entry.Load(listBox1);
+                listBox1.SelectedIndex = Entry.Index("-1", listBox1);
+
                 underload = -2;
                 Program.Log = true;
                 Restore_settings(true);

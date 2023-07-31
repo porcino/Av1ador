@@ -638,6 +638,8 @@ namespace Av1ador
         public string Pathfile { get; set; }
         public bool Stop { get; set; }
         public bool Credits { get; set; }
+        public int Retry { get; set; }
+        private bool retry;
         private string output;
 
         public string Start()
@@ -645,6 +647,15 @@ namespace Av1ador
             Encoding = true;
             Process ffmpeg = new Process();
             Func.Setinicial(ffmpeg, 3, Credits ? Func.Worsen_crf(Func.Replace_gs(Arguments, 0)) : Arguments);
+            if (Arguments.Contains("libaom-av1"))
+            {
+                retry = true;
+                if (Retry > 0)
+                {
+                    output = "";
+                    ffmpeg.StartInfo.Arguments = Func.Replace_threads(ffmpeg.StartInfo.Arguments, 1);
+                }
+            }
             bool multi = ffmpeg.StartInfo.Arguments.Contains("&& ffmpeg");
             if (multi)
             {
@@ -687,7 +698,7 @@ namespace Av1ador
                     if (ffmpeg.HasExited || (crash != null && crash.HasExited))
                         jump = true;
                     stopwatch.Start();
-                    output += jump ? ffmpeg.StandardError.ReadToEnd() : ffmpeg.StandardError.ReadLine();
+                    output += jump ? ffmpeg.StandardError.ReadToEnd() : ffmpeg.StandardError.ReadLine() + "\r\n";
                     stopwatch.Stop();
                     Thread.Sleep((int)Math.Min(stopwatch.ElapsedMilliseconds / 4, 100));
                     stopwatch.Reset();
@@ -714,6 +725,12 @@ namespace Av1ador
 
                 if (output != null)
                 {
+                    if (retry && Retry == 0 && output.Contains("error while decoding"))
+                    {
+                        Retry++;
+                        Stop = true;
+                        break;
+                    }
                     if (output.Length > 1500)
                         output = output.Substring(output.Length - 1500);
 
@@ -751,7 +768,11 @@ namespace Av1ador
                     }
                     catch
                     {
-                        ffmpeg.Kill();
+                        try
+                        {
+                            ffmpeg.Kill();
+                        }
+                        catch { }
                         Thread.Sleep(1000);
                     }
                 }

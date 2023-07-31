@@ -602,7 +602,7 @@ namespace Av1ador
 
         public string Build_vstr(bool predict = false)
         {
-            string str = " -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration!";
+            string str = " -hide_banner -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration!";
             str += " -c:v:0 " + Cv;
             List<string> vf = new List<string>(Vf);
             if (Vf.Count > 0 && Vf.FindIndex(s => s.StartsWith("setpts=")) > -1)

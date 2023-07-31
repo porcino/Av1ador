@@ -153,7 +153,7 @@ namespace Av1ador
                 bw.DoWork += (s, e) =>
                 {
                     Process ffmpeg = new Process();
-                    Func.Setinicial(ffmpeg, 3, " -ss 0 -i \"" + file + "\" -t 180 -map 0:v:0 -c copy -f null -");
+                    Func.Setinicial(ffmpeg, 3, " -hide_banner -ss 0 -i \"" + file + "\" -t 180 -map 0:v:0 -c copy -f null -");
                     ffmpeg.Start();
                     ffmpeg.PriorityClass = ProcessPriorityClass.BelowNormal;
                     string output2 = ffmpeg.StandardError.ReadToEnd();
@@ -218,7 +218,7 @@ namespace Av1ador
                 }
 
                 Process ffmpeg = new Process();
-                Func.Setinicial(ffmpeg, 3, " -copyts -start_at_zero -i \"" + file + "\" -t 120 -filter:v \"select='eq(pict_type\\,I)',showinfo\" -f null -");
+                Func.Setinicial(ffmpeg, 3, " -hide_banner -copyts -start_at_zero -i \"" + file + "\" -t 120 -filter:v \"select='eq(pict_type\\,I)',showinfo\" -f null -");
                 ffmpeg.Start();
                 var kf = new List<double>();
                 res_regex = new Regex("pts:[ ]*([0-9]{4}[0-9]*)");
@@ -355,7 +355,7 @@ namespace Av1ador
                             Ancho[i] = (int)(bar.Width * Double.Parse(encode.Splits[i + 1]) / Duration) - Left[i];
                             if (encode.Chunks[i].Completed)
                             {
-                                g.FillRectangle(Brushes.MediumSeaGreen, Left[i], 0, Ancho[i], bar.Height);
+                                g.FillRectangle(encode.Chunks[i].Retry > 0 ? Brushes.OliveDrab : Brushes.MediumSeaGreen, Left[i], 0, Ancho[i], bar.Height);
                             }
                             else if (encode.Chunks[i].Encoding)
                             {
@@ -512,7 +512,7 @@ namespace Av1ador
             string th = (Hdr ? 64 : 16).ToString();
             double ss = Duration > Kf_interval * 3 ? Duration / 2.0 : 0;
             Process ffmpeg = new Process();
-            Func.Setinicial(ffmpeg, 3, " -ss " + ss + " -i \"" + File + "\" -vframes " + ((35 - (int)Math.Pow(Width, 1.0/3.0)) * (int)Fps) + " -an -vf cropdetect=limit=" + th + ":round=2 -f null NUL");
+            Func.Setinicial(ffmpeg, 3, " -hide_banner -ss " + ss + " -i \"" + File + "\" -vframes " + ((35 - (int)Math.Pow(Width, 1.0/3.0)) * (int)Fps) + " -an -vf cropdetect=limit=" + th + ":round=2 -f null NUL");
             ffmpeg.Start();
             Regex regex = new Regex("crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*)", RegexOptions.RightToLeft);
             Match m = regex.Match(ffmpeg.StandardError.ReadToEnd());
