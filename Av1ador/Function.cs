@@ -112,7 +112,7 @@ namespace Av1ador
         {
             str = Regex.Replace(str, "-(" + param + " )[0-9]+ ", m => replace == "" ? "" : "-" + m.Groups[1].Value + replace + " ");
             str = Regex.Replace(str, "(" + param + "=)[0-9]+", m => replace == "" ? "" : m.Groups[1].Value + replace);
-            return str.Replace("::", ":").Replace("params :", "params ");
+            return str.Replace("::", ":").Replace("params :", "params ").Replace(": "," ");
         }
 
         public static string Replace_gs(string str, int gs_level)

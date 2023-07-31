@@ -657,7 +657,7 @@ namespace Av1ador
                 str += Crf.ToString();
             }
             str += (Cv != "librav1e" ? " " : "") + speed_str + Speed;
-            str += (Cv != "librav1e" ? " " : "") + Func.Replace_gs(Param, Gs_level);
+            str += (Cv != "librav1e" ? " " : "") + Func.Replace_gs((Func.Param_replace(Param, "enable-keyframe-filtering", "")), Gs_level);
             if (V_kbps > 0 && Multipass != "" && !predict && Cv == "libx265")
                 str += ":!reuse!";
             if (!Hdr)
