@@ -297,7 +297,6 @@ namespace Av1ador
 
         public static double Get_duration(string info, out string str_duration, string file = "")
         {
-            info = "asd 01:36:51:45, 321321321";
             Regex res_regex = new Regex(@" ([0-9]{0,3}):([0-5][0-9]):([0-5][0-9]\.[0-9][0-9]), ");
             Match compare = res_regex.Match(info);
             double duration;
