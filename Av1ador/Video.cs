@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -152,6 +153,7 @@ namespace Av1ador
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += (s, e) =>
                 {
+                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                     Process ffmpeg = new Process();
                     Func.Setinicial(ffmpeg, 3, " -hide_banner -ss 0 -i \"" + file + "\" -t 180 -map 0:v:0 -c copy -f null -");
                     ffmpeg.Start();
@@ -187,6 +189,7 @@ namespace Av1ador
             BackgroundWorker bw2 = new BackgroundWorker();
             bw2.DoWork += (s, e) =>
             {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 if (Tracks.Count > 0)
                 {
                     Process fftracks = new Process();
@@ -454,6 +457,7 @@ namespace Av1ador
             }
             bw.DoWork += (s, e) =>
             {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 List<int> gs = new List<int>();
                 for (int i = 1; i <= loop; i++)
                 {
@@ -560,6 +564,7 @@ namespace Av1ador
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, e) =>
             {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 if (Predicted == 0)
                 {
                     Process ffmpeg = new Process();

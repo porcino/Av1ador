@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -23,8 +24,8 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.1";
-        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
+        private readonly string title = "Av1ador 1.1.2";
+        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
         private double panx, pany, panx_ratio, pany_ratio;
@@ -71,6 +72,7 @@ namespace Av1ador
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Text = title;
             string exes = Func.Exes();
 
@@ -102,6 +104,7 @@ namespace Av1ador
 
             bw.DoWork += (s, ee) =>
             {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 mpv = new Player(this, leftPanel, rightPanel);
             };
             bw.RunWorkerCompleted += (s, ee) =>
@@ -249,6 +252,7 @@ namespace Av1ador
                 BackgroundWorker backgroundWorker = new BackgroundWorker();
                 backgroundWorker.DoWork += (o, e) =>
                 {
+                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                     while (video.First_frame == -1)
                     {
                         Thread.Sleep(40);
@@ -648,6 +652,7 @@ namespace Av1ador
             string in_str;
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, ee) => {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 in_str = mpv.Time();
                 if (in_str != "")
                     Invoke(new Action(() => { Update_current_time(Double.Parse(in_str)); }));
@@ -657,6 +662,7 @@ namespace Av1ador
 
         private void Update_current_time(double time)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             mpvTimer.Enabled = true;
             encoder.Playtime = time;
             var timespan = TimeSpan.FromSeconds(time);
@@ -1718,6 +1724,7 @@ namespace Av1ador
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += (s, ee) =>
                 {
+                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                     primer_video.Blackbars(encoder);
                     while (primer_video.Letterbox.Width == 0)
                         Thread.Sleep(30);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -257,6 +258,7 @@ namespace Av1ador
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, e) =>
             {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 if (!System.IO.File.Exists(Name + "\\segments.txt") || (vbr && !System.IO.File.Exists(Name + "\\complexity.txt")))
                 {
                     Status.Add("Detecting scenes...");
@@ -430,6 +432,7 @@ namespace Av1ador
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (ss, e) =>
             {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 int instances = 0;
                 int done = 0;
                 for (int i = 0; i < Order.Count; i++)
@@ -513,6 +516,7 @@ namespace Av1ador
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, e) =>
             {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                 string output;
                 while (!ffconcat.HasExited)
                 {
@@ -644,6 +648,7 @@ namespace Av1ador
 
         public string Start()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Encoding = true;
             Process ffmpeg = new Process();
             Func.Setinicial(ffmpeg, 3, Credits ? Func.Worsen_crf(Func.Replace_gs(Arguments, 0)) : Arguments);
