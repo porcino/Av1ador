@@ -410,7 +410,8 @@ namespace Av1ador
                         Arguments = Replace_times(Param, File, pathfile, Splits[i + 1], seek, start, scene_bitrate),
                         Pathfile = pathfile,
                         Length = scene_duration,
-                        Credits = Splits[i].Length > 3 && Splits[i].Substring(0, 3) == "000"
+                        Credits = Splits[i].Length > 3 && Splits[i].Substring(0, 3) == "000",
+                        Last = i + 1 == Splits.Count() - 1
                     };
                     Sorted.Add(new KeyValuePair<int, double>(i, Chunks[i].Length));
                 }
@@ -445,7 +446,7 @@ namespace Av1ador
                     {
                         bool present = System.IO.File.Exists(chunk.Pathfile);
                         if (present && new FileInfo(chunk.Pathfile).Length > 500 && !System.IO.File.Exists(chunk.Pathfile + ".txt")
-                            && Math.Abs(Video.Get_duration(Video.Get_info(chunk.Pathfile), out string _, chunk.Pathfile) - chunk.Length) < 2)
+                            && (Math.Abs(Video.Get_duration(Video.Get_info(chunk.Pathfile), out string _, chunk.Pathfile) - chunk.Length) < 2 || chunk.Last))
                         {
                             skip = false;
                             chunk.Completed = true;
@@ -646,6 +647,7 @@ namespace Av1ador
         public bool Stop { get; set; }
         public bool Credits { get; set; }
         public int Retry { get; set; }
+        public bool Last { get; set; }
         private bool retry;
         private string output;
 
@@ -800,7 +802,7 @@ namespace Av1ador
                     File.AppendAllText(Pathfile + ".txt", output);
                     return output;
                 }
-                if (Math.Abs(Video.Get_duration(Video.Get_info(Pathfile), out string _, Pathfile) - Length) > 2)
+                if (Math.Abs(Video.Get_duration(Video.Get_info(Pathfile), out string _, Pathfile) - Length) > 2 && !Last)
                     return Pathfile + "\r\nThe segment has finished but there is a mismatch in the duration.\r\nUsually this means that ffmpeg crashed.";
             }
             File.Delete(Pathfile + ".txt");
