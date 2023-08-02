@@ -452,6 +452,9 @@ namespace Av1ador
                             chunk.Progress = chunk.Progress == 0 ? 1 : chunk.Progress;
                             chunk.Size = new FileInfo(chunk.Pathfile).Length;
                             chunk.Bitrate = chunk.Size / (double)1024 * (double)8 / chunk.Length;
+                            if (watch.ElapsedMilliseconds > 2000)
+                                foreach (var seg in Chunks.ToList())
+                                    seg.Frames = 0;
                             watch.Reset();
                             watch.Start();
                         }

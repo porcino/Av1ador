@@ -72,7 +72,7 @@ namespace Av1ador
                     if (dif > 0)
                         name = name.Substring(0, name.Length > dif ? name.Length - dif : name.Length) + "...";
                 }
-                e.Graphics.DrawString(dir + "\\" + name, e.Font, Brushes.Black, e.Bounds);
+                e.Graphics.DrawString((dir + "\\" + name).Replace(@"\\",@"\"), e.Font, Brushes.Black, e.Bounds);
                 if (entry.Elapsed > 0 || entry.Status == 1)
                 {
                     int x = e.Bounds.Right - 52;
