@@ -683,48 +683,50 @@ namespace Av1ador
             string p2 = "-profile:a aac_he_v2", p1 = "-profile:a aac_he";
             if (Ca == "libfdk_aac")
             {
-                if (Ba < 8)
+                int ba = int.Parse(Ch);
+                ba = ba > 2 ? Ba / ba * 2 : Ba; 
+                if (ba < 8)
                     astr += "-b:a " + Ba + "k ";
-                else if (Ba < 24)
+                else if (ba < 24)
                     astr += "-b:a " + Ba + "k " + p2;
-                else if (Ba < 41)
+                else if (ba < 41)
                     astr += "-b:a " + Ba + "k " + p1;
-                else if (Ba < 45)
+                else if (ba < 45)
                     astr += "-vbr 1 " + p1;
-                else if (Ba < 50)
+                else if (ba < 50)
                     astr += "-vbr 2 " + p1;
-                else if (Ba < 57)
+                else if (ba < 57)
                     astr += "-vbr 1 " + p1;
-                else if (Ba < 66)
+                else if (ba < 66)
                     astr += "-vbr 2 " + p1;
-                else if (Ba < 81)
+                else if (ba < 81)
                     astr += "-vbr 3 " + p1;
-                else if (Ba < 97)
+                else if (ba < 97)
                     astr += "-vbr 4 " + p1;
-                else if (Ba < 110)
+                else if (ba < 110)
                     astr += "-vbr 1 -cutoff 15000";
-                else if (Ba < 116)
+                else if (ba < 116)
                     astr += "-vbr 1 -cutoff 16000";
-                else if (Ba < 121)
+                else if (ba < 121)
                     astr += "-vbr 1 -cutoff 17000";
-                else if (Ba < 140)
+                else if (ba < 140)
                     astr += "-vbr 2 -cutoff 17000";
-                else if (Ba < 160)
+                else if (ba < 160)
                     astr += "-vbr 3 -cutoff 17000";
-                else if (Ba < 180)
+                else if (ba < 180)
                     astr += "-vbr 4 -cutoff 17000";
                 else
                     astr += "-vbr 5 -cutoff 18000";
 
-                if (Ba < 8)
+                if (ba < 8)
                     astr += " -ar 8000";
-                else if (Ba < 10)
+                else if (ba < 10)
                     astr += " -ar 16000";
-                else if (Ba < 14)
+                else if (ba < 14)
                     astr += " -ar 22050";
-                else if (Ba < 20)
+                else if (ba < 20)
                     astr += " -ar 24000";
-                else if (Ba < 50)
+                else if (ba < 50)
                     astr += " -ar 32000";
             }
             else
