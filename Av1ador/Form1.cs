@@ -529,7 +529,9 @@ namespace Av1ador
             playButton.Visible = true;
             pauseButton.Visible = false;
             mpv.Cmd("set pause yes", 0);
-            Update_current_time(Double.Parse(mpv.Time()));
+            string in_str = mpv.Time();
+            if (in_str != "")
+                Update_current_time(Double.Parse(mpv.Time()));
             Sync_mpv(encoder.Playtime, 0, false);
         }
         private void PrevframeButton_Click(object sender, EventArgs e)
@@ -692,16 +694,17 @@ namespace Av1ador
                 if (segment > -1 && (encode.Chunks[segment].Completed || (encode.Chunks[segment].Encoding && encode.Chunks[segment].Progress > 0)) && File.Exists(name))
                 {
                     Detener();
-                    mpv.Mpv2_load(this, name, "set pause yes", (both ? pos : encoder.Playtime) - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
+                    mpv.Mpv2_load(this, name, "set pause yes", (both ? pos : encoder.Playtime - 0.34 / primer_video.Fps) - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
                     if (!encode.Chunks[segment].Completed)
                         segundo_video = null;
                     if (both)
                         mpv.Cmd("set pause yes;seek " + pos.ToString() + " absolute+exact");
                 }
-                else if (both)
+                else
                 {
                     leftPanel.Width = mpvsPanel.Width;
-                    mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
+                    if (both)
+                        mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
                 }
             }
             else

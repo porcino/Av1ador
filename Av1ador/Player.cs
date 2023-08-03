@@ -203,7 +203,9 @@ namespace Av1ador
             while (mpv_out.Peek() > -1)
                 in_str = mpv_out.ReadLine();
             reading = false;
-            return tiempo.Match(in_str).Groups[1].Value.ToString();
+            in_str = tiempo.Match(in_str).Groups[1].Value.ToString();
+            Double.TryParse(in_str, out double d);
+            return d > 0 ? in_str : "";
         }
 
         public void Cmd(string cmd, int mpv = 1)
