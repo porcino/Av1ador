@@ -529,6 +529,8 @@ namespace Av1ador
             playButton.Visible = true;
             pauseButton.Visible = false;
             mpv.Cmd("set pause yes", 0);
+            Update_current_time(Double.Parse(mpv.Time()));
+            Sync_mpv(encoder.Playtime, 0, false);
         }
         private void PrevframeButton_Click(object sender, EventArgs e)
         {
@@ -681,6 +683,36 @@ namespace Av1ador
             }
         }
 
+        private void Sync_mpv(double pos, int x, bool both)
+        {
+            if (encodestopButton.Enabled && encode != null && encode.Splits != null && encode.Chunks != null && encode.File == primer_video.File)
+            {
+                int segment = encode.Get_segment(picBoxBarra.Width, x, primer_video.Duration, both ? 0 : encoder.Playtime);
+                string name = encode.Name + "\\" + segment.ToString("00000") + "." + encode.Job;
+                if (segment > -1 && (encode.Chunks[segment].Completed || (encode.Chunks[segment].Encoding && encode.Chunks[segment].Progress > 0)) && File.Exists(name))
+                {
+                    Detener();
+                    mpv.Mpv2_load(this, name, "set pause yes", (both ? pos : encoder.Playtime) - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
+                    if (!encode.Chunks[segment].Completed)
+                        segundo_video = null;
+                    if (both)
+                        mpv.Cmd("set pause yes;seek " + pos.ToString() + " absolute+exact");
+                }
+                else if (both)
+                {
+                    leftPanel.Width = mpvsPanel.Width;
+                    mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
+                }
+            }
+            else
+            {
+                if (both)
+                    mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
+                if (mpv.Mpv2_loaded && segundo_video != null)
+                    mpv.Cmd("seek " + (pos + segundo_video.First_frame - primer_video.First_frame - primer_video.StartTime).ToString() + " absolute+exact", 2);
+            }
+        }
+
         private void PicBoxBarra_MouseClick(object sender, MouseEventArgs e)
         {
             if (primer_video == null)
@@ -690,30 +722,7 @@ namespace Av1ador
             mpv.Reconnect();
             double pos = primer_video.Duration * e.Location.X / picBoxBarra.Width;
             Update_current_time(pos);
-            if (encodestopButton.Enabled && encode != null && encode.Splits != null && encode.Chunks != null && encode.File == primer_video.File)
-            {
-                int segment = encode.Get_segment(picBoxBarra.Width, e.Location.X, primer_video.Duration);
-                string name = encode.Name + "\\" + segment.ToString("00000") + "." + encode.Job;
-                if (segment > -1 && (encode.Chunks[segment].Completed || (encode.Chunks[segment].Encoding && encode.Chunks[segment].Progress > 0)) && File.Exists(name))
-                {
-                    Detener();
-                    mpv.Mpv2_load(this, name, "set pause yes", pos - Double.Parse(encode.Splits[segment]) - primer_video.First_frame);
-                    mpv.Cmd("set pause yes;seek " + pos.ToString() + " absolute+exact");
-                    if (!encode.Chunks[segment].Completed)
-                        segundo_video = null;
-                }
-                else
-                {
-                    leftPanel.Width = mpvsPanel.Width;
-                    mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
-                }
-            }
-            else
-            {
-                mpv.Cmd("seek " + pos.ToString() + " absolute+exact");
-                if (mpv.Mpv2_loaded && segundo_video != null)
-                    mpv.Cmd("seek " + (pos + segundo_video.First_frame - primer_video.First_frame - primer_video.StartTime).ToString() + " absolute+exact", 2);
-            }
+            Sync_mpv(pos, e.Location.X, true);
         }
 
         private void ToolStripButton2_Click(object sender, EventArgs e)

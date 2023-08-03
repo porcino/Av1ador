@@ -453,11 +453,13 @@ namespace Av1ador
                             chunk.Progress = chunk.Progress == 0 ? 1 : chunk.Progress;
                             chunk.Size = new FileInfo(chunk.Pathfile).Length;
                             chunk.Bitrate = chunk.Size / (double)1024 * (double)8 / chunk.Length;
-                            if (watch.ElapsedMilliseconds > 2000)
-                                foreach (var seg in Chunks.ToList())
-                                    seg.Frames = 0;
                             watch.Reset();
                             watch.Start();
+                            if (watch.ElapsedMilliseconds > 1000)
+                            {
+                                for (int j = 0; j < Order.Count; j++)
+                                    Chunks[Order[j]].Frames = 0;
+                            }
                         }
                         else
                         {
@@ -592,12 +594,12 @@ namespace Av1ador
             return str.Replace("!name!", name).Replace("transforms.trf", name.Replace(@"\", @"\\") + ".trf");
         }
 
-        public int Get_segment(int w, int x, double duration)
+        public int Get_segment(int w, int x, double duration, double time)
         {
-            int time = x * (int)duration / w;
+            time = time > 0 ? time : (double)x * duration / (double)w;
             for (int i = 0; i < Splits.Count - 1; i++)
             {
-                if (time < (int)Double.Parse(Splits[i + 1]) && time >= (int)Double.Parse(Splits[i]))
+                if (time < Double.Parse(Splits[i + 1]) && time >= Double.Parse(Splits[i]))
                     return i;
             }
             return -1;
