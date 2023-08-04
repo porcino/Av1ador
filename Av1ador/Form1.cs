@@ -1909,9 +1909,8 @@ namespace Av1ador
         private void GrainButton_CheckStateChanged(object sender, EventArgs e)
         {
             grainButton.ToolTipText = grainButton.Checked ? "Hide film grain (AV1)" : "Show film grain (AV1)";
-            if (segundo_video != null && mpv.Mpv2_loaded)
+            if (mpv.Mpv2_loaded)
             {
-                Detener();
                 mpv.Cmd("{ \"command\": [\"set_property\", \"vd-lavc-film-grain\", \"" + (grainButton.Checked ? "cpu" : "gpu") + "\"] }", 2);
                 mpv.Cmd("playlist-play-index current", 2);
                 mpv.Wait_mpv();
