@@ -105,7 +105,7 @@ namespace Av1ador
                         double time = progress * duration / 100.0;
                         Abr = sum / 1024.0 * 8.0 / time;
                         double quadp = Math.Sqrt(progress / 100.0);
-                        double quad2p = Math.Pow(progress / 100.0, 0.25);
+                        double quad2p = Math.Pow(progress / 100.0, 0.2);
                         video_size = Math.Round((size * quad2p + (max + size) / 2.0 * (1.0 - quad2p)) * (1.0 - quadp) + (sum / 1024.0 * 100.0 / 1024.0 / progress) * quadp, 1);
                         return video_size;
                     }
@@ -513,7 +513,7 @@ namespace Av1ador
             b += Extension == "mp4" ? "-movflags faststart " : "";
             string f = Spd != 1 ? " -itsscale " + Spd : "";
             if (System.IO.File.Exists(Name + "\\audio." + A_Job))
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + " -i \"" + Name + "\\concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay + "ms" : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? -map_metadata -1 " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + " -i \"" + Name + "\\concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay + "ms" : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -i \"" + File + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
             else
                 ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + "  -i \"" + Name + "\\concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             ffconcat.Start();

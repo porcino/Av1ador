@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.2";
+        private readonly string title = "Av1ador 1.1.3";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -525,9 +525,7 @@ namespace Av1ador
 
         private void PauseButton_Click(object sender, EventArgs e)
         {
-            mpvTimer.Enabled = false;
-            playButton.Visible = true;
-            pauseButton.Visible = false;
+            Detener();
             mpv.Cmd("set pause yes", 0);
             string in_str = mpv.Time();
             if (in_str != "")
@@ -947,6 +945,7 @@ namespace Av1ador
             workersUpDown.Maximum = encoder.Cv.Contains("nvenc") ? 2 : encoder.Cores;
             workersUpDown.Value = workersUpDown.Maximum > 2 ? (workersBox.Checked ? (workersUpDown.Value <= workersUpDown.Maximum ? workersUpDown.Value : workersUpDown.Maximum) : 2) : 1;
             encoder.Predicted = false;
+            grainButton.Enabled = cvComboBox.Text.Contains("AV1");
             Entry_update(4);
         }
 
@@ -1905,6 +1904,19 @@ namespace Av1ador
         {
             if (bitrateBox.Text.Length > 0)
                 resComboBox.Enabled = !scaleBox.Checked;
+        }
+
+        private void GrainButton_CheckStateChanged(object sender, EventArgs e)
+        {
+            grainButton.ToolTipText = grainButton.Checked ? "Hide film grain (AV1)" : "Show film grain (AV1)";
+            if (segundo_video != null && mpv.Mpv2_loaded)
+            {
+                Detener();
+                mpv.Cmd("{ \"command\": [\"set_property\", \"vd-lavc-film-grain\", \"" + (grainButton.Checked ? "cpu" : "gpu") + "\"] }", 2);
+                mpv.Cmd("playlist-play-index current", 2);
+                mpv.Wait_mpv();
+                PauseButton_Click(new object(), new EventArgs());
+            }
         }
 
         private void WorkersBox_CheckedChanged(object sender, EventArgs e)

@@ -172,6 +172,7 @@
             this.audiomuteButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.zoomButton = new System.Windows.Forms.ToolStripButton();
+            this.grainButton = new System.Windows.Forms.ToolStripButton();
             this.expandButton = new System.Windows.Forms.ToolStripButton();
             this.restoreButton = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -1863,12 +1864,13 @@
             this.audiounmuteButton,
             this.audiomuteButton,
             this.toolStripSeparator9,
+            this.grainButton,
             this.zoomButton,
             this.expandButton,
             this.restoreButton});
-            this.toolStrip2.Location = new System.Drawing.Point(285, 0);
+            this.toolStrip2.Location = new System.Drawing.Point(205, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(429, 38);
+            this.toolStrip2.Size = new System.Drawing.Size(589, 38);
             this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
             this.toolStrip2.MouseEnter += new System.EventHandler(this.ToolStrip2_MouseEnter);
@@ -1898,8 +1900,8 @@
             this.prevframeButton.Image = global::Av1ador.Properties.Resources.PreviousFrame;
             this.prevframeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.prevframeButton.Name = "prevframeButton";
-            this.prevframeButton.Size = new System.Drawing.Size(90, 35);
-            this.prevframeButton.Text = "Previous frame";
+            this.prevframeButton.Size = new System.Drawing.Size(60, 35);
+            this.prevframeButton.Text = "Step back";
             this.prevframeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.prevframeButton.Click += new System.EventHandler(this.PrevframeButton_Click);
             // 
@@ -1933,8 +1935,8 @@
             this.nextframeButton.Image = global::Av1ador.Properties.Resources.NextFrame;
             this.nextframeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.nextframeButton.Name = "nextframeButton";
-            this.nextframeButton.Size = new System.Drawing.Size(90, 35);
-            this.nextframeButton.Text = "Next frame";
+            this.nextframeButton.Size = new System.Drawing.Size(60, 35);
+            this.nextframeButton.Text = "Step forth";
             this.nextframeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.nextframeButton.Click += new System.EventHandler(this.NextframeButton_Click);
             // 
@@ -1984,6 +1986,21 @@
             this.zoomButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.zoomButton.CheckStateChanged += new System.EventHandler(this.ZoomButton_CheckStateChanged);
             // 
+            // grainButton
+            // 
+            this.grainButton.AutoSize = false;
+            this.grainButton.Checked = true;
+            this.grainButton.CheckOnClick = true;
+            this.grainButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.grainButton.Image = global::Av1ador.Properties.Resources.CheckerboardSquare;
+            this.grainButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.grainButton.Name = "grainButton";
+            this.grainButton.Size = new System.Drawing.Size(43, 35);
+            this.grainButton.Text = "Grain";
+            this.grainButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.grainButton.ToolTipText = "Hide film grain (AV1)";
+            this.grainButton.CheckStateChanged += new System.EventHandler(this.GrainButton_CheckStateChanged);
+            // 
             // expandButton
             // 
             this.expandButton.AutoSize = false;
@@ -2022,7 +2039,7 @@
             this.tableLayoutPanel8.RowCount = 2;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(285, 38);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(205, 38);
             this.tableLayoutPanel8.TabIndex = 1;
             // 
             // playtimeLabel
@@ -2054,20 +2071,20 @@
             this.tableLayoutPanel9.Controls.Add(this.statusLabel, 0, 1);
             this.tableLayoutPanel9.Controls.Add(this.estimatedLabel, 0, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(714, 0);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(794, 0);
             this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(286, 38);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(206, 38);
             this.tableLayoutPanel9.TabIndex = 2;
             // 
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
             this.statusLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.statusLabel.Location = new System.Drawing.Point(283, 19);
+            this.statusLabel.Location = new System.Drawing.Point(203, 19);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(0, 19);
             this.statusLabel.TabIndex = 0;
@@ -2077,7 +2094,7 @@
             // 
             this.estimatedLabel.AutoSize = true;
             this.estimatedLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.estimatedLabel.Location = new System.Drawing.Point(283, 0);
+            this.estimatedLabel.Location = new System.Drawing.Point(203, 0);
             this.estimatedLabel.Name = "estimatedLabel";
             this.estimatedLabel.Size = new System.Drawing.Size(0, 19);
             this.estimatedLabel.TabIndex = 1;
@@ -2720,6 +2737,7 @@
         private System.Windows.Forms.ToolStripMenuItem speedupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem slowToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton creditsResetButton;
+        private System.Windows.Forms.ToolStripButton grainButton;
     }
 }
 
