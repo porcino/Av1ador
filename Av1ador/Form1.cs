@@ -609,7 +609,7 @@ namespace Av1ador
             tableLayoutPanel1.RowStyles[2].Height = 16;
             tableLayoutPanel1.RowStyles[3].Height = 0;
             tableLayoutPanel4.RowStyles[0].Height = 24;
-            syncButton.DisplayStyle = prevframeButton.DisplayStyle = playButton.DisplayStyle = pauseButton.DisplayStyle = nextframeButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            syncButton.DisplayStyle = prevframeButton.DisplayStyle = playButton.DisplayStyle = pauseButton.DisplayStyle = nextframeButton.DisplayStyle = grainButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
             audiomuteButton.DisplayStyle = audiounmuteButton.DisplayStyle = expandButton.DisplayStyle = restoreButton.DisplayStyle = zoomButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
             restoreButton.Visible = true;
             expandButton.Visible = false;
@@ -627,7 +627,7 @@ namespace Av1ador
             tableLayoutPanel1.RowStyles[2].Height = 24;
             tableLayoutPanel1.RowStyles[3].Height = 24;
             tableLayoutPanel4.RowStyles[0].Height = 38;
-            syncButton.DisplayStyle = prevframeButton.DisplayStyle = playButton.DisplayStyle = pauseButton.DisplayStyle = nextframeButton.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+            syncButton.DisplayStyle = prevframeButton.DisplayStyle = playButton.DisplayStyle = pauseButton.DisplayStyle = nextframeButton.DisplayStyle = grainButton.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
             audiomuteButton.DisplayStyle = audiounmuteButton.DisplayStyle = expandButton.DisplayStyle = restoreButton.DisplayStyle = zoomButton.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
             restoreButton.Visible = false;
             expandButton.Visible = true;
