@@ -1980,6 +1980,7 @@
             this.grainButton.Checked = true;
             this.grainButton.CheckOnClick = true;
             this.grainButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.grainButton.Enabled = false;
             this.grainButton.Image = global::Av1ador.Properties.Resources.CheckerboardSquare;
             this.grainButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.grainButton.Name = "grainButton";

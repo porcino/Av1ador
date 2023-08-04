@@ -453,13 +453,13 @@ namespace Av1ador
                             chunk.Progress = chunk.Progress == 0 ? 1 : chunk.Progress;
                             chunk.Size = new FileInfo(chunk.Pathfile).Length;
                             chunk.Bitrate = chunk.Size / (double)1024 * (double)8 / chunk.Length;
-                            watch.Reset();
-                            watch.Start();
-                            if (watch.ElapsedMilliseconds > 1000)
+                            if (watch.ElapsedMilliseconds > 500)
                             {
                                 for (int j = 0; j < Order.Count; j++)
                                     Chunks[Order[j]].Frames = 0;
                             }
+                            watch.Reset();
+                            watch.Start();
                         }
                         else
                         {
@@ -717,6 +717,7 @@ namespace Av1ador
                 }
             };
             bw.RunWorkerAsync();
+            int frames_before = 0;
             while (!Stop)
             {
                 bool jump = false;
@@ -755,7 +756,11 @@ namespace Av1ador
                             Progress = d;
                             compare = regex_frames.Match(output);
                             if (compare.Success)
-                                Frames = int.Parse(compare.Groups[1].ToString());
+                            {
+                                int total_frames = int.Parse(compare.Groups[1].ToString());
+                                Frames += total_frames - frames_before;
+                                frames_before = total_frames;
+                            }
                         }
                     }
                 }

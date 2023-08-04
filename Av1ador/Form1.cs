@@ -275,6 +275,7 @@ namespace Av1ador
                 backgroundWorker.RunWorkerCompleted += (s, e) =>
                 {
                     segundo_video = video;
+                    grainButton.Enabled = cvComboBox.Text.Contains("AV1") && segundo_video != null;
                 };
                 backgroundWorker.RunWorkerAsync();
             }
@@ -945,7 +946,7 @@ namespace Av1ador
             workersUpDown.Maximum = encoder.Cv.Contains("nvenc") ? 2 : encoder.Cores;
             workersUpDown.Value = workersUpDown.Maximum > 2 ? (workersBox.Checked ? (workersUpDown.Value <= workersUpDown.Maximum ? workersUpDown.Value : workersUpDown.Maximum) : 2) : 1;
             encoder.Predicted = false;
-            grainButton.Enabled = cvComboBox.Text.Contains("AV1");
+            grainButton.Enabled = cvComboBox.Text.Contains("AV1") && segundo_video != null;
             Entry_update(4);
         }
 
@@ -1908,14 +1909,13 @@ namespace Av1ador
 
         private void GrainButton_CheckStateChanged(object sender, EventArgs e)
         {
+            if (!mpv.Mpv2_loaded)
+                return;
             grainButton.ToolTipText = grainButton.Checked ? "Hide film grain (AV1)" : "Show film grain (AV1)";
-            if (mpv.Mpv2_loaded)
-            {
-                mpv.Cmd("{ \"command\": [\"set_property\", \"vd-lavc-film-grain\", \"" + (grainButton.Checked ? "cpu" : "gpu") + "\"] }", 2);
-                mpv.Cmd("playlist-play-index current", 2);
-                mpv.Wait_mpv();
-                PauseButton_Click(new object(), new EventArgs());
-            }
+            mpv.Cmd("{ \"command\": [\"set_property\", \"vd-lavc-film-grain\", \"" + (grainButton.Checked ? "cpu" : "gpu") + "\"] }", 2);
+            mpv.Cmd("playlist-play-index current", 2);
+            mpv.Wait_mpv();
+            PauseButton_Click(new object(), new EventArgs());
         }
 
         private void WorkersBox_CheckedChanged(object sender, EventArgs e)
