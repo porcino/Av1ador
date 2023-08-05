@@ -133,6 +133,7 @@
             this.speedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.speedupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.slowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.subtitleBurnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stabilizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tonemapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openclToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1389,6 +1390,7 @@
             this.rotateToolStripMenuItem,
             this.sharpenToolStripMenuItem,
             this.speedToolStripMenuItem,
+            this.subtitleBurnToolStripMenuItem,
             this.stabilizationToolStripMenuItem,
             this.tonemapToolStripMenuItem,
             this.upscaleToolStripMenuItem});
@@ -1566,6 +1568,14 @@
             this.slowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.slowToolStripMenuItem.Text = "Slow down 10%";
             this.slowToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            // 
+            // subtitleBurnToolStripMenuItem
+            // 
+            this.subtitleBurnToolStripMenuItem.AutoSize = false;
+            this.subtitleBurnToolStripMenuItem.Name = "subtitleBurnToolStripMenuItem";
+            this.subtitleBurnToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.subtitleBurnToolStripMenuItem.Text = "Subtitle burn";
+            this.subtitleBurnToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
             // 
             // stabilizationToolStripMenuItem
             // 
@@ -1987,7 +1997,7 @@
             this.grainButton.Size = new System.Drawing.Size(43, 35);
             this.grainButton.Text = "Grain";
             this.grainButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.grainButton.ToolTipText = "Hide film grain (AV1)";
+            this.grainButton.ToolTipText = "Disable AV1 grain synthesis";
             this.grainButton.CheckStateChanged += new System.EventHandler(this.GrainButton_CheckStateChanged);
             // 
             // zoomButton
@@ -2739,6 +2749,7 @@
         private System.Windows.Forms.ToolStripMenuItem slowToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton creditsResetButton;
         private System.Windows.Forms.ToolStripButton grainButton;
+        private System.Windows.Forms.ToolStripMenuItem subtitleBurnToolStripMenuItem;
     }
 }
 

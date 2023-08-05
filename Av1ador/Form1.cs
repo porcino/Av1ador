@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.3";
+        private readonly string title = "Av1ador 1.1.4";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -1911,7 +1911,7 @@ namespace Av1ador
         {
             if (!mpv.Mpv2_loaded)
                 return;
-            grainButton.ToolTipText = grainButton.Checked ? "Hide film grain (AV1)" : "Show film grain (AV1)";
+            grainButton.ToolTipText = grainButton.Checked ? "Disable AV1 grain synthesis" : "Enable AV1 grain synthesis";
             mpv.Cmd("{ \"command\": [\"set_property\", \"vd-lavc-film-grain\", \"" + (grainButton.Checked ? "cpu" : "gpu") + "\"] }", 2);
             mpv.Cmd("playlist-play-index current", 2);
             mpv.Wait_mpv();
