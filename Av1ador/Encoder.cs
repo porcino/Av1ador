@@ -541,8 +541,10 @@ namespace Av1ador
                     Filter = "Subtitle Files|*.ass;*.srt;*.sub;*.vtt|All Files (*.*)|*.*",
                     Title = "Select subtitle file to burn"
                 };
+                Form1.Dialogo = true;
                 if (filedialog.ShowDialog() == DialogResult.OK)
-                    Vf.Add("\"subtitles='" + filedialog.FileName.Replace(@"\", @"\\") + "'\"");
+                    Vf.Add("\"subtitles='" + filedialog.FileName.Replace(@"\", @"\\").Replace(@":",@"\:") + "'\"");
+                Form1.Dialogo = false;
             }
         }
 
