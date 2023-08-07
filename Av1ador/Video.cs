@@ -53,7 +53,7 @@ namespace Av1ador
         public int Height { get; }
         public double Sar { get; }
         public double Dar { get; }
-        public bool Hdr { get; }
+        public int Hdr { get; }
         public string Color_matrix { get; }
         public bool Interlaced { get; }
         public int Channels { get; }
@@ -137,12 +137,14 @@ namespace Av1ador
             {
                 Color_matrix = compare.Groups[1].ToString();
                 if (Color_matrix.Contains("2020"))
-                    Hdr = true;
+                    Hdr = 1;
             }
             else if (Height < 580 && (Sar < 1 || Interlaced))
                 Color_matrix = "mpeg2video";
             else
                 Color_matrix = "";
+            if (Hdr == 0 && Regex.Match(info, @"Side data:[\r\n]+ *DOVI").Success)
+                Hdr = 2;
 
             res_regex = new Regex("(23.976|23.98|24|25|30|29.97|60) fps");
             compare = res_regex.Match(info);
@@ -437,7 +439,7 @@ namespace Av1ador
                     break;
             }
             double size = Math.Round(new FileInfo(File).Length / 1024.0 / 1024.0, 1);
-            return str_duration + ", " + Width + "x" + Height + (Interlaced ? "i" : "p") + ", " + (Fps == 0 ? "..." : Fps.ToString() ) + " fps" + (Hdr ? ", HDR" : "") + " - " + str_ch + " - " + Func.Size_unit(size);
+            return str_duration + ", " + Width + "x" + Height + (Interlaced ? "i" : "p") + ", " + (Fps == 0 ? "..." : Fps.ToString() ) + " fps" + (Hdr == 1 ? ", HDR" : Hdr == 2 ? ", DOVI" : "") + " - " + str_ch + " - " + Func.Size_unit(size);
         }
 
         internal void Grain_detect(NumericUpDown gsupdown, Label status, int maxgs, Label inf, List<string> vf)
@@ -470,8 +472,13 @@ namespace Av1ador
                     Func.Setinicial(ffmpeg, 3);
                     int ss = (int)(Duration * i / (loop + 2));
                     string cmd = " -loglevel panic -init_hw_device opencl=gpu -filter_hw_device gpu -ss " + ss + " -i \"" + File + "\"  -an -sn -frames:v 1 -vf \"" + crop + "thumbnail=n=" + frames + ",scale=w=1920:h=1080:force_original_aspect_ratio=decrease:force_divisible_by=2";
-                    if (Hdr)
+                    if (Hdr == 1)
                         cmd += ",format=p010,hwupload,tonemap_opencl=tonemap=hable:r=tv:p=bt709:t=bt709:m=bt709:format=nv12,hwdownload,format=nv12";
+                    else if (Hdr == 2 && Encoder.Libplacebo)
+                    {
+                        cmd = cmd.Replace("opencl=gpu -filter_hw_device gpu", "vulkan");
+                        cmd += ",format=yuv420p10le,hwupload,libplacebo=tonemapping=reinhard:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:format=yuv420p,hwdownload,format=yuv420p";
+                    }
                     cmd += "\" -lossless 1 -compression_level 1 -y \"" + name + "_th.webp\"";
                     ffmpeg.StartInfo.Arguments = cmd;
                     ffmpeg.Start();
@@ -514,7 +521,7 @@ namespace Av1ador
                 enc.Vf_add("crop", Letterbox.Width.ToString(), Letterbox.Height.ToString(), Letterbox.X.ToString(), Letterbox.Y.ToString());
                 return;
             }
-            string th = (Hdr ? 64 : 16).ToString();
+            string th = (Hdr > 0 ? 64 : 16).ToString();
             double ss = Duration > Kf_interval * 3 ? Duration / 2.0 : 0;
             Process ffmpeg = new Process();
             Func.Setinicial(ffmpeg, 3, " -hide_banner -ss " + ss + " -i \"" + File + "\" -vframes " + ((35 - (int)Math.Pow(Width, 1.0/3.0)) * (int)Fps) + " -an -vf cropdetect=limit=" + th + ":round=2 -f null NUL");

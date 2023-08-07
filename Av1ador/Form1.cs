@@ -76,11 +76,9 @@ namespace Av1ador
             Text = title;
             string exes = Func.Exes();
 
-            encoder = new Encoder
-            {
-                Libfdk = exes.Contains("enable-libfdk-aac"),
-                Libplacebo = exes.Contains("enable-libplacebo")
-            };
+            encoder = new Encoder();
+            Encoder.Libfdk = exes.Contains("enable-libfdk-aac");
+            Encoder.Libplacebo = exes.Contains("enable-libplacebo");
             workersUpDown.Maximum = encoder.Cores;
             workersgroupBox.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(workersgroupBox, true, null);
             listBox1.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(listBox1, true, null);
@@ -169,7 +167,7 @@ namespace Av1ador
                     mediainfoLabel.Text = primer_video.Mediainfo();
                     checkedListBox1.Items.Clear();
                     checkedListBox1.Items.AddRange(primer_video.Tracks.ToArray());
-                    hdrComboBox.Enabled = primer_video.Hdr;
+                    hdrComboBox.Enabled = primer_video.Hdr > 0;
                     encoder.Set_audio_codec(caComboBox.Text.Split(' ')[0], primer_video.Channels);
                     Func.Update_combo(chComboBox, encoder.Channels, true);
                     caComboBox.Enabled = chComboBox.Enabled;
@@ -1079,7 +1077,7 @@ namespace Av1ador
                     bitsComboBox.Text = int.Parse(bitsComboBox.Text) < 10 ? "10" : bitsComboBox.Text;
                 encoder.Hdr = hdrComboBox.Text == "Yes" && hdrComboBox.Enabled;
                 if (primer_video != null)
-                    encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString());
+                    encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
             }
             Filter_items_update();
         }
@@ -1093,7 +1091,7 @@ namespace Av1ador
                     hdrComboBox.Text = "No";
                 encoder.Bits = int.Parse(bitsComboBox.Text);
                 if (primer_video != null)
-                    encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString());
+                    encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
             }
             Filter_items_update();
             Entry_update(5);
@@ -1535,7 +1533,7 @@ namespace Av1ador
             if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
                 encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
             
-            encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString());
+            encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
             encoder.Vf_add("deinterlace", primer_video.Interlaced.ToString());
             encoder.Vf_add("autocolor", primer_video.Color_matrix);
             Filter_items_update();
@@ -1665,7 +1663,7 @@ namespace Av1ador
         private void FilteraddDropDownButton_DropDownOpening(object sender, EventArgs e)
         {
             bool vulkan = false;
-            bool opencl = !encoder.Libplacebo;
+            bool opencl = !Encoder.Libplacebo;
             bool tonemap = false;
             if (encoder.Vf.Count > 0)
             {
@@ -1680,7 +1678,7 @@ namespace Av1ador
                 }
             }
             denoiseToolStripMenuItem.Enabled = !vulkan;
-            openclToolStripMenuItem.Enabled = !vulkan && !tonemap;
+            openclToolStripMenuItem.Enabled = !vulkan && !tonemap && (primer_video != null && primer_video.Hdr != 2);
             vulkanToolStripMenuItem.Enabled = !opencl && !tonemap;
             upscaleToolStripMenuItem.Enabled = !vulkan;
         }

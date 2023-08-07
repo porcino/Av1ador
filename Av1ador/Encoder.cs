@@ -18,6 +18,8 @@ namespace Av1ador
         private readonly string[] a = new string[] { "aac", "opus", "vorbis", "mp3" };
         private readonly string[] c = new string[] { "2 (stereo)", "6 (surround 5.1)", "8 (surround 7.1)", "1 (mono)" };
         private string speed_str;
+        public static bool Libfdk { get; set; }
+        public static bool Libplacebo { get; set; }
         public string[] Resos { get; set; }
         public string Param { get; set; }
         public int Max_crf { get; set; }
@@ -53,8 +55,6 @@ namespace Av1ador
         public int Out_fps { get; set; }
         public double Out_spd { get; set; } = 1;
         public bool Predicted { get; set; }
-        public bool Libfdk { get; set; }
-        public bool Libplacebo { get; set; }
         public double Rate { get; set; }
         public string Multipass { get; set; }
         public string Vbr_str { get; set; }
@@ -159,8 +159,7 @@ namespace Av1ador
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "2", "3", "*4", "5", "6", "7", "8 (fastest)" };
                 speed_str = "-cpu-used ";
-                //Params = "-tune 0 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -aom-params sharpness=4:max-gf-interval=20:gf-max-pyr-height=3:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=7:arnr-strength=4:max-reference-frames=4:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:qm-max=5:enable-obmc=0 -strict -2";
-                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -aom-params sharpness=4:max-gf-interval=28:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=2:arnr-strength=4:max-reference-frames=4:enable-rect-partitions=0:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:enable-obmc=0 -strict -2";
+                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -aom-params sharpness=4:max-gf-interval=20:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=3:arnr-strength=4:max-reference-frames=4:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:qm-max=5 -strict -2";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Gs = 100;
                 Rate = 0.82;
@@ -495,7 +494,7 @@ namespace Av1ador
             else if (f == "OpenCL")
                 Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_OCL() + ",hwdownload," + Bit_OCL() + "\"");
             else if (f == "Vulkan")
-                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=1.8:gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0.4:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
+                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=" + (v == "False" ? "1" : "1.8") + ":gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0.4:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             else if (f == "anime4k")
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
             else if (f == "fsrcnnx")
@@ -548,7 +547,7 @@ namespace Av1ador
             }
         }
 
-        public void Vf_update(string f, [Optional] string v, [Optional] string a)
+        public void Vf_update(string f, [Optional] string v, [Optional] string a, [Optional] bool b)
         {
             if (f == "tonemap")
             {
@@ -578,8 +577,8 @@ namespace Av1ador
                 if (!d)
                 {
                     if (Libplacebo)
-                        Vf_add("Vulkan", "");
-                    else
+                        Vf_add("Vulkan", b.ToString());
+                    else if (b)
                         Vf_add("OpenCL", "");
                 }
             }
