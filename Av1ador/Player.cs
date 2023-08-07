@@ -59,7 +59,7 @@ namespace Av1ador
             List<IntPtr> ignore = new List<IntPtr>();
             foreach (Process p in processes)
                 ignore.Add(p.MainWindowHandle);
-            Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "socket" + processID.ToString()));
+            Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "socket" + processID.ToString()) + " --vo=gpu-next,gpu");
 
             Process mp = mpv1p;
             

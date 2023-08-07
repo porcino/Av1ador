@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.4";
+        private readonly string title = "Av1ador 1.1.5";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -167,7 +167,7 @@ namespace Av1ador
                     mediainfoLabel.Text = primer_video.Mediainfo();
                     checkedListBox1.Items.Clear();
                     checkedListBox1.Items.AddRange(primer_video.Tracks.ToArray());
-                    hdrComboBox.Enabled = primer_video.Hdr > 0;
+                    hdrComboBox.Enabled = primer_video.Hdr == 1;
                     encoder.Set_audio_codec(caComboBox.Text.Split(' ')[0], primer_video.Channels);
                     Func.Update_combo(chComboBox, encoder.Channels, true);
                     caComboBox.Enabled = chComboBox.Enabled;
