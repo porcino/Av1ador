@@ -12,6 +12,7 @@ namespace Av1ador
         private static bool shouldsave;
         private static int lastupdate;
         private static int refresh;
+        public static object[] elapsed_add;
         public string File { get; set; }
         public int Status { get; set; }
         public int Elapsed { get; set; }
@@ -75,6 +76,12 @@ namespace Av1ador
                 e.Graphics.DrawString((dir + "\\" + name).Replace(@"\\",@"\"), e.Font, Brushes.Black, e.Bounds);
                 if (entry.Elapsed > 0 || entry.Status == 1)
                 {
+                    int add = elapsed_add != null ? Convert.ToInt32(elapsed_add[0]) : 0;
+                    if (add > 0 && (string)elapsed_add[1] == entry.File) {
+                        entry.Elapsed += add;
+                        elapsed_add = null;
+                        Save_entries(list);
+                    }
                     int x = e.Bounds.Right - 52;
                     int y = e.Bounds.Bottom - 16;
                     e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index, entry.Status), x, y, 51, 15);

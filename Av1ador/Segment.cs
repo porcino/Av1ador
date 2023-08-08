@@ -457,6 +457,8 @@ namespace Av1ador
                             {
                                 for (int j = 0; j < Order.Count; j++)
                                     Chunks[Order[j]].Frames = 0;
+                                if (watch.ElapsedMilliseconds > 10000)
+                                    Entry.elapsed_add = new object[] { watch.ElapsedMilliseconds, File };
                             }
                             watch.Reset();
                             watch.Start();
@@ -479,7 +481,11 @@ namespace Av1ador
                     if (chunk.Completed)
                         done++;
                     if (instances >= Workers && skip)
+                    {
+                        if (watch.ElapsedMilliseconds > 300000)
+                            Entry.elapsed_add = new object[] { watch.ElapsedMilliseconds, File };
                         break;
+                    }
                 }
                 if (done == Chunks.Length)
                 {

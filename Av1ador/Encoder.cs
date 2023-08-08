@@ -159,7 +159,7 @@ namespace Av1ador
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "2", "3", "*4", "5", "6", "7", "8 (fastest)" };
                 speed_str = "-cpu-used ";
-                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -aom-params sharpness=4:max-gf-interval=20:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=3:arnr-strength=4:max-reference-frames=4:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:qm-max=5 -strict -2";
+                Params = "-tune 1 -enable-restoration 0 -threads !threads! -tiles 2x1 -keyint_min !minkey! -g !maxkey! -aom-params sharpness=4:max-gf-interval=20:gf-max-pyr-height=4:disable-trellis-quant=2:denoise-noise-level=!gs!:enable-dnl-denoising=0:denoise-block-size=16:arnr-maxframes=3:arnr-strength=4:max-reference-frames=4:enable-rect-partitions=0:enable-filter-intra=0:enable-masked-comp=0:enable-qm=1:qm-min=1:qm-max=5 -strict -2";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Gs = 100;
                 Rate = 0.82;
@@ -379,7 +379,7 @@ namespace Av1ador
         {
             if (f.IndexOf("nlmeans") > -1)
             {
-                Regex regex = new Regex(@"_opencl=s=([0-9]+):p=([0-9]+):r=([0-9]+)");
+                Regex regex = new Regex(@"_opencl=s=([0-9\.]+):p=([0-9]+):r=([0-9]+)");
                 Match match = regex.Match(f);
                 if (match.Success)
                     return "nlmeans=s=" + match.Groups[1].Value + ":p=" + match.Groups[2].Value + ":r=" + match.Groups[3].Value;
