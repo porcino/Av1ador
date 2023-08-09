@@ -24,6 +24,8 @@ namespace Av1ador
         private readonly Stopwatch watch;
         private int bitrate;
         private double track_delay;
+        private int[] fps = new int[0];
+        private int frames_last;
         public string Dir { get; set; }
         public string File { get; set; }
         public string Name { get; set; }
@@ -126,7 +128,16 @@ namespace Av1ador
                         int f = 0;
                         foreach (var chunk in Chunks.ToList())
                             f += chunk.Frames;
-                        speed = Math.Round((double)f / watch.ElapsedMilliseconds * 1000.0, 2);
+                        int frames_new = f - frames_last;
+                        frames_last = f;
+                        if (frames_new >= 0)
+                        {
+                            if (fps.Count() >= 40)
+                                fps = fps.Skip(1).ToArray();
+                            fps = fps.Concat(new int[] { frames_new }).ToArray();
+                        }
+
+                        speed = Math.Round((double)fps.Sum() / ((double)fps.Length * 1.5), 2);
                         return speed;
                     }
                     return 0;
@@ -460,6 +471,8 @@ namespace Av1ador
                                 if (watch.ElapsedMilliseconds > 10000)
                                     Entry.elapsed_add = new object[] { watch.ElapsedMilliseconds, File };
                             }
+                            fps = new int[0];
+                            frames_last = 0;
                             watch.Reset();
                             watch.Start();
                         }
