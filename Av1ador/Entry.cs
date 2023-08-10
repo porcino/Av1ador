@@ -13,6 +13,7 @@ namespace Av1ador
         private static int lastupdate;
         private static int refresh;
         public static object[] elapsed_add;
+        public static int Lastsave { get; set; }
         public string File { get; set; }
         public int Status { get; set; }
         public int Elapsed { get; set; }
@@ -81,11 +82,12 @@ namespace Av1ador
                         entry.Elapsed += add;
                         elapsed_add = null;
                         Save_entries(list);
+                        Lastsave = (int)ts.TotalMilliseconds;
                     }
                     int x = e.Bounds.Right - 52;
                     int y = e.Bounds.Bottom - 16;
                     e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index, entry.Status), x, y, 51, 15);
-                    string t = ((entry.Status == 1 ? ts : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed)).ToString().Split('.')[0];
+                    string t = ((entry.Status == 1 ? ts : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed - Lastsave)).ToString().Split('.')[0];
                     e.Graphics.DrawString("[" + t + "]", e.Font, Brushes.Black, x, y);
                 }
             }
@@ -106,7 +108,10 @@ namespace Av1ador
                     if (status != entry.Status)
                     {
                         if (entry.Status == 2 || entry.Status == -1 || (status == 1 && entry.Status == 0))
-                            entry.Elapsed += lastupdate;
+                        {
+                            entry.Elapsed += lastupdate - Lastsave;
+                            Lastsave = 0;
+                        }
                         Save(list, true);
                         if (!running && entry.Status != 1)
                             list.Refresh();
