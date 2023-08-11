@@ -525,17 +525,17 @@ namespace Av1ador
             Status.Add("Merging segments...");
             var files = new List<string>();
             for (int i = 0; i < Chunks.Length; i++)
-                files.Add("file '" + i.ToString("00000").ToString() + "." + Job + "'");
-            System.IO.File.WriteAllLines(Name + "\\concat.txt", files.ToArray());
+                files.Add("file '" + Name.Replace(tempdir, "") + "\\" + i.ToString("00000").ToString() + "." + Job + "'");
+            System.IO.File.WriteAllLines(tempdir + "concat.txt", files.ToArray());
             Process ffconcat = new Process();
             Func.Setinicial(ffconcat, 3);
             string b = A_Job == "m4a" ? "-bsf:a aac_adtstoasc " : "";
             b += Extension == "mp4" ? "-movflags faststart " : "";
             string f = Spd != 1 ? " -itsscale " + Spd : "";
             if (System.IO.File.Exists(Name + "\\audio." + A_Job))
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + " -i \"" + Name + "\\concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay + "ms" : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -i \"" + File + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + " -i \"" + tempdir + "concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay + "ms" : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -i \"" + File + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
             else
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + "  -i \"" + Name + "\\concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + "  -i \"" + tempdir + "concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             ffconcat.Start();
             Regex regex = new Regex("time=([0-9]{2}):([0-9]{2}):([0-9]{2}.[0-9]{2})");
             Match compare;
@@ -574,8 +574,11 @@ namespace Av1ador
                 long size = new FileInfo(Dir + Path.GetFileName(Name) + "_Av1ador." + Extension).Length;
                 if (size > 500 && !System.IO.File.Exists("debug"))
                     Directory.Delete(Name, true);
-            }
-            catch { }
+            } catch { }
+            try
+            {
+                System.IO.File.Delete(tempdir + "concat.txt");
+            } catch { }
         }
 
         public void Background(Segment chunk)
