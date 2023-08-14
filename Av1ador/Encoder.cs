@@ -494,7 +494,7 @@ namespace Av1ador
             else if (f == "OpenCL")
                 Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_OCL() + ",hwdownload," + Bit_OCL() + "\"");
             else if (f == "Vulkan")
-                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=" + (v == "False" ? "1" : "1.8") + ":gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0." + (v == "False" ? "5" : "4") + ":range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
+                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=" + (v == "False" ? "1" : "1.5") + ":gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0." + (v == "False" ? "5" : "45") + ":range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             else if (f == "anime4k")
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
             else if (f == "fsrcnnx")
