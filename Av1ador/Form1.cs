@@ -183,7 +183,7 @@ namespace Av1ador
                     primer_video.CreditsTime = entry.Credits;
                     primer_video.CreditsEndTime = entry.CreditsEnd;
                     cvComboBox.SelectedIndex = entry.Cv;
-                    paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : entry.Param;
+                    paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : encoder.Params_replace((int)Math.Round(primer_video.Fps), entry.Param);
                     bitsComboBox.Text = entry.Bits;
                     numericUpDown1.Value = entry.Crf;
                     abitrateBox.Text = entry.Ba.ToString();
@@ -480,7 +480,7 @@ namespace Av1ador
                 Crf = (int)numericUpDown1.Value,
                 Ba = int.Parse(abitrateBox.Text),
                 Bv = bitrateBox.Text,
-                Resolution = resComboBox.Text
+                Resolution = settings.Resolution
             };
             listBox1.Items.Add(entry);
         }
@@ -1195,7 +1195,6 @@ namespace Av1ador
             else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && (entry.Param != "" || paramsBox.Text != "") && (encoder.Vf.Count == 0 || !encoder.Vf[0].Contains("crop=D")))
             {
                 encoder.Params = paramsBox.Text;
-                paramsBox.Text = encoder.Params_replace((int)primer_video.Fps);
                 encode = new Encode
                 {
                     Split_min_time = 4 + (int)((primer_video.EndTime - primer_video.StartTime) / 1400.0),

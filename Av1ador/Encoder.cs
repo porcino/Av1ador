@@ -349,14 +349,20 @@ namespace Av1ador
             return Math.Round((double)(kbps + ba + fps / 10) * duracion / (double)8 / (double)1024, 1);
         }
 
-        public string Params_replace(int fps)
+        public string Params_replace(int fps, [Optional] string p)
         {
             int minkey = fps > 1 ? fps : 24;
             int maxkey = fps > 1 ? fps * 10 : 240;
             if (Cv == "libxvid")
                 maxkey /= 2;
-            Param = Params.Replace("!minkey!", minkey.ToString()).Replace("!maxkey!", maxkey.ToString()).Replace("!threads!", Threads.ToString()).Replace("!gs!", Gs_level.ToString());
-            return Param;
+            if (p == null)
+                p = Param;
+            p = Func.Param_replace(p, "keyint_min", minkey.ToString());
+            p = Func.Param_replace(p, "min-keyint", minkey.ToString());
+            p = Func.Param_replace(p, "keyint", maxkey.ToString());
+            p = Func.Param_replace(p, "g", maxkey.ToString());
+            p = p.Replace("!minkey!", minkey.ToString()).Replace("!maxkey!", maxkey.ToString()).Replace("!threads!", Threads.ToString()).Replace("!gs!", Gs_level.ToString());
+            return p;
         }
 
         private string Bit_Format([Optional] int bits)
