@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.5";
+        private readonly string title = "Av1ador 1.1.6";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -296,7 +296,7 @@ namespace Av1ador
                     resComboBox.Items.Add(encoder.Resos[i]);
                     if (resComboBox.SelectedIndex < 0)
                     {
-                        if (entry_res != "" && int.Parse(entry_res.Replace("p", "")) <= alto)
+                        if (entry_res != "" && entry_res != "Default" && int.Parse(entry_res.Replace("p", "")) <= alto)
                             resComboBox.Text = entry_res;
                         else if (alto <= Screen.FromControl(this).Bounds.Height || alto <= Screen.FromControl(this).Bounds.Height)
                             resComboBox.Text = encoder.Resos[i];
@@ -480,7 +480,7 @@ namespace Av1ador
                 Crf = (int)numericUpDown1.Value,
                 Ba = int.Parse(abitrateBox.Text),
                 Bv = bitrateBox.Text,
-                Resolution = settings.Resolution
+                Resolution = settings != null ? settings.Resolution : resComboBox.Text,
             };
             listBox1.Items.Add(entry);
         }

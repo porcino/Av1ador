@@ -356,7 +356,7 @@ namespace Av1ador
             if (Cv == "libxvid")
                 maxkey /= 2;
             if (p == null)
-                p = Param;
+                p = Params;
             p = Func.Param_replace(p, "keyint_min", minkey.ToString());
             p = Func.Param_replace(p, "min-keyint", minkey.ToString());
             p = Func.Param_replace(p, "keyint", maxkey.ToString());
