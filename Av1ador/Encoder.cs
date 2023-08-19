@@ -21,7 +21,6 @@ namespace Av1ador
         public static bool Libfdk { get; set; }
         public static bool Libplacebo { get; set; }
         public string[] Resos { get; set; }
-        public string Param { get; set; }
         public int Max_crf { get; set; }
         public int Crf { get; set; }
         public int Cores { get; }
@@ -675,7 +674,7 @@ namespace Av1ador
                 str += Crf.ToString();
             }
             str += (Cv != "librav1e" ? " " : "") + speed_str + Speed;
-            str += (Cv != "librav1e" ? " " : "") + Func.Replace_gs((Func.Param_replace(Param, "enable-keyframe-filtering", "")), Gs_level);
+            str += (Cv != "librav1e" ? " " : "") + Func.Replace_gs((Func.Param_replace(Params, "enable-keyframe-filtering", "")), Gs_level);
             if (V_kbps > 0 && Multipass != "" && !predict && Cv == "libx265")
                 str += ":!reuse!";
             if (!Hdr)

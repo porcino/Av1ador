@@ -558,7 +558,7 @@ namespace Av1ador
             Encoder enc = (Encoder)encoder.Clone();
             enc.Set_video_codec("H264 (x264)");
             enc.Speed = "veryslow";
-            enc.Param = "-x264opts ref=1:me=hex:subme=8:b-adapt=1";
+            enc.Params = "-x264opts ref=1:me=hex:subme=8:b-adapt=1";
             enc.V_kbps = enc.Out_w * enc.Out_h * fr / 100 * 3 / 1024;
             enc.Vf.RemoveAll(s => s.StartsWith("scale=w"));
             int t = 6;
