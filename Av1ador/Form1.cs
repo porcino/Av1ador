@@ -1382,6 +1382,7 @@ namespace Av1ador
         {
             if (togglefButton.Text == "Video")
             {
+                bool resize = false;
                 for (int i = vfListBox.SelectedIndices.Count - 1; i >= 0; i--)
                 {
                     string s = vfListBox.SelectedItems[i].ToString();
@@ -1391,10 +1392,12 @@ namespace Av1ador
                         clTextBox.Text = "";
                     encoder.Vf.RemoveAt(vfListBox.SelectedIndices[i]);
                     if (s.Contains("Anime4K") || s.Contains("FSRCNNX"))
-                        Get_res();
+                        resize = true;
                     if (s.StartsWith("setpts"))
                         encoder.Af.RemoveAll(ss => ss.StartsWith("atempo="));
                 }
+                if (resize)
+                    Get_res();
             }
             else
             {
@@ -1529,7 +1532,7 @@ namespace Av1ador
                 mpv.Scale(scale, scale);
             if (encoder.Vf.FindIndex(s => s.StartsWith("scale")) != -1)
                 return;
-            if (ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
+            if (resComboBox.SelectedIndex > 0 || ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
                 encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
             
             encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
