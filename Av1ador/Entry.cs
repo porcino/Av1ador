@@ -77,18 +77,29 @@ namespace Av1ador
                 e.Graphics.DrawString((dir + "\\" + name).Replace(@"\\",@"\"), e.Font, Brushes.Black, e.Bounds);
                 if (entry.Elapsed > 0 || entry.Status == 1)
                 {
-                    int add = elapsed_add != null ? Convert.ToInt32(elapsed_add[0]) : 0;
-                    if (add > 0 && (string)elapsed_add[1] == entry.File) {
-                        entry.Elapsed += add;
-                        elapsed_add = null;
-                        Save_entries(list);
-                        Lastsave = (int)ts.TotalMilliseconds;
-                    }
                     int x = e.Bounds.Right - 52;
                     int y = e.Bounds.Bottom - 16;
                     e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index, entry.Status), x, y, 51, 15);
-                    string t = ((entry.Status == 1 ? ts : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed)).ToString().Split('.')[0];
+                    string t = ((entry.Status == 1 ? ts - TimeSpan.FromMilliseconds(Lastsave) : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed)).ToString().Split('.')[0];
                     e.Graphics.DrawString("[" + t + "]", e.Font, Brushes.Black, x, y);
+                }
+            }
+        }
+
+        private static void Elapsed_save(ListBox list, TimeSpan ts)
+        {
+            int add = elapsed_add != null ? Convert.ToInt32(elapsed_add[0]) : 0;
+            if (add == 0)
+                return;
+            for (int i = 0; i < list.Items.Count; i++)
+            {
+                Entry entry = list.Items[i] as Entry;
+                if ((string)elapsed_add[1] == entry.File)
+                {
+                    entry.Elapsed += add;
+                    elapsed_add = null;
+                    Save_entries(list);
+                    Lastsave = (int)ts.TotalMilliseconds;
                 }
             }
         }
@@ -109,7 +120,7 @@ namespace Av1ador
                     {
                         if (entry.Status == 2 || entry.Status == -1 || (status == 1 && entry.Status == 0))
                         {
-                            entry.Elapsed += lastupdate - Lastsave;
+                            entry.Elapsed += lastupdate > Lastsave ? lastupdate - Lastsave : 0;
                             Lastsave = 0;
                         }
                         Save(list, true);
@@ -124,6 +135,8 @@ namespace Av1ador
             {
                 refresh = 10;
                 list.Refresh();
+                if (running)
+                    Elapsed_save(list, ts);
             }
         }
 
