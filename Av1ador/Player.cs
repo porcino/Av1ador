@@ -205,7 +205,7 @@ namespace Av1ador
             reading = false;
             in_str = tiempo.Match(in_str).Groups[1].Value.ToString();
             Double.TryParse(in_str, out double d);
-            return d > 0 ? in_str : "";
+            return d >= 0 ? in_str : "";
         }
 
         public void Cmd(string cmd, int mpv = 1)

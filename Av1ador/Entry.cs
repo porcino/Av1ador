@@ -87,7 +87,7 @@ namespace Av1ador
                     int x = e.Bounds.Right - 52;
                     int y = e.Bounds.Bottom - 16;
                     e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index, entry.Status), x, y, 51, 15);
-                    string t = ((entry.Status == 1 ? ts : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed - Lastsave)).ToString().Split('.')[0];
+                    string t = ((entry.Status == 1 ? ts : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed)).ToString().Split('.')[0];
                     e.Graphics.DrawString("[" + t + "]", e.Font, Brushes.Black, x, y);
                 }
             }
