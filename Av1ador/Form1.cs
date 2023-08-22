@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.5";
+        private readonly string title = "Av1ador 1.1.7";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -1898,6 +1898,15 @@ namespace Av1ador
         private void MultiToolStripMenuItem_Click(object sender, EventArgs e)
         {
             encoder.Vf_add((sender as ToolStripMenuItem).Text);
+            Filter_items_update();
+        }
+
+        private void VulkanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (primer_video == null)
+                encoder.Vf_add((sender as ToolStripMenuItem).Text);
+            else
+                encoder.Vf_add((sender as ToolStripMenuItem).Text, (primer_video.Hdr != 2).ToString());
             Filter_items_update();
         }
 

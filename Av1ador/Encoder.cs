@@ -499,7 +499,7 @@ namespace Av1ador
             else if (f == "OpenCL")
                 Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_OCL() + ",hwdownload," + Bit_OCL() + "\"");
             else if (f == "Vulkan")
-                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=" + (v == "False" ? "1" : "1.5") + ":gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0." + (v == "False" ? "5" : "45") + ":range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
+                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=" + (v == "False" ? "1" : "1.5") + ":gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0.45:contrast_recovery=0:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             else if (f == "anime4k")
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
             else if (f == "fsrcnnx")
@@ -600,7 +600,7 @@ namespace Av1ador
                 if (int.Parse(Ch) < int.Parse(v) && int.Parse(Ch) < 3)
                 {
                     if (int.Parse(Ch) == 2)
-                        Af.Insert(0, "sofalizer='" + resdir + "HRIR_CIRC360_NF150.sofa':type=freq:lfegain=1:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'\"");
+                        Af.Insert(0, "sofalizer='" + resdir + "HRIR_CIRC360_NF150.sofa':lfegain=1:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'\"");
                     Af.Add("dynaudnorm=g=3:peak=0.99:maxgain=" + v + ":b=1:r=1");
                 }
             }
@@ -626,10 +626,27 @@ namespace Av1ador
             string str = " -hide_banner -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration!";
             str += " -c:v:0 " + Cv;
             List<string> vf = new List<string>(Vf);
-            if (Vf.Count > 0 && Vf.FindIndex(s => s.StartsWith("setpts=")) > -1)
+            if (Vf.Count > 0)
             {
-                Out_spd = Func.Get_speed(Vf);
-                vf.RemoveAll(s => s.StartsWith("setpts="));
+                if (Vf.FindIndex(s => s.StartsWith("setpts=")) > -1)
+                {
+                    Out_spd = Func.Get_speed(Vf);
+                    vf.RemoveAll(s => s.StartsWith("setpts="));
+                }
+                int pos = vf.FindIndex(s => s.Contains("libplacebo="));
+                if (pos > -1)
+                {
+                    if (pos > 0 && vf[pos - 1].StartsWith("scale"))
+                    {
+                        string[] wh = Func.Find_w_h(new List<string>() { vf[pos - 1] });
+                        Match algo = Regex.Match(vf[pos - 1], @"flags=(bilinear|neighbor|lanczos|spline|gauss)");
+                        string downscaler = "";
+                        if(algo.Success)
+                            downscaler = ":downscaler=" + algo.Groups[1].ToString().Replace("neighbor", "nearest").Replace("spline", "spline36").Replace("gauss", "gaussian");
+                        vf[pos] = vf[pos].Replace("libplacebo=", "libplacebo=w=" + wh[0] + ":h=" + wh[1] + downscaler + ":");
+                        vf.RemoveAll(s => s.StartsWith("scale"));
+                    }
+                }
             }
             if (vf.Count > 0)
             {

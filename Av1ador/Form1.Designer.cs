@@ -1601,7 +1601,7 @@
             this.openclToolStripMenuItem.Name = "openclToolStripMenuItem";
             this.openclToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openclToolStripMenuItem.Text = "OpenCL";
-            this.openclToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            this.openclToolStripMenuItem.Click += new System.EventHandler(this.VulkanToolStripMenuItem_Click);
             // 
             // vulkanToolStripMenuItem
             // 
@@ -1609,7 +1609,7 @@
             this.vulkanToolStripMenuItem.Name = "vulkanToolStripMenuItem";
             this.vulkanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.vulkanToolStripMenuItem.Text = "Vulkan";
-            this.vulkanToolStripMenuItem.Click += new System.EventHandler(this.MultiToolStripMenuItem_Click);
+            this.vulkanToolStripMenuItem.Click += new System.EventHandler(this.VulkanToolStripMenuItem_Click);
             // 
             // upscaleToolStripMenuItem
             // 
