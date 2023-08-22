@@ -468,7 +468,7 @@ namespace Av1ador
                             {
                                 for (int j = 0; j < Order.Count; j++)
                                     Chunks[Order[j]].Frames = 0;
-                                if (watch.ElapsedMilliseconds - Entry.Lastsave > 10000)
+                                if (Entry.elapsed_add == null && watch.ElapsedMilliseconds - Entry.Lastsave > 10000)
                                     Entry.elapsed_add = new object[] { watch.ElapsedMilliseconds - Entry.Lastsave, File };
                             }
                             fps = new int[0];
@@ -496,7 +496,7 @@ namespace Av1ador
                         done++;
                     if (instances >= Workers && skip)
                     {
-                        if (watch.ElapsedMilliseconds - Entry.Lastsave > 300000)
+                        if (Entry.elapsed_add == null && watch.ElapsedMilliseconds - Entry.Lastsave > 300000)
                             Entry.elapsed_add = new object[] { watch.ElapsedMilliseconds - Entry.Lastsave, File };
                         break;
                     }

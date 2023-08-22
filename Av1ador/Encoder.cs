@@ -171,7 +171,7 @@ namespace Av1ador
                 Crf = 36;
                 Bit_depth = new string[] { "10", "8" };
                 Job = j[1];
-                Presets = new string[] { "0 (slowest)", "1", "2", "3", "4", "5", "*6", "7", "8", "9", "10", "11", "12 (fastest)" };
+                Presets = new string[] { "0 (slowest)", "1", "2", "3", "4", "*5", "6", "7", "8", "9", "10", "11", "12 (fastest)" };
                 speed_str = "-preset ";
                 Params = "-svtav1-params tune=0:fast-decode=0:irefresh-type=2:keyint=!maxkey!:enable-overlays=1:enable-restoration=0:film-grain-denoise=0:film-grain=!gs!";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
@@ -499,7 +499,7 @@ namespace Av1ador
             else if (f == "OpenCL")
                 Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_OCL() + ",hwdownload," + Bit_OCL() + "\"");
             else if (f == "Vulkan")
-                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=" + (v == "False" ? "1" : "1.5") + ":gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0.45:contrast_recovery=0:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
+                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=" + (v == "False" ? "1.6" : "1.6") + ":percentile=100:gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0.45:contrast_recovery=0:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             else if (f == "anime4k")
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
             else if (f == "fsrcnnx")

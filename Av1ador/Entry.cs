@@ -94,13 +94,16 @@ namespace Av1ador
             for (int i = 0; i < list.Items.Count; i++)
             {
                 Entry entry = list.Items[i] as Entry;
-                if ((string)elapsed_add[1] == entry.File)
+                try
                 {
-                    entry.Elapsed += add;
-                    elapsed_add = null;
-                    Save_entries(list);
-                    Lastsave = (int)ts.TotalMilliseconds;
-                }
+                    if ((string)elapsed_add[1] == entry.File)
+                    {
+                        entry.Elapsed += add;
+                        elapsed_add = null;
+                        Save_entries(list);
+                        Lastsave = (int)ts.TotalMilliseconds;
+                    }
+                } catch { elapsed_add = null; }
             }
         }
 
@@ -113,7 +116,7 @@ namespace Av1ador
                 if (entry.File == file)
                 {
                     if (restart)
-                        entry.Elapsed = 0;
+                        entry.Elapsed = Lastsave = 0;
                     int status = entry.Status;
                     entry.Status = running ? 1 : failed ? -1 : finished ? 2 : status != -1 && status != 2 ? 0 : entry.Status;
                     if (status != entry.Status)
