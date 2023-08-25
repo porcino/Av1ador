@@ -19,7 +19,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern int GetWindowThreadProcessId(IntPtr hWnd, ref int ProcessID);
 
-        private readonly string mpv_args = " --priority=abovenormal --pause --cache=yes --hr-seek=always --hr-seek-demuxer-offset=5 -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no --tone-mapping=reinhard --tone-mapping-param=0.45 --tone-mapping-mode=rgb --gamut-mapping-mode=clip --gamut-mapping-mode=relative";
+        private readonly string mpv_args = " --priority=abovenormal --no-resume-playback --pause --cache=yes --hr-seek=always --hr-seek-demuxer-offset=5 -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no --tone-mapping=reinhard --tone-mapping-param=0.45 --tone-mapping-mode=rgb --gamut-mapping-mode=relative";
         private static readonly int processID = Process.GetCurrentProcess().Id;
         private System.IO.Pipes.NamedPipeClientStream mpv_tubo;
         private System.IO.Pipes.NamedPipeClientStream mpv2_tubo;

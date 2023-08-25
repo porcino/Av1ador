@@ -969,6 +969,7 @@
             this.scaleBox.Size = new System.Drawing.Size(53, 17);
             this.scaleBox.TabIndex = 4;
             this.scaleBox.Text = "Scale";
+            this.toolTip1.SetToolTip(this.scaleBox, "Downscale automatically");
             this.scaleBox.UseVisualStyleBackColor = true;
             this.scaleBox.CheckedChanged += new System.EventHandler(this.ScaleBox_CheckedChanged);
             // 
@@ -1153,6 +1154,7 @@
             this.gscheckBox.Size = new System.Drawing.Size(15, 14);
             this.gscheckBox.TabIndex = 2;
             this.gscheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.gscheckBox, "Select manually");
             this.gscheckBox.UseVisualStyleBackColor = true;
             this.gscheckBox.CheckedChanged += new System.EventHandler(this.GscheckBox_CheckedChanged);
             // 
@@ -1208,6 +1210,7 @@
             this.workersBox.Name = "workersBox";
             this.workersBox.Size = new System.Drawing.Size(15, 14);
             this.workersBox.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.workersBox, "Select manually");
             this.workersBox.UseVisualStyleBackColor = true;
             this.workersBox.CheckedChanged += new System.EventHandler(this.WorkersBox_CheckedChanged);
             // 

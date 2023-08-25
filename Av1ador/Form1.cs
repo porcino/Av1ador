@@ -1274,7 +1274,7 @@ namespace Av1ador
                     if (underload > 8)
                     {
                         underload = -1;
-                        if (workersUpDown.Value + 1 <= workersUpDown.Maximum && encode.Segments_left > 0 && workersUpDown.Value < Environment.ProcessorCount * 2 / 3)
+                        if (workersUpDown.Value + 1 <= workersUpDown.Maximum && encode.Segments_left > 0 && workersUpDown.Value < Environment.ProcessorCount * 3 / 5)
                             workersUpDown.Value++;
                     }
                 }
@@ -1811,8 +1811,6 @@ namespace Av1ador
                     toolTip1.SetToolTip(listBox1, ((Entry)listBox1.Items[hover]).File);
                     toolTip1.Active = true;
                 }
-                else
-                    toolTip1.Active = false;
             }
         }
 
