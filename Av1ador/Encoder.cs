@@ -600,12 +600,25 @@ namespace Av1ador
         {
             if (f == "sofalizer")
             {
-                Af.RemoveAll(s => s.StartsWith("sofalizer"));
+                Af.RemoveAll(s => s.Contains("sofalizer"));
                 Af.RemoveAll(s => s.StartsWith("dynaudnorm"));
                 if (int.Parse(Ch) < int.Parse(v) && int.Parse(Ch) < 3)
                 {
-                    if (int.Parse(Ch) == 2)
-                        Af.Insert(0, "sofalizer='" + resdir + "HRIR_CIRC360_NF150.sofa':lfegain=1:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'\"");
+                    if (int.Parse(Ch) == 2 && int.Parse(v) > 4 && int.Parse(v) < 9)
+                    {
+                        string pan;
+                        if (int.Parse(v) > 6)
+                        {
+                            v = "8";
+                            pan = "[0:a]pan=stereo|FL=.14FL+.1FC|FR=.14FR+.1FC[lr];[0:a]pan=7.1|c0=.0*c0|c1=.0*c1|c2=.0*c2|c3=c3|c4=c4|c5=c5|c6=c6|c7=c7,";
+                        }
+                        else
+                        {
+                            v = "6";
+                            pan = "[0:a]pan=stereo|FL=.2FL+.14FC|FR=.2FR+.14FC[lr];[0:a]pan=5.1|c0=.0*c0|c1=.0*c1|c2=.0*c2|c3=c3|c4=c4|c5=c5,";
+                        }                        
+                        Af.Insert(0, pan + "sofalizer='" + resdir + "HRIR_CIRC360_NF150.sofa':lfegain=2:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'[sofa];[lr][sofa]amix=normalize=0\"");
+                    }
                     Af.Add("dynaudnorm=g=3:peak=0.99:maxgain=" + v + ":b=1:r=1");
                 }
             }
@@ -772,7 +785,10 @@ namespace Av1ador
                 astr += "-b:a " + Ba + "k";
             if (Af.Count > 0)
                 astr += " -af " + String.Join(",", Af.ToArray());
-            astr += " -map 0:a:" + track;
+            if (astr.IndexOf("[0:a") > -1)
+                astr = astr.Replace(" -af ", " -filter_complex ").Replace("[0:a]", "[0:a:" + track + "]");
+            else
+                astr += " -map 0:a:" + track;
             return astr;
         }
 
