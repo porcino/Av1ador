@@ -433,8 +433,21 @@ namespace Av1ador
         {
             if (listBox1.SelectedItems.Count != 0)
             {
-                while (listBox1.SelectedIndex != -1)
-                    listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+                int sel = 0;
+                while (listBox1.SelectedItems.Count > sel)
+                {
+                    bool keep = false;
+                    if (encodestopButton.Enabled && encode != null)
+                    {
+                        if (encode.File == (listBox1.SelectedItems[sel] as Entry).File)
+                        {
+                            keep = true;
+                            sel++;
+                        }
+                    }
+                    if (!keep)
+                        listBox1.Items.RemoveAt(listBox1.SelectedIndex + sel);
+                }
                 Update_Video_txt();
             }
             if (listBox1.Items.Count == 0)
