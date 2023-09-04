@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.8";
+        private readonly string title = "Av1ador 1.1.9";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -261,8 +261,8 @@ namespace Av1ador
                         scale = zoomButton.Checked ? 2.0 : 1.0;
                         double zoom = Func.Scale(primer_video, video, scale, primer_video.Sar != video.Sar && encoder.Vf.Count > 0 && Func.Find_w_h(encoder.Vf).Count() > 0 ? Double.Parse(Func.Find_w_h(encoder.Vf)[0]) : 0);
                         mpv.Scale(zoom, zoom);
-                        panx_ratio = ((Double)primer_video.Width * (zoom / scale) * (primer_video.Sar > 1 ? primer_video.Sar : 1.0)) / ((Double)video.Width * video.Sar);
-                        pany_ratio = ((Double)primer_video.Height * (zoom / scale) / (primer_video.Sar < 1 ? primer_video.Sar : 1.0)) / ((Double)video.Height / video.Sar);
+                        panx_ratio = ((Double)(Math.Abs(primer_video.Rotation) != 90 ? primer_video.Width : primer_video.Height) * (zoom / scale) * (primer_video.Sar > 1 ? primer_video.Sar : 1.0)) / ((Double)video.Width * video.Sar);
+                        pany_ratio = ((Double)(Math.Abs(primer_video.Rotation) != 90 ? primer_video.Height : primer_video.Width) * (zoom / scale) / (primer_video.Sar < 1 ? primer_video.Sar : 1.0)) / ((Double)video.Height / video.Sar);
                         mpv.Cmd("loadfile \"" + file.Replace(@"\", @"\\").Replace(@"'", @"\'") + "\";set pause yes;set fullscreen yes;set video-pan-x " + (panx * panx_ratio) + ";set video-pan-y " + (pany * pany_ratio) + cmds, 2);
                         mpv.Scale(scale, scale, 2);
                         mpv.Wait_mpv();
@@ -1551,6 +1551,7 @@ namespace Av1ador
             encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
             encoder.Vf_add("deinterlace", primer_video.Interlaced.ToString());
             encoder.Vf_add("autocolor", primer_video.Color_matrix);
+            encoder.Vf_add("rotate", primer_video.Rotation.ToString());
             Filter_items_update();
         }
 

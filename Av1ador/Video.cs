@@ -54,6 +54,7 @@ namespace Av1ador
         public double Sar { get; }
         public double Dar { get; }
         public int Hdr { get; }
+        public int Rotation { get; }
         public string Color_matrix { get; }
         public bool Interlaced { get; }
         public int Channels { get; }
@@ -85,18 +86,16 @@ namespace Av1ador
 
             ffprobe.Start();
             string output = ffprobe.StandardOutput.ReadToEnd();
-            Regex res_regex = new Regex("channels=([0-9])");
+            Regex res_regex = new Regex("channels=([0-9][0-9]?)");
             Match compare = res_regex.Match(output);
-            Channels = compare.Success ? int.Parse(compare.Groups[1].Value) : 0;
+            Channels = compare.Success ? int.Parse(Regex.Replace(compare.Groups[1].Value, "^0$", "2")) : 0;
 
             string info = Get_info(file);
-            res_regex = new Regex(@"Stream #0:([0-9]+).*Video:.*\(default\)");
-            compare = res_regex.Match(info);
+            compare = Regex.Match(info, @"Stream #0:([0-9]+).*Video:.*\(default\)");
             if (compare.Success)
                 Default = int.Parse(compare.Groups[1].ToString()) + 1;
 
-            res_regex = new Regex(" [0-9]{2,5}x[0-9]{2,5}");
-            compare = res_regex.Match(info);
+            compare = Regex.Match(info, " [0-9]{2,5}x[0-9]{2,5}");
             if (compare.Success)
             {
                 Width = int.Parse(compare.ToString().Split('x')[0].Replace(" ", ""));
@@ -109,15 +108,13 @@ namespace Av1ador
                 Duration = len;
             endtime = Duration;
 
-            res_regex = new Regex("SAR ([0-9]+):([0-9]+)");
-            compare = res_regex.Match(info);
+            compare = Regex.Match(info, "SAR ([0-9]+):([0-9]+)");
             if (compare.Success)
                 Sar = Double.Parse(compare.Groups[1].ToString()) / Double.Parse(compare.Groups[2].ToString());
             else
                 Sar = 1;
 
-            res_regex = new Regex("DAR ([0-9]+):([0-9]+)");
-            compare = res_regex.Match(info);
+            compare = Regex.Match(info, "DAR ([0-9]+):([0-9]+)");
             if (compare.Success && (Math.Abs(1.0 - Sar) > 0.01))
                 Dar = Double.Parse(compare.Groups[1].ToString()) / Double.Parse(compare.Groups[2].ToString());
             else if (Height > 0)
@@ -126,13 +123,11 @@ namespace Av1ador
                 Dar = (double)Width / (double)Height;
             }
 
-            res_regex = new Regex("(top first|bottom first)");
-            compare = res_regex.Match(info);
+            compare = Regex.Match(info, "(top first|bottom first)");
             if (compare.Success)
                 Interlaced = true;
 
-            res_regex = new Regex("(bt2020|smpte170m|mpeg2video)");
-            compare = res_regex.Match(info);
+            compare = Regex.Match(info, " (bt2020|smpte170m|mpeg2video)");
             if (compare.Success)
             {
                 Color_matrix = compare.Groups[1].ToString();
@@ -146,8 +141,13 @@ namespace Av1ador
             if (Hdr == 0 && Regex.Match(info, @"Side data:[\r\n]+ *DOVI").Success)
                 Hdr = 2;
 
-            res_regex = new Regex("(23.976|23.98|24|25|30|29.97|60) fps");
-            compare = res_regex.Match(info);
+            compare = Regex.Match(info, "rotation of (-?[0-9]{1,3})");
+            int rotation = 0;
+            if (compare.Success)
+                int.TryParse(compare.Groups[1].ToString(), out rotation);
+            Rotation = rotation;
+
+            compare = Regex.Match(info, "(23.976|23.98|24|25|30|29.97|60) fps");
             if (compare.Success)
                 Fps = Double.Parse(compare.Groups[1].ToString());
             else if (!segundo)

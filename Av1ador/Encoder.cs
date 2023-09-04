@@ -517,6 +517,12 @@ namespace Av1ador
                 Vf.Add("rotate=-PI/2:ow=ih:oh=iw");
             else if (f == "180°")
                 Vf.Add("rotate=PI");
+            else if (f == "rotate" && v != "0")
+            {
+                Vf.RemoveAll(s => s.StartsWith("rotate="));
+                v += "*PI/(-180)";
+                Vf.Add("rotate=" + v + ":ow=rotw(" + v + "):oh=roth(" + v + ")");
+            }
             else if (f.Contains("Horizontal"))
                 Vf.Add("hflip");
             else if (f.Contains("Vertical"))
@@ -534,7 +540,7 @@ namespace Av1ador
                 Af.RemoveAll(s => s.StartsWith("atempo="));
                 if (spd == 1)
                     return;
-                Vf.Add("setpts=" + spd +"*PTS");
+                Vf.Add("setpts=" + spd + "*PTS");
                 spd = 1.0 / spd;
                 while (spd < 0.5)
                 {
@@ -552,7 +558,7 @@ namespace Av1ador
                 };
                 Form1.Dialogo = true;
                 if (filedialog.ShowDialog() == DialogResult.OK)
-                    Vf.Add("\"subtitles='" + filedialog.FileName.Replace(@"\", @"\\").Replace(@":",@"\:") + "'\"");
+                    Vf.Add("\"subtitles='" + filedialog.FileName.Replace(@"\", @"\\").Replace(@":", @"\:") + "'\"");
                 Form1.Dialogo = false;
             }
         }
@@ -641,7 +647,7 @@ namespace Av1ador
 
         public string Build_vstr(bool predict = false)
         {
-            string str = " -hide_banner -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration!";
+            string str = " -hide_banner -copyts -start_at_zero -display_rotation 0 -y !seek! -i \"!file!\" !start! !duration!";
             str += " -c:v:0 " + Cv;
             List<string> vf = new List<string>(Vf);
             if (Vf.Count > 0)

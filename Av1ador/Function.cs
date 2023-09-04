@@ -212,8 +212,15 @@ namespace Av1ador
         public static double Scale(Video v1, Video v2, double scale, double w = 0)
         {
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            return v1.Dar <= v2.Dar || v1.Width == v2.Width * scale || w == v2.Width * scale
-                ? ((double)v2.Width * scale * v2.Sar) / ((double)v1.Width * (v1.Sar > 1 ? v1.Sar : 1.0)) : (double)v2.Height * scale / (double)v1.Height;
+            int rw = v1.Width;
+            int rh = v1.Height;
+            if (Math.Abs(v1.Rotation) == 90)
+            {
+                rw = v1.Height;
+                rh = v1.Width;
+            }
+            return v1.Dar <= v2.Dar || rw == v2.Width * scale || w == v2.Width * scale
+                ? ((double)v2.Width * scale * v2.Sar) / ((double)rw * (v1.Sar > 1 ? v1.Sar : 1.0)) : (double)v2.Height * scale / (double)rh;
         }
 
         public static double Median(int[] a)
