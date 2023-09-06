@@ -948,6 +948,7 @@ namespace Av1ador
                 paramsBox.Text = "";
             }
             trackBar1.Maximum = encoder.Max_crf;
+            numericUpDown1.Maximum = encoder.Max_crf;
             numericUpDown1.Value = encoder.Crf;
             Func.Update_combo(speedComboBox, encoder.Presets, false);
             Dialogo = false;
