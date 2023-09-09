@@ -585,7 +585,10 @@ namespace Av1ador
         {
             string log = chunk.Start();
             if (log == "Retry")
+            {
+                log = "";
                 log = chunk.Start();
+            }
             if (log != "" && !Failed)
             {
                 Failed = true;
