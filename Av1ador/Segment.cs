@@ -584,6 +584,8 @@ namespace Av1ador
         public void Background(Segment chunk)
         {
             string log = chunk.Start();
+            if (log == "Retry")
+                log = chunk.Start();
             if (log != "" && !Failed)
             {
                 Failed = true;
@@ -761,7 +763,7 @@ namespace Av1ador
 
                 if (output != null)
                 {
-                    if (retry && Retry == 0 && output.Contains("error while decoding"))
+                    if (retry && Retry == 0 && (output.Contains("error while decoding") || output.Contains("slice in a frame missing")))
                     {
                         Retry++;
                         Stop = true;
@@ -818,6 +820,7 @@ namespace Av1ador
                 }
                 Progress = 0;
                 Stop = false;
+                return "Retry";
             }
             else
             {

@@ -153,7 +153,7 @@ namespace Av1ador
             {
                 Cv = "libaom-av1";
                 Max_crf = 63;
-                Crf = 36;
+                Crf = 35;
                 Bit_depth = new string[] { "10", "8" };
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "2", "3", "*4", "5", "6", "7", "8 (fastest)" };
@@ -761,12 +761,8 @@ namespace Av1ador
                     astr += "-vbr 3 " + p1;
                 else if (ba < 97)
                     astr += "-vbr 4 " + p1;
-                else if (ba < 110)
-                    astr += "-vbr 1 -cutoff 15000";
-                else if (ba < 116)
-                    astr += "-vbr 1 -cutoff 16000";
                 else if (ba < 121)
-                    astr += "-vbr 1 -cutoff 17000";
+                    astr += "-vbr 5 " + p1;
                 else if (ba < 140)
                     astr += "-vbr 2 -cutoff 17000";
                 else if (ba < 160)
