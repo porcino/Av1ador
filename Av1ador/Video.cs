@@ -192,35 +192,6 @@ namespace Av1ador
             bw2.DoWork += (s, e) =>
             {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                if (Tracks.Count > 0)
-                {
-                    Process fftracks = new Process();
-                    Func.Setinicial(fftracks, 2, " -loglevel quiet -select_streams a -show_entries stream=start_time -of csv=p=0 -i \"" + file + "\"");
-                    fftracks.Start();
-                    output = fftracks.StandardOutput.ReadToEnd();
-                    using (var reader = new StringReader(output))
-                    {
-                        for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                        {
-                            if (line.Replace(" ", "").Replace(",", "") != "")
-                                Tracks_delay.Add(double.Parse(line) * 1000.0);
-                        }
-                    }
-                    while (Tracks_delay.Count < Tracks.Count)
-                        Tracks_delay.Add(0);
-                    fftracks.StartInfo.Arguments = " -loglevel quiet -select_streams v -show_entries stream=start_time -of csv=p=0 -i \"" + file + "\"";
-                    fftracks.Start();
-                    output = fftracks.StandardOutput.ReadToEnd();
-                    using (var reader = new StringReader(output))
-                    {
-                        string line = reader.ReadLine().Replace(" ", "").Replace(",", "");
-                        if (line != "")
-                        {
-                            for (int i = 0; i < Tracks_delay.Count; i++)
-                                Tracks_delay[i] -= double.Parse(line) * 1000.0;
-                        }
-                    }
-                }
 
                 Process ffmpeg = new Process();
                 Func.Setinicial(ffmpeg, 3, " -hide_banner -copyts -start_at_zero -i \"" + file + "\" -t 120 -filter:v \"select='eq(pict_type\\,I)',showinfo\" -f null -");
@@ -285,6 +256,24 @@ namespace Av1ador
                     Kf_interval = 10;
                 if (noteq > 2)
                     Kf_fixed = false;
+
+                if (Tracks.Count > 0)
+                {
+                    Process fftracks = new Process();
+                    Func.Setinicial(fftracks, 2);
+                    while (Tracks_delay.Count < Tracks.Count)
+                        Tracks_delay.Add(0);
+                    for (int i = 0; i < Tracks_delay.Count; i++)
+                    {
+                        fftracks.StartInfo.Arguments = " -loglevel quiet -select_streams a:" + i + " -show_entries frame=best_effort_timestamp_time -read_intervals %+#1 -of csv=p=0 -i \"" + file + "\"";
+                        fftracks.Start();
+                        string delay_str = fftracks.StandardOutput.ReadToEnd();
+                        double.TryParse(new StringReader(delay_str).ReadLine().Replace(" ", "").Replace(",", ""), out double adelay);
+                        if (Math.Abs(adelay) > 0)
+                            Tracks_delay[i] = adelay * 1000.0;
+                        Tracks_delay[i] -= First_frame * 1000.0;
+                    }
+                }
             };
             bw2.RunWorkerCompleted += (s, e) => {
                 Busy = false;

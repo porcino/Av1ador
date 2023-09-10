@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.9";
+        private readonly string title = "Av1ador 1.1.10";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -57,10 +57,10 @@ namespace Av1ador
             aset.DoWork += (s, ee) =>
             {
                 int aid = (int)ee.Argument;
-                while (primer_video != null && primer_video.Busy)
+                while (primer_video != null && (primer_video.Busy || primer_video.Tracks.Count != primer_video.Tracks_delay.Count))
                     Thread.Sleep(30);
-                /*if (primer_video != null && encoder != null)
-                    encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());*/
+                if (primer_video != null && encoder != null)
+                    encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
             };
             aset.RunWorkerCompleted += (s, ee) =>
             {
