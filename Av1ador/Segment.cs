@@ -586,7 +586,7 @@ namespace Av1ador
             string log = chunk.Start();
             if (log == "Retry")
                 log = chunk.Start();
-            if (log != "" && !Failed)
+            if (log != "" && log != "Retry" && !Failed)
             {
                 Failed = true;
                 Set_state(true);
