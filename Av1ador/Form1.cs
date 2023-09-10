@@ -469,9 +469,7 @@ namespace Av1ador
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 foreach (string file in openFileDialog1.FileNames)
-                {
                     Add_entry(file);
-                }
                 Update_Video_txt();
                 if (primer_video == null)
                     Mpv_load_first();
@@ -481,6 +479,9 @@ namespace Av1ador
 
         private void Add_entry(string file)
         {
+            foreach (Entry item in listBox1.Items)
+                if (item.File == file)
+                    return;
             Entry entry = new Entry
             {
                 File = file,
