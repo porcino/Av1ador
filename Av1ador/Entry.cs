@@ -80,8 +80,8 @@ namespace Av1ador
                     int x = e.Bounds.Right - 52;
                     int y = e.Bounds.Bottom - 16;
                     e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index, entry.Status), x, y, 51, 15);
-                    string t = ((entry.Status == 1 ? ts - TimeSpan.FromMilliseconds(Lastsave) : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed)).ToString().Split('.')[0];
-                    e.Graphics.DrawString("[" + t + "]", e.Font, Brushes.Black, x, y);
+                    TimeSpan t = (entry.Status == 1 ? ts - TimeSpan.FromMilliseconds(Lastsave) : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed);
+                    e.Graphics.DrawString("[" + (int)t.TotalHours + ":" + t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00") + "]", e.Font, Brushes.Black, x, y);
                 }
             }
         }

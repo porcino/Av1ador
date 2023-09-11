@@ -30,7 +30,7 @@ namespace Av1ador
         private Video primer_video, segundo_video;
         private double panx, pany, panx_ratio, pany_ratio;
         private bool click_in, mouse1, moviendo_divisor, can_sync;
-        private Point click_pos, mouse_pos, mouse_pos_antes;
+        private Point click_pos, mouse_pos, mouse_pos_antes, mouse_bar;
         private int focus_id, mpv_left, me_x, underload;
         private Encoder encoder;
         private Encode encode;
@@ -737,6 +737,30 @@ namespace Av1ador
             double pos = primer_video.Duration * e.Location.X / picBoxBarra.Width;
             Update_current_time(pos);
             Sync_mpv(pos, e.Location.X, true);
+        }
+
+        private void PicBoxBarra_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (primer_video == null || encodestartButton.Enabled || !statusLabel.Text.Contains("Encoding") || mouse_bar.X == e.X)
+                return;
+            mouse_bar = new Point(e.X, - picBoxBarra.Height * 2);
+            string str = TimeSpan.FromSeconds(primer_video.Duration * e.X / picBoxBarra.Width).ToString().Replace("0000", "");
+            int segment = encode.Get_segment(picBoxBarra.Width, e.X, primer_video.Duration, 0);
+            str += Environment.NewLine + "Segment: " + segment.ToString("00000") + Environment.NewLine + "Status: ";
+            if (encode.Chunks[segment].Encoding)
+                str += "encoding";
+            else if (encode.Chunks[segment].Completed)
+                str += "finished";
+            else
+                str += "inactive";
+            if (encode.Chunks[segment].Retry > 0)
+                str += " (decoding error)";
+            toolTip1.Show(str, picBoxBarra, mouse_bar);
+        }
+
+        private void PicBoxBarra_MouseLeave(object sender, EventArgs e)
+        {
+            toolTip1.Hide(picBoxBarra);
         }
 
         private void ToolStripButton2_Click(object sender, EventArgs e)

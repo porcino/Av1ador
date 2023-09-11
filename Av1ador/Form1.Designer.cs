@@ -2440,6 +2440,8 @@
             this.picBoxBarra.TabIndex = 0;
             this.picBoxBarra.TabStop = false;
             this.picBoxBarra.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PicBoxBarra_MouseClick);
+            this.picBoxBarra.MouseLeave += new System.EventHandler(this.PicBoxBarra_MouseLeave);
+            this.picBoxBarra.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicBoxBarra_MouseMove);
             // 
             // openFileDialog1
             // 
