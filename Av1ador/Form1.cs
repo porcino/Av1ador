@@ -741,20 +741,24 @@ namespace Av1ador
 
         private void PicBoxBarra_MouseMove(object sender, MouseEventArgs e)
         {
-            if (primer_video == null || encodestartButton.Enabled || !statusLabel.Text.Contains("Encoding") || mouse_bar.X == e.X)
+            if (primer_video == null || mouse_bar.X == e.X)
                 return;
-            mouse_bar = new Point(e.X, - picBoxBarra.Height * 2);
+            mouse_bar = new Point(e.X, - picBoxBarra.Height);
             string str = TimeSpan.FromSeconds(primer_video.Duration * e.X / picBoxBarra.Width).ToString().Replace("0000", "");
-            int segment = encode.Get_segment(picBoxBarra.Width, e.X, primer_video.Duration, 0);
-            str += Environment.NewLine + "Segment: " + segment.ToString("00000") + Environment.NewLine + "Status: ";
-            if (encode.Chunks[segment].Encoding)
-                str += "encoding";
-            else if (encode.Chunks[segment].Completed)
-                str += "finished";
-            else
-                str += "inactive";
-            if (encode.Chunks[segment].Retry > 0)
-                str += " (decoding error)";
+            if (encodestopButton.Enabled && statusLabel.Text.Contains("Encoding video"))
+            {
+                mouse_bar.Y -= picBoxBarra.Height;
+                int segment = encode.Get_segment(picBoxBarra.Width, e.X, primer_video.Duration, 0);
+                str += Environment.NewLine + "Segment: " + segment.ToString("00000") + Environment.NewLine + "Status: ";
+                if (encode.Chunks[segment].Encoding)
+                    str += "encoding";
+                else if (encode.Chunks[segment].Completed)
+                    str += "finished";
+                else
+                    str += "inactive";
+                if (encode.Chunks[segment].Retry > 0)
+                    str += " (decoding error)";
+            }
             toolTip1.Show(str, picBoxBarra, mouse_bar);
         }
 
