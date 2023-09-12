@@ -744,8 +744,9 @@ namespace Av1ador
             if (primer_video == null || mouse_bar.X == e.X)
                 return;
             mouse_bar = new Point(e.X, - picBoxBarra.Height);
-            string str = TimeSpan.FromSeconds(primer_video.Duration * e.X / picBoxBarra.Width).ToString().Replace("0000", "");
-            if (encodestopButton.Enabled && statusLabel.Text.Contains("Encoding video"))
+            TimeSpan ts = TimeSpan.FromSeconds(primer_video.Duration * e.X / picBoxBarra.Width);
+            string str = ts.ToString().Replace("0000", "");
+            if (statusLabel.Text.Contains("Encoding video") && encode.File == primer_video.File && ts.TotalSeconds > primer_video.StartTime && ts.TotalSeconds < primer_video.EndTime)
             {
                 mouse_bar.Y -= picBoxBarra.Height;
                 int segment = encode.Get_segment(picBoxBarra.Width, e.X, primer_video.Duration, 0);

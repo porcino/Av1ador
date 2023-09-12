@@ -81,7 +81,7 @@ namespace Av1ador
                     int y = e.Bounds.Bottom - 16;
                     e.Graphics.FillRectangle(Brush_bg(isItemSelected, e.Index, entry.Status), x, y, 51, 15);
                     TimeSpan t = (entry.Status == 1 ? ts - TimeSpan.FromMilliseconds(Lastsave) : new TimeSpan(0)) + TimeSpan.FromMilliseconds(entry.Elapsed);
-                    e.Graphics.DrawString("[" + (int)t.TotalHours + ":" + t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00") + "]", e.Font, Brushes.Black, x, y);
+                    e.Graphics.DrawString("[" + ((int)t.TotalHours).ToString("00") + ":" + t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00") + "]", e.Font, Brushes.Black, x, y);
                 }
             }
         }
