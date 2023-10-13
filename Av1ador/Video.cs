@@ -235,6 +235,8 @@ namespace Av1ador
                             kf.Add(Double.Parse(compare.Groups[1].ToString()) * Timebase);
                     }
                 }
+                if (First_frame == -1)
+                    First_frame = 0;
                 try
                 {
                     ffmpeg.Kill();
