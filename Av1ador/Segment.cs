@@ -525,7 +525,7 @@ namespace Av1ador
             Status.Add("Merging segments...");
             var files = new List<string>();
             for (int i = 0; i < Chunks.Length; i++)
-                files.Add("file '" + Name.Replace(tempdir, "") + "\\" + i.ToString("00000").ToString() + "." + Job + "'");
+                files.Add("file '" + Name.Replace(tempdir, "").Replace("'","\'\\'\'") + "\\" + i.ToString("00000").ToString() + "." + Job + "'");
             System.IO.File.WriteAllLines(tempdir + "concat.txt", files.ToArray());
             Process ffconcat = new Process();
             Func.Setinicial(ffconcat, 3);
