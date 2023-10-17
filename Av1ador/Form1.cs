@@ -750,6 +750,8 @@ namespace Av1ador
             {
                 mouse_bar.Y -= picBoxBarra.Height;
                 int segment = encode.Get_segment(picBoxBarra.Width, e.X, primer_video.Duration, 0);
+                if (segment < 0)
+                    return;
                 str += Environment.NewLine + "Segment: " + segment.ToString("00000") + Environment.NewLine + "Status: ";
                 if (encode.Chunks[segment].Encoding)
                     str += "encoding";
