@@ -517,11 +517,7 @@ namespace Av1ador
             encodefirstButton.Enabled = listBox1.SelectedIndex > 0;
             Update_Video_txt(false);
             if (listBox1.SelectedIndex > -1)
-            {
-                Entry entry = (Entry)listBox1.Items[listBox1.SelectedIndex];
-                if (!File.Exists(entry.File))
-                    listBox1.Items.RemoveAt(listBox1.SelectedIndex);
-            }
+                Mpv_load_first();
             Filter_remove();
         }
 
