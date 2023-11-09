@@ -616,12 +616,12 @@ namespace Av1ador
                         string pan;
                         if (int.Parse(v) > 6)
                         {
-                            v = "8";
+                            v = "7";
                             pan = "[0:a]pan=stereo|FL=.14FL+.1FC|FR=.14FR+.1FC[lr];[0:a]pan=7.1|c0=.0*c0|c1=.0*c1|c2=.0*c2|c3=c3|c4=c4|c5=c5|c6=c6|c7=c7,";
                         }
                         else
                         {
-                            v = "6";
+                            v = "5";
                             pan = "[0:a]pan=stereo|FL=.2FL+.14FC|FR=.2FR+.14FC[lr];[0:a]pan=5.1|c0=.0*c0|c1=.0*c1|c2=.0*c2|c3=c3|c4=c4|c5=c5,";
                         }                        
                         Af.Insert(0, pan + "sofalizer='" + resdir + "HRIR_CIRC360_NF150.sofa':lfegain=2:radius=5,\"firequalizer=gain_entry='entry(50,-2);entry(250,0);entry(1000,1);entry(4000,-0.5);entry(8000,3);entry(16000,4)'[sofa];[lr][sofa]amix=normalize=0\"");
