@@ -707,7 +707,7 @@ namespace Av1ador
             {
                 if (Cv == "libxvid")
                     str += " -qscale:v ";
-                else if (Cv == "h264_nvenc" || Cv == "hevc_nvenc")
+                else if (Cv == "h264_nvenc" || Cv == "hevc_nvenc" || Cv == "av1_nvenc")
                     str += " -maxrate:v 200M -cq:v ";
                 else if (Cv == "librav1e")
                     str += " -rav1e-params quantizer=";
