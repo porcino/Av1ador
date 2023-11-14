@@ -59,7 +59,7 @@ namespace Av1ador
                 int aid = (int)ee.Argument;
                 while (primer_video != null && (primer_video.Busy || primer_video.Tracks.Count != primer_video.Tracks_delay.Count))
                     Thread.Sleep(30);
-                if (primer_video != null && encoder != null)
+                if (primer_video != null && encoder != null && aid > -1)
                     encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
             };
             aset.RunWorkerCompleted += (s, ee) =>
@@ -200,6 +200,8 @@ namespace Av1ador
                         gsUpDown.Value = int.Parse(entry.Gs);
                     for (int i = 0; i < checkedListBox1.Items.Count; i++)
                         checkedListBox1.SetItemCheckState(i, i == entry.Track ? CheckState.Checked : CheckState.Unchecked);
+                    if (checkedListBox1.Items.Count > 0 && checkedListBox1.CheckedItems.Count == 0 && !aset.IsBusy)
+                        aset.RunWorkerAsync(-1);
                     BackgroundWorker bw = new BackgroundWorker();
                     bw.DoWork += (s, e) => {
                         while (disks == null)
