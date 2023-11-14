@@ -531,7 +531,7 @@ namespace Av1ador
             else if (f == "interpolation")
             {
                 Out_fps = (Out_fps > 0 ? Out_fps : (int)double.Parse(v)) * 2;
-                Vf.Add("minterpolate=fps=" + Out_fps.ToString() + ":search_param=96");
+                Vf.Add("minterpolate=fps=" + Out_fps.ToString() + ":mc_mode=aobmc:search_param=48:vsbmc=1:scd_threshold=3");
             }
             else if (f.StartsWith("Speed up") || f.StartsWith("Slow down") || f == "Speed update")
             {
@@ -676,7 +676,7 @@ namespace Av1ador
             if (vf.Count > 0)
             {
                 if (Vf.FindIndex(s => s.Contains("vidstabtransform")) > -1)
-                    str = " -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration! -vf \"scale='min(640,iw)':-2,vidstabdetect=shakiness=10:accuracy=5:result='transforms.trf'\" -f null NUL && ffmpeg" + str;
+                    str = " -copyts -start_at_zero -y !seek! -i \"!file!\" !start! !duration! -vf \"vidstabdetect=shakiness=10:accuracy=5:result='transforms.trf'\" -f null NUL && ffmpeg" + str;
 
                 foreach (string s in Vf)
                 {
