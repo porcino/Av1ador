@@ -1,5 +1,6 @@
 ﻿using Av1ador.Properties;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -371,6 +372,14 @@ namespace Av1ador
                 origfolderButton.Checked = settings.Output_folder.Length == 0;
                 gscheckBox.Checked = settings.Auto_grain_level;
                 // && setting != null
+            }
+            else
+            {
+                settings = new Settings
+                {
+                    CustomVf = new List<string>(),
+                    CustomAf = new List<string>()
+                };
             }
         }
 
