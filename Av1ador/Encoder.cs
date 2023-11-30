@@ -823,7 +823,7 @@ namespace Av1ador
             return str;
         }
 
-        public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto)
+        public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto, List<string> customvf, List<string> customaf)
         {
             if (Form.ActiveForm == null)
                 return;
@@ -869,6 +869,9 @@ namespace Av1ador
                     Auto_grain_level = gsauto.Checked
                 };
             }
+            settings.CustomVf = customvf;
+            settings.CustomAf = customaf;
+
             var writer = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
             var wfile = new System.IO.StreamWriter(@"settings.xml");
             writer.Serialize(wfile, settings);
@@ -904,5 +907,7 @@ namespace Av1ador
         public string Audio_br;
         public string Output_folder;
         public bool Auto_grain_level;
+        public List<string> CustomVf;
+        public List<string> CustomAf;
     }
 }

@@ -24,7 +24,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.1.12";
+        private readonly string title = "Av1ador 1.2";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -1078,7 +1078,7 @@ namespace Av1ador
                 Dialogo = false;
             }
             else if (mpv.Mpv_loaded)
-                encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox);
+                encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings.CustomVf, settings.CustomAf);
         }
 
         private void Exit(bool stop = false)
@@ -1145,7 +1145,7 @@ namespace Av1ador
         {
             if (primer_video == null)
                 return;
-            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox);
+            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings.CustomVf, settings.CustomAf);
             encodestopButton.Enabled = true;
             encodestartButton.Enabled = false;
             encode?.Set_state();
@@ -1341,7 +1341,7 @@ namespace Av1ador
         {
             gsUpDown.Enabled = gscheckBox.Checked;
             gsgroupBox.Text = gscheckBox.Checked ? "Grain synthesis" : "Grain synthesis (auto)";
-            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox);
+            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings.CustomVf, settings.CustomAf);
         }
 
         private void TogglefButton_Click(object sender, EventArgs e)
@@ -1467,6 +1467,27 @@ namespace Av1ador
             {
                 if (afListBox.SelectedIndex > -1)
                     clTextBox.Text = afListBox.SelectedItem.ToString();
+            }
+        }
+
+        private void VfListBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (togglefButton.Text == "Video")
+                {
+                    vfListBox.SelectedIndex = -1;
+                    vfListBox.SelectedIndex = vfListBox.IndexFromPoint(e.X, e.Y);
+                    SaveToolStripMenuItem.Enabled = !(settings.CustomVf.FindIndex(s => s.Equals(vfListBox.SelectedItem.ToString())) > -1);
+                }
+                else
+                {
+                    afListBox.SelectedIndex = -1;
+                    afListBox.SelectedIndex = afListBox.IndexFromPoint(e.X, e.Y);
+                    SaveToolStripMenuItem.Enabled = !(settings.CustomAf.FindIndex(s => s.Equals(afListBox.SelectedItem.ToString())) > -1);
+                }
+                RemoveToolStripMenuItem.Enabled = !SaveToolStripMenuItem.Enabled;
+                FilterContextMenu.Show(Cursor.Position.X, Cursor.Position.Y);
             }
         }
 
@@ -1709,25 +1730,78 @@ namespace Av1ador
 
         private void FilteraddDropDownButton_DropDownOpening(object sender, EventArgs e)
         {
-            bool vulkan = false;
-            bool opencl = !Encoder.Libplacebo;
-            bool tonemap = false;
-            if (encoder.Vf.Count > 0)
+            if (togglefButton.Text == "Video")
             {
-                foreach (var f in encoder.Vf)
+                bool vulkan = false;
+                bool opencl = !Encoder.Libplacebo;
+                bool tonemap = false;
+                if (encoder.Vf.Count > 0)
                 {
-                    if (f.Contains("libplacebo"))
-                        vulkan = true;
-                    if (f.Contains("tonemap"))
-                        tonemap = true;
-                    if (f.Contains("opencl"))
-                        opencl = true;
+                    foreach (var f in encoder.Vf)
+                    {
+                        if (f.Contains("libplacebo"))
+                            vulkan = true;
+                        if (f.Contains("tonemap"))
+                            tonemap = true;
+                        if (f.Contains("opencl"))
+                            opencl = true;
+                    }
                 }
+                denoiseToolStripMenuItem.Enabled = !vulkan;
+                openclToolStripMenuItem.Enabled = !vulkan && !tonemap && (primer_video != null && primer_video.Hdr != 2);
+                vulkanToolStripMenuItem.Enabled = !opencl && !tonemap;
+                upscaleToolStripMenuItem.Enabled = !vulkan;
+
+                savedToolStripMenuItem.DropDownItems.Clear();
+                if (settings.CustomVf.Count() > 0)
+                {
+                    savedToolStripMenuItem.Enabled = true;
+                    SavedMenuItems(true);
+                }
+                else
+                    savedToolStripMenuItem.Enabled = false;
             }
-            denoiseToolStripMenuItem.Enabled = !vulkan;
-            openclToolStripMenuItem.Enabled = !vulkan && !tonemap && (primer_video != null && primer_video.Hdr != 2);
-            vulkanToolStripMenuItem.Enabled = !opencl && !tonemap;
-            upscaleToolStripMenuItem.Enabled = !vulkan;
+            else
+            {
+                savedToolStripMenuItem1.DropDownItems.Clear();
+                if (settings.CustomAf.Count() > 0)
+                {
+                    savedToolStripMenuItem1.Enabled = true;
+                    SavedMenuItems();
+                }
+                else
+                    savedToolStripMenuItem1.Enabled = false;
+            }
+
+        }
+
+        private void SavedMenuItems(bool video = false)
+        {
+            ToolStripMenuItem[] items = new ToolStripMenuItem[video ? settings.CustomVf.Count() : settings.CustomAf.Count()];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = new ToolStripMenuItem
+                {
+                    Name = "SavedItem" + i.ToString(),
+                    Text = video ? settings.CustomVf[i].ToString() : settings.CustomAf[i].ToString()
+                };
+                items[i].Click += new EventHandler(MenuItemClickHandler);
+            }
+
+            if (video)
+                savedToolStripMenuItem.DropDownItems.AddRange(items);
+            else
+                savedToolStripMenuItem1.DropDownItems.AddRange(items);
+        }
+
+        private void MenuItemClickHandler(object sender, EventArgs e)
+        {
+            ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
+            if (togglefButton.Text == "Video")
+                encoder.Vf.Add(clickedItem.ToString());
+            else
+                encoder.Af.Add(clickedItem.ToString());
+            Filter_items_update();
         }
 
         private void SyncButton_CheckStateChanged(object sender, EventArgs e)
@@ -1957,6 +2031,22 @@ namespace Av1ador
         {
             if (bitrateBox.Text.Length > 0)
                 resComboBox.Enabled = !scaleBox.Checked;
+        }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (togglefButton.Text == "Video")
+                settings.CustomVf.Add(vfListBox.SelectedItem.ToString());
+            else
+                settings.CustomAf.Add(afListBox.SelectedItem.ToString());
+        }
+
+        private void RemoveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (togglefButton.Text == "Video")
+                settings.CustomVf.Remove(vfListBox.SelectedItem.ToString());
+            else
+                settings.CustomAf.Remove(afListBox.SelectedItem.ToString());
         }
 
         private void GrainButton_CheckStateChanged(object sender, EventArgs e)

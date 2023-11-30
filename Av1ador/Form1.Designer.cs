@@ -216,6 +216,13 @@
             this.infoTimer = new System.Windows.Forms.Timer(this.components);
             this.mouseTimer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.FilterContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RemoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
+            this.savedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
+            this.savedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -268,6 +275,7 @@
             this.toolStrip4.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxBarra)).BeginInit();
+            this.FilterContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -1396,7 +1404,9 @@
             this.subtitleBurnToolStripMenuItem,
             this.stabilizationToolStripMenuItem,
             this.tonemapToolStripMenuItem,
-            this.upscaleToolStripMenuItem});
+            this.upscaleToolStripMenuItem,
+            this.toolStripSeparator16,
+            this.savedToolStripMenuItem});
             this.filteraddDropDownButton.Image = global::Av1ador.Properties.Resources.RecommendedTest;
             this.filteraddDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.filteraddDropDownButton.Name = "filteraddDropDownButton";
@@ -1651,18 +1661,22 @@
             // 
             // filteraddaDropDownButton
             // 
+            this.filteraddaDropDownButton.AutoSize = false;
             this.filteraddaDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.filteraddaDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.downmixToolStripMenuItem,
             this.noiseReductionToolStripMenuItem,
             this.normalizeToolStripMenuItem,
-            this.volumeToolStripMenuItem});
+            this.volumeToolStripMenuItem,
+            this.toolStripSeparator17,
+            this.savedToolStripMenuItem1});
             this.filteraddaDropDownButton.Image = global::Av1ador.Properties.Resources.RecommendedTest;
             this.filteraddaDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.filteraddaDropDownButton.Name = "filteraddaDropDownButton";
             this.filteraddaDropDownButton.Size = new System.Drawing.Size(29, 21);
             this.filteraddaDropDownButton.Text = "Add audio filter";
             this.filteraddaDropDownButton.Visible = false;
+            this.filteraddaDropDownButton.DropDownOpening += new System.EventHandler(this.FilteraddDropDownButton_DropDownOpening);
             // 
             // downmixToolStripMenuItem
             // 
@@ -1807,6 +1821,7 @@
             this.vfListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.VfListBox_DrawItem);
             this.vfListBox.SelectedIndexChanged += new System.EventHandler(this.AfListBox_SelectedIndexChanged);
             this.vfListBox.DragOver += new System.Windows.Forms.DragEventHandler(this.VfListBox_DragOver);
+            this.vfListBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.VfListBox_MouseUp);
             // 
             // afListBox
             // 
@@ -1825,6 +1840,7 @@
             this.afListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.AfListBox_DrawItem);
             this.afListBox.SelectedIndexChanged += new System.EventHandler(this.AfListBox_SelectedIndexChanged);
             this.afListBox.DragOver += new System.Windows.Forms.DragEventHandler(this.VfListBox_DragOver);
+            this.afListBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.VfListBox_MouseUp);
             // 
             // tableLayoutPanel4
             // 
@@ -2473,6 +2489,53 @@
             // 
             this.toolTip1.ShowAlways = true;
             // 
+            // FilterContextMenu
+            // 
+            this.FilterContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SaveToolStripMenuItem,
+            this.RemoveToolStripMenuItem});
+            this.FilterContextMenu.Name = "FilterContextMenu";
+            this.FilterContextMenu.Size = new System.Drawing.Size(188, 48);
+            // 
+            // SaveToolStripMenuItem
+            // 
+            this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
+            this.SaveToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.SaveToolStripMenuItem.Text = "Save as custom filter";
+            this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
+            // 
+            // RemoveToolStripMenuItem
+            // 
+            this.RemoveToolStripMenuItem.Name = "RemoveToolStripMenuItem";
+            this.RemoveToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.RemoveToolStripMenuItem.Text = "Remove custom filter";
+            this.RemoveToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.AutoSize = false;
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(177, 6);
+            // 
+            // savedToolStripMenuItem
+            // 
+            this.savedToolStripMenuItem.AutoSize = false;
+            this.savedToolStripMenuItem.Name = "savedToolStripMenuItem";
+            this.savedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.savedToolStripMenuItem.Text = "Saved";
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(177, 6);
+            // 
+            // savedToolStripMenuItem1
+            // 
+            this.savedToolStripMenuItem1.AutoSize = false;
+            this.savedToolStripMenuItem1.Name = "savedToolStripMenuItem1";
+            this.savedToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.savedToolStripMenuItem1.Text = "Saved";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2564,6 +2627,7 @@
             this.toolStrip4.PerformLayout();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picBoxBarra)).EndInit();
+            this.FilterContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2755,6 +2819,13 @@
         private System.Windows.Forms.ToolStripButton creditsResetButton;
         private System.Windows.Forms.ToolStripButton grainButton;
         private System.Windows.Forms.ToolStripMenuItem subtitleBurnToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip FilterContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem SaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RemoveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
+        private System.Windows.Forms.ToolStripMenuItem savedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
+        private System.Windows.Forms.ToolStripMenuItem savedToolStripMenuItem1;
     }
 }
 
