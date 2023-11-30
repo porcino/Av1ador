@@ -1487,7 +1487,8 @@ namespace Av1ador
                     SaveToolStripMenuItem.Enabled = !(settings.CustomAf.FindIndex(s => s.Equals(afListBox.SelectedItem.ToString())) > -1);
                 }
                 RemoveToolStripMenuItem.Enabled = !SaveToolStripMenuItem.Enabled;
-                FilterContextMenu.Show(Cursor.Position.X, Cursor.Position.Y);
+                if ((togglefButton.Text == "Video" && vfListBox.SelectedIndex > -1) || (togglefButton.Text != "Video" && afListBox.SelectedIndex > -1))
+                    FilterContextMenu.Show(Cursor.Position.X, Cursor.Position.Y);
             }
         }
 
