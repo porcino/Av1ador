@@ -142,11 +142,15 @@
             this.anime4kToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.anime4kX2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fSRCNNXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
+            this.savedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filteraddaDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.downmixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.noiseReductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.normalizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.volumeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
+            this.savedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.filternewButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.filterupButton = new System.Windows.Forms.ToolStripButton();
@@ -219,10 +223,6 @@
             this.FilterContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RemoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
-            this.savedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
-            this.savedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -1659,6 +1659,19 @@
             this.fSRCNNXToolStripMenuItem.Text = "FSRCNNX x2";
             this.fSRCNNXToolStripMenuItem.Click += new System.EventHandler(this.XToolStripMenuItem_Click);
             // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.AutoSize = false;
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(177, 6);
+            // 
+            // savedToolStripMenuItem
+            // 
+            this.savedToolStripMenuItem.AutoSize = false;
+            this.savedToolStripMenuItem.Name = "savedToolStripMenuItem";
+            this.savedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.savedToolStripMenuItem.Text = "Saved";
+            // 
             // filteraddaDropDownButton
             // 
             this.filteraddaDropDownButton.AutoSize = false;
@@ -1709,6 +1722,19 @@
             this.volumeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.volumeToolStripMenuItem.Text = "Volume";
             this.volumeToolStripMenuItem.Click += new System.EventHandler(this.VolumeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.AutoSize = false;
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(177, 6);
+            // 
+            // savedToolStripMenuItem1
+            // 
+            this.savedToolStripMenuItem1.AutoSize = false;
+            this.savedToolStripMenuItem1.Name = "savedToolStripMenuItem1";
+            this.savedToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.savedToolStripMenuItem1.Text = "Saved";
             // 
             // filternewButton
             // 
@@ -2510,31 +2536,6 @@
             this.RemoveToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.RemoveToolStripMenuItem.Text = "Remove custom filter";
             this.RemoveToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator16
-            // 
-            this.toolStripSeparator16.AutoSize = false;
-            this.toolStripSeparator16.Name = "toolStripSeparator16";
-            this.toolStripSeparator16.Size = new System.Drawing.Size(177, 6);
-            // 
-            // savedToolStripMenuItem
-            // 
-            this.savedToolStripMenuItem.AutoSize = false;
-            this.savedToolStripMenuItem.Name = "savedToolStripMenuItem";
-            this.savedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.savedToolStripMenuItem.Text = "Saved";
-            // 
-            // toolStripSeparator17
-            // 
-            this.toolStripSeparator17.Name = "toolStripSeparator17";
-            this.toolStripSeparator17.Size = new System.Drawing.Size(177, 6);
-            // 
-            // savedToolStripMenuItem1
-            // 
-            this.savedToolStripMenuItem1.AutoSize = false;
-            this.savedToolStripMenuItem1.Name = "savedToolStripMenuItem1";
-            this.savedToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.savedToolStripMenuItem1.Text = "Saved";
             // 
             // Form1
             // 
