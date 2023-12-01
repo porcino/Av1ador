@@ -1579,7 +1579,7 @@ namespace Av1ador
 
         private void ResComboBox_Enter(object sender, EventArgs e)
         {
-            prevheight = int.Parse(resComboBox.Text.Replace("p", ""));
+            int.TryParse(resComboBox.Text.Replace("p", ""), out prevheight);
         }
 
         private void ResComboBox_DropDownClosed(object sender, EventArgs e)
