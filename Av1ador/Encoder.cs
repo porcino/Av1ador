@@ -216,6 +216,7 @@ namespace Av1ador
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Rate = 0.95;
                 Vbr_str = "-undershoot-pct 60 -overshoot-pct 0";
+                Multipass = "-pass 1 -passlogfile \"!log!\"";
             }
             else if (codec == v[5])
             {
@@ -651,6 +652,7 @@ namespace Av1ador
             string str = " -hide_banner -copyts -start_at_zero -display_rotation 0 -y !seek! -i \"!file!\" !start! !duration!";
             str += " -c:v:0 " + Cv;
             List<string> vf = new List<string>(Vf);
+            bool always_2p = Cv == "libvpx-vp9" && Regex.Match(Params, "auto-alt-ref [1-6]").Success;
             if (Vf.Count > 0)
             {
                 if (Vf.FindIndex(s => s.StartsWith("setpts=")) > -1)
@@ -703,6 +705,8 @@ namespace Av1ador
                 if (Cv == "librav1e")
                     str += " -rav1e-params bitrate=!bitrate!";
             }
+            else if (always_2p)
+                str += " " + Multipass;
             else
             {
                 if (Cv == "libxvid")
@@ -722,7 +726,7 @@ namespace Av1ador
             if (!Hdr)
                 str += Color;
             str += " -an";
-            if (V_kbps > 0 && Multipass != "" && !predict)
+            if ((V_kbps > 0 || always_2p) && Multipass != "" && !predict)
                 str = Pass(str) + " -loglevel error -f null NUL && ffmpeg" + Pass(str, 2);
             str += " -map 0:v:0 -muxpreload 0 -muxdelay 0 -mpegts_copyts 1 -bsf:v dump_extra \"!name!\"";
             return str;

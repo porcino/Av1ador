@@ -521,8 +521,7 @@ namespace Av1ador
             Match m = regex.Match(ffmpeg.StandardError.ReadToEnd());
             if (m.Success) {
                 Letterbox = new Rect(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value), int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                if (enc != null)
-                    enc.Vf_add("crop", Letterbox.Width.ToString(), Letterbox.Height.ToString(), Letterbox.X.ToString(), Letterbox.Y.ToString());
+                enc?.Vf_add("crop", Letterbox.Width.ToString(), Letterbox.Height.ToString(), Letterbox.X.ToString(), Letterbox.Y.ToString());
             }
         }
 

@@ -611,11 +611,9 @@ namespace Av1ador
             string ss2 = ss > 0 ? "-ss " + ss.ToString() : "";
             str = str.Replace("!seek!", ss1).Replace("!start!", ss2);
             if (bitrate > 0)
-            {
                 str = str.Replace("!bitrate!", bitrate.ToString());
-                str = str.Replace("!log!.log", name.Replace("\\", "\\\\") + ".log");
-                str = str.Replace("!log!", name);
-            }
+            str = str.Replace("!log!.log", name.Replace("\\", "\\\\") + ".log");
+            str = str.Replace("!log!", name);
             return str.Replace("!name!", name).Replace("transforms.trf", name.Replace(@"\", @"\\") + ".trf");
         }
 
