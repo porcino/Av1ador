@@ -151,11 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="av1ador.ico" />
-    <None Include="Resources\Save.png" />
     <None Include="Resources\Delete.png" />
     <None Include="Resources\OpenFolder.png" />
     <None Include="Resources\CleanData.png" />
-    <None Include="Resources\DocumentsFolder.png" />
     <None Include="Resources\CheckerboardSquare.png" />
     <None Include="Resources\GoToError.png" />
     <None Include="Resources\Paste.png" />

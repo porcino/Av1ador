@@ -1802,7 +1802,7 @@
             this.toolStripSeparator18,
             this.opentempMenuItem});
             this.deltempMenuStrip.Name = "deltempMenuStrip";
-            this.deltempMenuStrip.Size = new System.Drawing.Size(178, 98);
+            this.deltempMenuStrip.Size = new System.Drawing.Size(215, 120);
             // 
             // timestampsMenuItem
             // 
@@ -1811,7 +1811,7 @@
             this.timestampsMenuItem.CheckOnClick = true;
             this.timestampsMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.timestampsMenuItem.Name = "timestampsMenuItem";
-            this.timestampsMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.timestampsMenuItem.Size = new System.Drawing.Size(214, 22);
             this.timestampsMenuItem.Text = "Identified scenes";
             this.timestampsMenuItem.CheckedChanged += new System.EventHandler(this.TimestampsMenuItem_CheckedChanged);
             // 
@@ -1822,8 +1822,8 @@
             this.segmentsMenuItem.CheckOnClick = true;
             this.segmentsMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.segmentsMenuItem.Name = "segmentsMenuItem";
-            this.segmentsMenuItem.Size = new System.Drawing.Size(174, 22);
-            this.segmentsMenuItem.Text = "Encoded segments";
+            this.segmentsMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.segmentsMenuItem.Text = "Encoded video (segments)";
             this.segmentsMenuItem.CheckedChanged += new System.EventHandler(this.TimestampsMenuItem_CheckedChanged);
             // 
             // audioMenuItem
@@ -1833,14 +1833,15 @@
             this.audioMenuItem.CheckOnClick = true;
             this.audioMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.audioMenuItem.Name = "audioMenuItem";
-            this.audioMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.audioMenuItem.Size = new System.Drawing.Size(214, 22);
             this.audioMenuItem.Text = "Encoded audio";
             this.audioMenuItem.CheckedChanged += new System.EventHandler(this.TimestampsMenuItem_CheckedChanged);
             // 
             // toolStripSeparator18
             // 
+            this.toolStripSeparator18.AutoSize = false;
             this.toolStripSeparator18.Name = "toolStripSeparator18";
-            this.toolStripSeparator18.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator18.Size = new System.Drawing.Size(211, 6);
             // 
             // encodestopButton
             // 
@@ -2614,7 +2615,7 @@
             this.opentempMenuItem.AutoSize = false;
             this.opentempMenuItem.Image = global::Av1ador.Properties.Resources.OpenFolder;
             this.opentempMenuItem.Name = "opentempMenuItem";
-            this.opentempMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.opentempMenuItem.Size = new System.Drawing.Size(214, 22);
             this.opentempMenuItem.Text = "Open temp folder...";
             this.opentempMenuItem.Click += new System.EventHandler(this.OpentempMenuItem_Click);
             // 
