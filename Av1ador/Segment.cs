@@ -206,11 +206,11 @@ namespace Av1ador
             Name = Tempdir + Path.GetFileNameWithoutExtension(file);
             if (!Directory.Exists(Name))
                 Directory.CreateDirectory(Name);
-            else
+            else if (!unattended)
             {
                 Form1.Dialogo = true;
                 string[] files = Directory.GetFiles(Name);
-                if (unattended || (files.Length > 0 && MessageBox.Show("There are some files from a previous encoding, do you want to resume it?", "Resume", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No))
+                if (files.Length > 0 && MessageBox.Show("There are some files from a previous encoding, do you want to resume it?", "Resume", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 {
                     foreach (FileInfo f in new DirectoryInfo(Name).GetFiles())
                         f.Delete();
