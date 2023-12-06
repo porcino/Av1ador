@@ -827,7 +827,7 @@ namespace Av1ador
             return str;
         }
 
-        public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto, List<string> customvf, List<string> customaf)
+        public void Save_settings(ToolStripComboBox format, ToolStripComboBox codec_video, ToolStripComboBox speed, ToolStripComboBox resolution, ToolStripComboBox hdr, ToolStripComboBox bit_depth, NumericUpDown crf, ToolStripComboBox codec_audio, ToolStripComboBox channels, TextBox ba, string output_folder, CheckBox gsauto, Settings s)
         {
             if (Form.ActiveForm == null)
                 return;
@@ -854,6 +854,7 @@ namespace Av1ador
                 settings.Audio_br = ba.Text;
                 settings.Output_folder = output_folder;
                 settings.Auto_grain_level = gsauto.Checked;
+                settings.Delete_temp_files = s.Delete_temp_files;
             }
             else
             {
@@ -870,11 +871,12 @@ namespace Av1ador
                     Channels = ch_s,
                     Audio_br = ba.Text,
                     Output_folder = output_folder,
-                    Auto_grain_level = gsauto.Checked
+                    Auto_grain_level = gsauto.Checked,
+                    Delete_temp_files = s.Delete_temp_files
                 };
             }
-            settings.CustomVf = customvf;
-            settings.CustomAf = customaf;
+            settings.CustomVf = s.CustomVf;
+            settings.CustomAf = s.CustomAf;
 
             var writer = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
             var wfile = new System.IO.StreamWriter(@"settings.xml");
@@ -888,6 +890,8 @@ namespace Av1ador
             System.IO.StreamReader file = new System.IO.StreamReader("settings.xml");
             Settings settings = (Settings)reader.Deserialize(file);
             file.Close();
+            if (settings.Delete_temp_files == 0)
+                settings.Delete_temp_files = 15;
             return settings;
         }
 
@@ -911,6 +915,7 @@ namespace Av1ador
         public string Audio_br;
         public string Output_folder;
         public bool Auto_grain_level;
+        public uint Delete_temp_files;
         public List<string> CustomVf;
         public List<string> CustomAf;
     }

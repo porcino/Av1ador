@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.1";
+        private readonly string title = "Av1ador 1.2.3";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -371,12 +371,16 @@ namespace Av1ador
                 outfolderButton.Checked = settings.Output_folder.Length > 0;
                 origfolderButton.Checked = settings.Output_folder.Length == 0;
                 gscheckBox.Checked = settings.Auto_grain_level;
+                timestampsMenuItem.Checked = (settings.Delete_temp_files & 2) != 0;
+                segmentsMenuItem.Checked = (settings.Delete_temp_files & 4) != 0;
+                audioMenuItem.Checked = (settings.Delete_temp_files & 8) != 0;
                 // && setting != null
             }
             else
             {
                 settings = new Settings
                 {
+                    Delete_temp_files = 15,
                     CustomVf = new List<string>(),
                     CustomAf = new List<string>()
                 };
@@ -1087,7 +1091,7 @@ namespace Av1ador
                 Dialogo = false;
             }
             else if (mpv.Mpv_loaded)
-                encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings.CustomVf, settings.CustomAf);
+                encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings);
         }
 
         private void Exit(bool stop = false)
@@ -1154,7 +1158,7 @@ namespace Av1ador
         {
             if (primer_video == null)
                 return;
-            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings.CustomVf, settings.CustomAf);
+            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings);
             encodestopButton.Enabled = true;
             encodestartButton.Enabled = false;
             encode?.Set_state();
@@ -1255,7 +1259,8 @@ namespace Av1ador
                     Job = encoder.Job,
                     Extension = formatComboBox.Text,
                     Workers = (int)workersUpDown.Value,
-                    Param = encoder.Build_vstr()
+                    Param = encoder.Build_vstr(),
+                    Clean = settings.Delete_temp_files
                 };
                 encode.Set_fps_filter(encoder.Vf);
                 double delay = 0;
@@ -1266,7 +1271,7 @@ namespace Av1ador
                     delay = primer_video.Tracks_delay[checkedListBox1.CheckedIndices[0]];
                 }
                 double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
-                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps, encoder.Out_spd);
+                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps, encoder.Out_spd, encodelistButton.Checked);
                 listBox1.Refresh();
             }
             else if (encodestopButton.Enabled && encode.Finished)
@@ -1350,7 +1355,7 @@ namespace Av1ador
         {
             gsUpDown.Enabled = gscheckBox.Checked;
             gsgroupBox.Text = gscheckBox.Checked ? "Grain synthesis" : "Grain synthesis (auto)";
-            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings.CustomVf, settings.CustomAf);
+            encoder.Save_settings(formatComboBox, cvComboBox, speedComboBox, resComboBox, hdrComboBox, bitsComboBox, numericUpDown1, caComboBox, chComboBox, abitrateBox, folderBrowserDialog1.SelectedPath, gscheckBox, settings);
         }
 
         private void TogglefButton_Click(object sender, EventArgs e)
@@ -2057,6 +2062,26 @@ namespace Av1ador
                 settings.CustomVf.Remove(vfListBox.SelectedItem.ToString());
             else
                 settings.CustomAf.Remove(afListBox.SelectedItem.ToString());
+        }
+
+        private void DeltempButton_Click(object sender, EventArgs e)
+        {
+            timestampsMenuItem.Image = timestampsMenuItem.Checked ? Resources.Delete : null;
+            segmentsMenuItem.Image = segmentsMenuItem.Checked ? Resources.Delete : null;
+            audioMenuItem.Image = audioMenuItem.Checked ? Resources.Delete : null;
+            deltempMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
+        }
+
+        private void TimestampsMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            settings.Delete_temp_files = 1 + (uint)((timestampsMenuItem.Checked ? 2 : 0) + (segmentsMenuItem.Checked ? 4 : 0) + (audioMenuItem.Checked ? 8 : 0));
+        }
+
+        private void OpentempMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(encode.Tempdir))
+                Directory.CreateDirectory(encode.Tempdir);
+            Process.Start(encode.Tempdir);
         }
 
         private void GrainButton_CheckStateChanged(object sender, EventArgs e)

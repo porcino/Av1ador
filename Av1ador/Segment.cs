@@ -14,7 +14,6 @@ namespace Av1ador
 {
     internal class Encode
     {
-        const string tempdir = "temp\\";
         private double progress;
         private double initial_progress;
         private double video_size;
@@ -26,6 +25,7 @@ namespace Av1ador
         private double track_delay;
         private int[] fps = new int[0];
         private int frames_last;
+        public string Tempdir { get; } = "temp\\";
         public string Dir { get; set; }
         public string File { get; set; }
         public string Name { get; set; }
@@ -52,6 +52,7 @@ namespace Av1ador
         public double Abr { get; set; }
         public double Peak_br { get; set; }
         public int Counter { get; set; }
+        public uint Clean { get; set; }
         public int Progress
         {
             get
@@ -197,19 +198,19 @@ namespace Av1ador
             bitrate = 0;
         }
 
-        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0, double spd = 1)
+        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0, double spd = 1, bool unattended = false)
         {
             track_delay = delay;
             Dir = dir == "" ? Path.GetDirectoryName(file) + "\\" : dir + "\\";
             File = file;
-            Name = tempdir + Path.GetFileNameWithoutExtension(file);
+            Name = Tempdir + Path.GetFileNameWithoutExtension(file);
             if (!Directory.Exists(Name))
                 Directory.CreateDirectory(Name);
             else
             {
                 Form1.Dialogo = true;
                 string[] files = Directory.GetFiles(Name);
-                if (files.Length > 0 && MessageBox.Show("There are some files from a previous encoding, do you want to resume it?", "Resume", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                if (unattended || (files.Length > 0 && MessageBox.Show("There are some files from a previous encoding, do you want to resume it?", "Resume", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No))
                 {
                     foreach (FileInfo f in new DirectoryInfo(Name).GetFiles())
                         f.Delete();
@@ -525,17 +526,17 @@ namespace Av1ador
             Status.Add("Merging segments...");
             var files = new List<string>();
             for (int i = 0; i < Chunks.Length; i++)
-                files.Add("file '" + Name.Replace(tempdir, "").Replace("'","\'\\'\'") + "\\" + i.ToString("00000").ToString() + "." + Job + "'");
-            System.IO.File.WriteAllLines(tempdir + "concat.txt", files.ToArray());
+                files.Add("file '" + Name.Replace(Tempdir, "").Replace("'","\'\\'\'") + "\\" + i.ToString("00000").ToString() + "." + Job + "'");
+            System.IO.File.WriteAllLines(Tempdir + "concat.txt", files.ToArray());
             Process ffconcat = new Process();
             Func.Setinicial(ffconcat, 3);
             string b = A_Job == "m4a" ? "-bsf:a aac_adtstoasc " : "";
             b += Extension == "mp4" ? "-movflags faststart " : "";
             string f = Spd != 1 ? " -itsscale " + Spd : "";
             if (System.IO.File.Exists(Name + "\\audio." + A_Job))
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + " -i \"" + tempdir + "concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay + "ms" : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -i \"" + File + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + " -i \"" + Tempdir + "concat.txt" + "\"" + (track_delay < 0 ? " -itsoffset " + track_delay + "ms" : "") + " -i \"" + Name + "\\audio." + A_Job + "\" -i \"" + File + "\" -c:v copy -c:a copy -map 0:v:0 -map 1:a:0? " + b + "\"" + Dir + Path.GetFileName(Name) + "_Av1ador." + Extension + "\"";
             else
-                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + "  -i \"" + tempdir + "concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
+                ffconcat.StartInfo.Arguments = " -y -f concat -safe 0" + f + "  -i \"" + Tempdir + "concat.txt" + "\" -c:v copy -an -map 0:v:0 -map_metadata -1 " + b + "\"" + Dir + Path.GetFileNameWithoutExtension(Name) + "_Av1ador." + Extension + "\"";
             ffconcat.Start();
             Regex regex = new Regex("time=([0-9]{2}):([0-9]{2}):([0-9]{2}.[0-9]{2})");
             Match compare;
@@ -572,12 +573,22 @@ namespace Av1ador
             try
             {
                 long size = new FileInfo(Dir + Path.GetFileName(Name) + "_Av1ador." + Extension).Length;
-                if (size > 500 && !System.IO.File.Exists("debug"))
+                if (size > 500 && Clean == 15)
                     Directory.Delete(Name, true);
+                else
+                {
+                    if ((Clean & 2) != 0)
+                        System.IO.File.Delete(Name + "\\segments.txt");
+                    if ((Clean & 4) != 0)
+                        foreach (string f in Directory.GetFiles(Name, "*." + Job).Where(i => i.EndsWith("." + Job)))
+                            System.IO.File.Delete(f);
+                    if ((Clean & 8) != 0)
+                        System.IO.File.Delete(Name + "\\audio." + A_Job);
+                }
             } catch { }
             try
             {
-                System.IO.File.Delete(tempdir + "concat.txt");
+                System.IO.File.Delete(Tempdir + "concat.txt");
             } catch { }
         }
 
@@ -641,7 +652,7 @@ namespace Av1ador
 
         public void Clear_splits(string file)
         {
-            string name = tempdir + Path.GetFileNameWithoutExtension(file);
+            string name = Tempdir + Path.GetFileNameWithoutExtension(file);
             if (System.IO.File.Exists(name + "\\segments.txt"))
                 System.IO.File.Delete(name + "\\segments.txt");
         }
