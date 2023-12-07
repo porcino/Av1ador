@@ -366,14 +366,16 @@ namespace Av1ador
                 caComboBox.Text = settings.Codec_audio != "Default" ? settings.Codec_audio : caComboBox.Text;
                 chComboBox.Text = settings.Channels != "Default" ? settings.Channels : chComboBox.Text;
                 if (before)
+                {
                     abitrateBox.Text = settings.Audio_br;
+                    timestampsMenuItem.Checked = (settings.Delete_temp_files & 2) != 0;
+                    segmentsMenuItem.Checked = (settings.Delete_temp_files & 4) != 0;
+                    audioMenuItem.Checked = (settings.Delete_temp_files & 8) != 0;
+                }
                 folderBrowserDialog1.SelectedPath = settings.Output_folder;
                 outfolderButton.Checked = settings.Output_folder.Length > 0;
                 origfolderButton.Checked = settings.Output_folder.Length == 0;
                 gscheckBox.Checked = settings.Auto_grain_level;
-                timestampsMenuItem.Checked = (settings.Delete_temp_files & 2) != 0;
-                segmentsMenuItem.Checked = (settings.Delete_temp_files & 4) != 0;
-                audioMenuItem.Checked = (settings.Delete_temp_files & 8) != 0;
                 // && setting != null
             }
             else
