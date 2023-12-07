@@ -151,6 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="av1ador.ico" />
+    <None Include="Resources\VirtualMachineOK.png" />
+    <None Include="Resources\Save.png" />
+    <None Include="Resources\Cancel.png" />
     <None Include="Resources\Delete.png" />
     <None Include="Resources\OpenFolder.png" />
     <None Include="Resources\CleanData.png" />

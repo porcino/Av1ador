@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.3";
+        private readonly string title = "Av1ador 1.2.4";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -1293,9 +1293,16 @@ namespace Av1ador
                     heat = Func.Heat(0);
                     workersgroupBox.Refresh();
                     Detener();
-                    mpv.Mpv2_load(this, encode.Dir + Path.GetFileNameWithoutExtension(encode.Name) + "_Av1ador." + encode.Extension, "set pause yes");
-                    mpv.Cmd("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
-                    Update_current_time(primer_video.StartTime);
+                    if (shutdownMenuItem.Checked)
+                        Process.Start("shutdown", "/s /t 0");
+                    else if (exitMenuItem.Checked)
+                        Exit();
+                    else
+                    {
+                        mpv.Mpv2_load(this, encode.Dir + Path.GetFileNameWithoutExtension(encode.Name) + "_Av1ador." + encode.Extension, "set pause yes");
+                        mpv.Cmd("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
+                        Update_current_time(primer_video.StartTime);
+                    }
                 }
                 if (!workersUpDown.Enabled && workersUpDown.Value > 1)
                     workersUpDown.Value = 2;
@@ -2074,9 +2081,10 @@ namespace Av1ador
             deltempMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
         }
 
-        private void TimestampsMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void TimestampsMenuItem_Click(object sender, EventArgs e)
         {
             settings.Delete_temp_files = 1 + (uint)((timestampsMenuItem.Checked ? 2 : 0) + (segmentsMenuItem.Checked ? 4 : 0) + (audioMenuItem.Checked ? 8 : 0));
+            deltempButton.Checked = settings.Delete_temp_files > 1;
         }
 
         private void OpentempMenuItem_Click(object sender, EventArgs e)
@@ -2084,6 +2092,18 @@ namespace Av1ador
             if (!Directory.Exists(encode.Tempdir))
                 Directory.CreateDirectory(encode.Tempdir);
             Process.Start(encode.Tempdir);
+        }
+
+        private void ToolStripButton1_Click(object sender, EventArgs e)
+        {
+            offMenu.Show(Cursor.Position.X, Cursor.Position.Y);
+        }
+
+        private void ShutdownMenuItem_Click(object sender, EventArgs e)
+        {
+            nothingMenuItem.Checked = exitMenuItem.Checked = shutdownMenuItem.Checked = false;
+            (sender as ToolStripMenuItem).Checked = true;
+            offButton.Checked = exitMenuItem.Checked || shutdownMenuItem.Checked;
         }
 
         private void GrainButton_CheckStateChanged(object sender, EventArgs e)
