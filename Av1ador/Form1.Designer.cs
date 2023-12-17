@@ -681,7 +681,7 @@
             this.pastetoolStripButton.Image = global::Av1ador.Properties.Resources.Paste;
             this.pastetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pastetoolStripButton.Name = "pastetoolStripButton";
-            this.pastetoolStripButton.Size = new System.Drawing.Size(23, 20);
+            this.pastetoolStripButton.Size = new System.Drawing.Size(23, 21);
             this.pastetoolStripButton.Text = "Paste filters";
             this.pastetoolStripButton.Click += new System.EventHandler(this.PastetoolStripButton_Click);
             // 

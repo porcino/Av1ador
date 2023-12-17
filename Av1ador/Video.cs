@@ -57,7 +57,7 @@ namespace Av1ador
         public int Rotation { get; }
         public string Color_matrix { get; }
         public bool Interlaced { get; }
-        public int Channels { get; }
+        public List<int> Channels { get; }
         public double Fps { get; set; }
         public double Kf_interval { get; set; }
         public bool Kf_fixed { get; set; }
@@ -80,6 +80,7 @@ namespace Av1ador
             Grain_level = -1;
             Tracks = new List<string> { };
             Tracks_delay = new List<double>();
+            Channels = new List<int>();
 
             Process ffprobe = new Process();
             Func.Setinicial(ffprobe, 2, " -show_entries stream=channels -of compact=p=0:nk=0 -v 0 \"" + file + "\"");
@@ -87,11 +88,13 @@ namespace Av1ador
             ffprobe.Start();
             string output = ffprobe.StandardOutput.ReadToEnd();
             Regex res_regex = new Regex("channels=([0-9][0-9]?)");
-            Match compare = res_regex.Match(output);
-            Channels = compare.Success ? int.Parse(Regex.Replace(compare.Groups[1].Value, "^0$", "2")) : 0;
+            foreach (Match atrack in res_regex.Matches(output))
+                Channels.Add(int.Parse(Regex.Replace(atrack.Groups[1].Value, "^0$", "2")));
+            if (Channels.Count == 0)
+                Channels.Add(0);
 
             string info = Get_info(file);
-            compare = Regex.Match(info, @"Stream #0:([0-9]+).*Video:.*\(default\)");
+            Match compare = Regex.Match(info, @"Stream #0:([0-9]+).*Video:.*\(default\)");
             if (compare.Success)
                 Default = int.Parse(compare.Groups[1].ToString()) + 1;
 
@@ -407,7 +410,7 @@ namespace Av1ador
 
         internal string Mediainfo()
         {
-            string str_ch = Channels.ToString();
+            string str_ch = Channels.Max().ToString();
             switch (str_ch)
             {
                 case "1":

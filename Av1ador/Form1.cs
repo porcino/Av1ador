@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.5";
+        private readonly string title = "Av1ador 1.2.6";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -169,7 +169,7 @@ namespace Av1ador
                     checkedListBox1.Items.Clear();
                     checkedListBox1.Items.AddRange(primer_video.Tracks.ToArray());
                     hdrComboBox.Enabled = primer_video.Hdr > 0;
-                    encoder.Set_audio_codec(caComboBox.Text.Split(' ')[0], primer_video.Channels);
+                    encoder.Set_audio_codec(caComboBox.Text.Split(' ')[0], primer_video.Channels.Max());
                     Func.Update_combo(chComboBox, encoder.Channels, true);
                     caComboBox.Enabled = chComboBox.Enabled;
                     groupBox2.Enabled = chComboBox.Enabled;
@@ -1021,7 +1021,7 @@ namespace Av1ador
 
         private void CaComboBox_DropDownClosed(object sender, EventArgs e)
         {
-            encoder.Set_audio_codec(caComboBox.Text, primer_video == null ? 8 : primer_video.Channels);
+            encoder.Set_audio_codec(caComboBox.Text, primer_video == null ? 8 : primer_video.Channels.Max());
             Func.Update_combo(chComboBox, encoder.Channels, true);
             trackBar2.Minimum = encoder.A_min;
             Abitrate_update(caComboBox.Focused || abitrateBox.Text.Length == 0);
@@ -1071,8 +1071,9 @@ namespace Av1ador
             Abitrate_update(chComboBox.Focused || abitrateBox.Text.Length == 0);
             if (primer_video != null)
             {
-                encoder.Af_add("sofalizer", primer_video.Channels.ToString());
-                downmixToolStripMenuItem.Enabled = primer_video.Channels > 2;
+                if (chComboBox.Focused && checkedListBox1.CheckedItems.Count > 0)
+                    encoder.Af_add("sofalizer", primer_video.Channels[checkedListBox1.CheckedIndices[0]].ToString());
+                downmixToolStripMenuItem.Enabled = primer_video.Channels.Max() > 2;
             }
             Filter_items_update();
             Dialogo = false;
@@ -1271,14 +1272,14 @@ namespace Av1ador
                 };
                 encode.Set_fps_filter(encoder.Vf);
                 double delay = 0;
-                if (primer_video.Channels > 0 && checkedListBox1.CheckedItems.Count > 0)
+                if (primer_video.Channels[0] > 0 && checkedListBox1.CheckedItems.Count > 0)
                 {
                     encode.A_Param = encoder.Build_astr(checkedListBox1.CheckedIndices[0]);
                     encode.A_Job = encoder.A_Job;
                     delay = primer_video.Tracks_delay[checkedListBox1.CheckedIndices[0]];
                 }
                 double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
-                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), primer_video.Channels > 0, delay, encoder.V_kbps, encoder.Out_spd, encodelistButton.Checked);
+                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), checkedListBox1.CheckedItems.Count > 0, delay, encoder.V_kbps, encoder.Out_spd, encodelistButton.Checked);
                 listBox1.Refresh();
             }
             else if (encodestopButton.Enabled && encode.Finished)
@@ -1720,15 +1721,15 @@ namespace Av1ador
 
         private void NormalizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (primer_video != null)
-                encoder.Af_add("normalize", primer_video.Channels.ToString());
+            if (primer_video != null && checkedListBox1.CheckedItems.Count > 0)
+                encoder.Af_add("normalize", primer_video.Channels[checkedListBox1.CheckedIndices[0]].ToString());
             Filter_items_update();
         }
 
         private void DownmixToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (primer_video != null)
-                encoder.Af_add("sofalizer", primer_video.Channels.ToString());
+            if (primer_video != null && checkedListBox1.CheckedItems.Count > 0)
+                encoder.Af_add("sofalizer", primer_video.Channels[checkedListBox1.CheckedIndices[0]].ToString());
             Filter_items_update();
         }
 
@@ -1867,7 +1868,15 @@ namespace Av1ador
                     aset.RunWorkerAsync(e.Index);
             }
             mpv.Cmd("{ \"command\": [\"set_property\", \"aid\", " + (e.Index + 1) + "] }");
-            Entry_update(10, e.NewValue == CheckState.Checked ? e.Index : -1);
+            if (encoder != null && e.Index > -1)
+            {
+                encoder.Ch = primer_video.Channels[e.Index].ToString();
+                encoder.Set_audio_codec(caComboBox.Text, primer_video.Channels[e.Index]);
+                Func.Update_combo(chComboBox, encoder.Channels, true);
+            }
+            encoder.Af_add("sofalizer", primer_video.Channels[e.Index].ToString());
+            Entry_update(10, e.Index);
+            Entry.Save(listBox1);
         }
 
         private void FilterdocButton_Click(object sender, EventArgs e)
