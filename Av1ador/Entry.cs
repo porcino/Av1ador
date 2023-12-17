@@ -30,8 +30,9 @@ namespace Av1ador
         public string Bv { get; set; }
         public int Track { get; set; }
         public string Resolution { get; set; }
+        public string Speed { get; set; }
 
-        
+
         public static int Index(string file, ListBox list)
         {
             for (int i = 0; i < list.Items.Count; i++)
@@ -165,7 +166,7 @@ namespace Av1ador
             }
         }
 
-        public static void Update(int col, string file, ListBox list, ListBox vf, ListBox af, string gs, double credits, double creditsend, int cv, string bits, string param, int crf, int ba, string bv, int track, string res)
+        public static void Update(int col, string file, ListBox list, ListBox vf, ListBox af, string gs, double credits, double creditsend, int cv, string bits, string param, int crf, int ba, string bv, int track, string res, string spd)
         {
             for (int i = 0; i < list.Items.Count; i++)
             {
@@ -239,6 +240,11 @@ namespace Av1ador
                             shouldsave = res != entry.Resolution;
                             if (shouldsave)
                                 entry.Resolution = res;
+                            break;
+                        case 12:
+                            shouldsave = spd != entry.Speed;
+                            if (shouldsave)
+                                entry.Speed = spd;
                             break;
                     }
                     list.Items[i] = entry;

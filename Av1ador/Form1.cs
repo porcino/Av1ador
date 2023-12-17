@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.4";
+        private readonly string title = "Av1ador 1.2.5";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -184,6 +184,7 @@ namespace Av1ador
                     primer_video.CreditsTime = entry.Credits;
                     primer_video.CreditsEndTime = entry.CreditsEnd;
                     cvComboBox.SelectedIndex = entry.Cv;
+                    speedComboBox.Text = entry.Speed;
                     paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : encoder.Params_replace((int)Math.Round(primer_video.Fps), entry.Param);
                     bitsComboBox.Text = entry.Bits;
                     numericUpDown1.Value = entry.Crf;
@@ -349,12 +350,13 @@ namespace Av1ador
             if (File.Exists("settings.xml"))
             {
                 settings = encoder.Load_settings();
-                formatComboBox.Text = settings.Format != "Default" ? settings.Format : formatComboBox.Text;
                 if (before)
+                {
+                    formatComboBox.Text = settings.Format != "Default" ? settings.Format : formatComboBox.Text;
                     cvComboBox.Text = settings.Codec_video != "Default" ? settings.Codec_video : cvComboBox.Text;
-                speedComboBox.Text = settings.Speed != "Default" ? settings.Speed : speedComboBox.Text;
-                if (before)
+                    speedComboBox.Text = settings.Speed != "Default" ? settings.Speed : speedComboBox.Text;
                     resComboBox.Text = settings.Resolution != "Default" ? settings.Resolution : resComboBox.Text;
+                }
                 hdrComboBox.Text = settings.Hdr != "Default" ? settings.Hdr : hdrComboBox.Text;
                 if (before)
                     bitsComboBox.Text = settings.Bit_depth != "Default" ? settings.Bit_depth : bitsComboBox.Text;
@@ -512,6 +514,7 @@ namespace Av1ador
                 Ba = int.Parse(abitrateBox.Text),
                 Bv = bitrateBox.Text,
                 Resolution = settings != null ? settings.Resolution : resComboBox.Text,
+                Speed = speedComboBox.Text,
             };
             listBox1.Items.Add(entry);
         }
@@ -1137,6 +1140,8 @@ namespace Av1ador
                 encoder.Hdr = hdrComboBox.Text == "Yes" && hdrComboBox.Enabled;
                 if (primer_video != null)
                     encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
+
+                Entry_update(12);
             }
             Filter_items_update();
         }
@@ -2246,7 +2251,7 @@ namespace Av1ador
         private void Entry_update(int field, int track = -1)
         {
             if (primer_video != null)
-                Entry.Update(field, primer_video.File, listBox1, vfListBox, afListBox, gsUpDown.Value.ToString(), primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track, resComboBox.Text);
+                Entry.Update(field, primer_video.File, listBox1, vfListBox, afListBox, gsUpDown.Value.ToString(), primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track, resComboBox.Text, speedComboBox.Text);
         }
     }
 }
