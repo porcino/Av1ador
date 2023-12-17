@@ -283,15 +283,10 @@ namespace Av1ador
             if (codec == a[0])
             {
                 if (Libfdk)
-                {
                     Ca = "libfdk_aac";
-                    Channels = new string[] { c[0], c[1], c[2] };
-                }
                 else
-                {
                     Ca = "aac";
-                    Channels = new string[] { c[0], c[1], c[2], c[3] };
-                }
+                Channels = new string[] { c[0], c[1], c[2], c[3] };
                 A_kbps = 112;
                 A_min = 2;
                 A_Job = "m4a";

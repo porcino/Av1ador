@@ -187,6 +187,8 @@ namespace Av1ador
                     speedComboBox.Text = entry.Speed;
                     paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : encoder.Params_replace((int)Math.Round(primer_video.Fps), entry.Param);
                     bitsComboBox.Text = entry.Bits;
+                    if (entry.Crf > numericUpDown1.Maximum)
+                        return;
                     numericUpDown1.Value = entry.Crf;
                     abitrateBox.Text = entry.Ba.ToString();
                     if (entry.Bv.Length > 0)
@@ -366,7 +368,7 @@ namespace Av1ador
                 if (before && crf < 99 && crf > numericUpDown1.Minimum && crf < numericUpDown1.Maximum)
                     numericUpDown1.Value = settings.Crf != "Default" ? crf : numericUpDown1.Value;
                 caComboBox.Text = settings.Codec_audio != "Default" ? settings.Codec_audio : caComboBox.Text;
-                chComboBox.Text = settings.Channels != "Default" ? settings.Channels : chComboBox.Text;
+                chComboBox.Text = settings.Channels != "Default" ? settings.Channels : chComboBox.Items.Count > 1 ? chComboBox.Items[0].ToString() : chComboBox.Text.ToString();
                 if (before)
                 {
                     abitrateBox.Text = settings.Audio_br;
@@ -1071,7 +1073,7 @@ namespace Av1ador
             Abitrate_update(chComboBox.Focused || abitrateBox.Text.Length == 0);
             if (primer_video != null)
             {
-                if (chComboBox.Focused && checkedListBox1.CheckedItems.Count > 0)
+                if (checkedListBox1.CheckedItems.Count > 0)
                     encoder.Af_add("sofalizer", primer_video.Channels[checkedListBox1.CheckedIndices[0]].ToString());
                 downmixToolStripMenuItem.Enabled = primer_video.Channels.Max() > 2;
             }
@@ -2260,7 +2262,11 @@ namespace Av1ador
         private void Entry_update(int field, int track = -1)
         {
             if (primer_video != null)
+            {
+                listBox1.SelectedIndexChanged -= new EventHandler(ListBox1_SelectedIndexChanged);
                 Entry.Update(field, primer_video.File, listBox1, vfListBox, afListBox, gsUpDown.Value.ToString(), primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track, resComboBox.Text, speedComboBox.Text);
+                listBox1.SelectedIndexChanged += new EventHandler(ListBox1_SelectedIndexChanged);
+            }
         }
     }
 }
