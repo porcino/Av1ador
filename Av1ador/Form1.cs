@@ -1509,13 +1509,13 @@ namespace Av1ador
                 {
                     vfListBox.SelectedIndex = -1;
                     vfListBox.SelectedIndex = vfListBox.IndexFromPoint(e.X, e.Y);
-                    SaveToolStripMenuItem.Enabled = !(settings.CustomVf.FindIndex(s => s.Equals(vfListBox.SelectedItem.ToString())) > -1);
+                    SaveToolStripMenuItem.Enabled = vfListBox.SelectedIndex > -1 && !(settings.CustomVf.FindIndex(s => s.Equals(vfListBox.SelectedItem.ToString())) > -1);
                 }
                 else
                 {
                     afListBox.SelectedIndex = -1;
                     afListBox.SelectedIndex = afListBox.IndexFromPoint(e.X, e.Y);
-                    SaveToolStripMenuItem.Enabled = !(settings.CustomAf.FindIndex(s => s.Equals(afListBox.SelectedItem.ToString())) > -1);
+                    SaveToolStripMenuItem.Enabled = afListBox.SelectedIndex > -1 && !(settings.CustomAf.FindIndex(s => s.Equals(afListBox.SelectedItem.ToString())) > -1);
                 }
                 RemoveToolStripMenuItem.Enabled = !SaveToolStripMenuItem.Enabled;
                 if ((togglefButton.Text == "Video" && vfListBox.SelectedIndex > -1) || (togglefButton.Text != "Video" && afListBox.SelectedIndex > -1))
