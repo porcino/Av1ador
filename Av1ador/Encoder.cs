@@ -603,9 +603,15 @@ namespace Av1ador
         {
             if (f == "sofalizer")
             {
-                Af.RemoveAll(s => s.Contains("sofalizer"));
-                Af.RemoveAll(s => s.StartsWith("dynaudnorm"));
-                if (int.Parse(Ch) < int.Parse(v) && int.Parse(Ch) < 3)
+                if (!(int.Parse(Ch) < int.Parse(v) && int.Parse(Ch) < 3))
+                {
+                    if (Af.FindIndex(s => s.Contains("sofalizer")) > -1)
+                    {
+                        Af.RemoveAll(s => s.Contains("sofalizer"));
+                        Af.RemoveAll(s => s.StartsWith("dynaudnorm"));
+                    }
+                }
+                else if (Af.FindIndex(s => s.Contains("sofalizer")) == -1)
                 {
                     if (int.Parse(Ch) == 2 && int.Parse(v) > 4 && int.Parse(v) < 9)
                     {
@@ -626,10 +632,7 @@ namespace Av1ador
                 }
             }
             else if (f == "volume")
-            {
-                Af.RemoveAll(s => s.StartsWith("volume"));
                 Af.Add("volume=1.3");
-            }
             if (f == "normalize")
                 Af.Add("dynaudnorm=g=3:peak=0.99:maxgain=" + v + ":b=1:r=1");
             if (f == "adelay")
