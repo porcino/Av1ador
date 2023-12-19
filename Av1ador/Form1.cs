@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.6";
+        private readonly string title = "Av1ador 1.2.7";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -60,7 +60,7 @@ namespace Av1ador
                 int aid = (int)ee.Argument;
                 while (primer_video != null && (primer_video.Busy || primer_video.Tracks.Count != primer_video.Tracks_delay.Count))
                     Thread.Sleep(30);
-                if (primer_video != null && encoder != null && aid > -1)
+                if (primer_video != null && encoder != null && aid > -1 && primer_video.Tracks_delay.Count > 0)
                     encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
             };
             aset.RunWorkerCompleted += (s, ee) =>
@@ -351,7 +351,16 @@ namespace Av1ador
         {
             if (File.Exists("settings.xml"))
             {
-                settings = encoder.Load_settings();
+                if (settings == null)
+                    settings = encoder.Load_settings();
+                else
+                {
+                    Settings cfg = encoder.Load_settings();
+                    cfg.CustomVf = settings.CustomVf;
+                    cfg.CustomAf = settings.CustomAf;
+                    cfg.Delete_temp_files = settings.Delete_temp_files;
+                    settings = cfg;
+                }
                 if (before)
                 {
                     formatComboBox.Text = settings.Format != "Default" ? settings.Format : formatComboBox.Text;
@@ -1305,7 +1314,7 @@ namespace Av1ador
                         Process.Start("shutdown", "/s /t 0");
                     else if (exitMenuItem.Checked)
                         Exit();
-                    else
+                    else if (primer_video.File == encode.File)
                     {
                         mpv.Mpv2_load(this, encode.Dir + Path.GetFileNameWithoutExtension(encode.Name) + "_Av1ador." + encode.Extension, "set pause yes");
                         mpv.Cmd("set pause yes;seek " + primer_video.StartTime.ToString() + " absolute+exact");
