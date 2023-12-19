@@ -109,11 +109,11 @@ namespace Av1ador
             bw.RunWorkerCompleted += (s, ee) =>
             {
                 Entry.Load(listBox1);
+                Restore_settings(true);
                 listBox1.SelectedIndex = Entry.Index("-1", listBox1);
 
                 underload = -2;
                 Program.Log = true;
-                Restore_settings(true);
                 Mpv_load_first();
                 infoTimer.Enabled = true;
                 mouseTimer.Enabled = true;

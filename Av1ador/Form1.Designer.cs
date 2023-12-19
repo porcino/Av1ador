@@ -2590,14 +2590,14 @@
             this.SaveToolStripMenuItem,
             this.RemoveToolStripMenuItem});
             this.FilterContextMenu.Name = "FilterContextMenu";
-            this.FilterContextMenu.Size = new System.Drawing.Size(188, 48);
+            this.FilterContextMenu.Size = new System.Drawing.Size(188, 70);
             // 
             // SaveToolStripMenuItem
             // 
             this.SaveToolStripMenuItem.AutoSize = false;
             this.SaveToolStripMenuItem.Image = global::Av1ador.Properties.Resources.Save;
             this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
-            this.SaveToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.SaveToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.SaveToolStripMenuItem.Text = "Save as custom filter";
             this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
@@ -2606,7 +2606,7 @@
             this.RemoveToolStripMenuItem.AutoSize = false;
             this.RemoveToolStripMenuItem.Image = global::Av1ador.Properties.Resources.Cancel;
             this.RemoveToolStripMenuItem.Name = "RemoveToolStripMenuItem";
-            this.RemoveToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.RemoveToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.RemoveToolStripMenuItem.Text = "Remove custom filter";
             this.RemoveToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
             // 
