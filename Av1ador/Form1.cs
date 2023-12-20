@@ -1152,8 +1152,11 @@ namespace Av1ador
                 encoder.Hdr = hdrComboBox.Text == "Yes" && hdrComboBox.Enabled;
                 if (primer_video != null)
                     encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
-
-                Entry_update(12);
+                if (speedComboBox.Focused == true)
+                {
+                    Entry_update(12);
+                    Entry.Save(listBox1);
+                }
             }
             Filter_items_update();
         }
@@ -1170,8 +1173,12 @@ namespace Av1ador
                     encoder.Vf_update("tonemap", hdrComboBox.Text, hdrComboBox.Enabled.ToString(), primer_video.Hdr != 2);
             }
             Filter_items_update();
-            Entry_update(5);
-        }
+            if (bitsComboBox.Focused == true)
+            {
+                Entry_update(5);
+                Entry.Save(listBox1);
+            }
+         }
 
         private void EncodestartButton_Click(object sender, EventArgs e)
         {
