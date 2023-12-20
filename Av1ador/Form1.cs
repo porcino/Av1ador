@@ -817,6 +817,8 @@ namespace Av1ador
 
         private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
+            if (numericUpDown1.Focused == false && trackBar1.Focused == false)
+                return;
             trackBar1.Value = (int)numericUpDown1.Value;
             encoder.Crf = (int)numericUpDown1.Value;
             Entry_update(7);
