@@ -611,7 +611,7 @@ namespace Av1ador
                         Af.RemoveAll(s => s.StartsWith("dynaudnorm"));
                     }
                 }
-                else if (Af.FindIndex(s => s.Contains("sofalizer")) == -1)
+                else if (Af.FindIndex(s => s.Contains("sofalizer")) == -1 && Af.FindIndex(s => s.Contains("pan=stereo")) == -1)
                 {
                     if (int.Parse(Ch) == 2 && int.Parse(v) > 4 && int.Parse(v) < 9)
                     {
