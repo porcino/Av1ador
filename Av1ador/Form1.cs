@@ -1643,7 +1643,7 @@ namespace Av1ador
             encoder.Out_h = (int)(Math.Floor(((ow * (double)primer_video.Height / (double)primer_video.Width / primer_video.Sar) + (double)1) / (double)2) * 2);
             if (segundo_video == null)
                 mpv.Scale(scale, scale);
-            if (encoder.Vf.FindIndex(s => s.StartsWith("scale")) != -1)
+            if (encoder.Vf.FindIndex(s => s.StartsWith("scale")) != -1 || encoder.Vf.FindIndex(s => s.StartsWith("zscale")) != -1)
                 return;
             if (resComboBox.SelectedIndex > 0 || ow < (double)primer_video.Width * primer_video.Sar - 1 || primer_video.Sar != 1)
                 encoder.Vf_add("scale", ow.ToString(), encoder.Out_h.ToString(), primer_video.Width.ToString(), primer_video.Height.ToString());
