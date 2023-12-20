@@ -500,7 +500,7 @@ namespace Av1ador
                     Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=1.6:gamut_mode=relative:tonemapping=reinhard:tonemapping_param=0.5:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
                 else
                     Vf.Add("\"curves=m=0/0 0.25/0.3 0.87/0.88 1/1," + Bit_Format(10) + ",hwupload,libplacebo=minimum_peak=4.0:gamut_mode=relative:tonemapping=hable:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");*/
-                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=percentile=99.6:gamut_mode=relative:tonemapping=bt.2446a:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
+                Vf.Add("\"" + Bit_Format(10) + ",hwupload,libplacebo=percentile=98.9:gamut_mode=relative:tonemapping=bt.2446a:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:" + Bit_Format() + ",hwdownload," + Bit_Format() + "\"");
             }
             else if (f == "anime4k")
                 Vf.Add(Bit_Format() + ",hwupload,libplacebo='custom_shader_path=" + resdir + "Anime4K_Restore_CNN_" + (v == "1.5" ? "Soft_" : "") + "VL.glsl',libplacebo='w=iw*" + v + ":h=ih*" + v + ":custom_shader_path=" + resdir + "Anime4K_Upscale_Denoise_CNN_x2_VL.glsl',hwdownload," + Bit_Format());
