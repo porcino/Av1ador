@@ -639,6 +639,8 @@
             // 
             // deltempButton
             // 
+            this.deltempButton.Checked = true;
+            this.deltempButton.CheckState = System.Windows.Forms.CheckState.Checked;
             this.deltempButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.deltempButton.Image = global::Av1ador.Properties.Resources.CleanData;
             this.deltempButton.ImageTransparentColor = System.Drawing.Color.Magenta;

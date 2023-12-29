@@ -493,7 +493,7 @@ namespace Av1ador
             else if (f == "Denoise")
                 Vf.Add("format=pix_fmts=yuv420p,hwupload,nlmeans_opencl=s=3:p=15:r=7,hwdownload,format=pix_fmts=yuv420p");
             else if (f == "OpenCL")
-                Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_OCL() + ",hwdownload," + Bit_OCL() + "\"");
+                Vf.Add("\"curves=m=0/0 0.25/0.2 0.63/0.53 1/0.6:r=0/0 0.5/0.504 1/1:g=0.005/0 0.506/0.5 1/1,format=p010,hwupload,tonemap_opencl=tonemap=hable:desat=0:threshold=0:r=tv:p=bt709:t=bt709:m=bt709:" + Bit_OCL() + ",hwdownload," + Bit_OCL() + "\"");
             else if (f == "Vulkan")
             {
                 /*if (v == "False")

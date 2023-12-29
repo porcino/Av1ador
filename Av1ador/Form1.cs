@@ -25,8 +25,8 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.7";
-        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|3gp|png)$", RegexOptions.IgnoreCase);
+        private readonly string title = "Av1ador 1.2.8";
+        private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|asf|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
         private double panx, pany, panx_ratio, pany_ratio;
@@ -190,6 +190,7 @@ namespace Av1ador
                     if (entry.Crf > numericUpDown1.Maximum)
                         return;
                     numericUpDown1.Value = entry.Crf;
+                    trackBar1.Value = (int)numericUpDown1.Value;
                     abitrateBox.Text = entry.Ba.ToString();
                     if (entry.Bv.Length > 0)
                     {
@@ -374,7 +375,7 @@ namespace Av1ador
                 int crf = 99;
                 try { crf = int.Parse(settings.Crf); }
                 catch { }
-                if (before && crf < 99 && crf > numericUpDown1.Minimum && crf < numericUpDown1.Maximum)
+                if (before && crf < 99 && crf >= numericUpDown1.Minimum && crf <= numericUpDown1.Maximum)
                     numericUpDown1.Value = settings.Crf != "Default" ? crf : numericUpDown1.Value;
                 caComboBox.Text = settings.Codec_audio != "Default" ? settings.Codec_audio : caComboBox.Text;
                 chComboBox.Text = settings.Channels != "Default" ? settings.Channels : chComboBox.Items.Count > 1 ? chComboBox.Items[0].ToString() : chComboBox.Text.ToString();
@@ -384,6 +385,7 @@ namespace Av1ador
                     timestampsMenuItem.Checked = (settings.Delete_temp_files & 2) != 0;
                     segmentsMenuItem.Checked = (settings.Delete_temp_files & 4) != 0;
                     audioMenuItem.Checked = (settings.Delete_temp_files & 8) != 0;
+                    deltempButton.Checked = settings.Delete_temp_files > 1;
                 }
                 folderBrowserDialog1.SelectedPath = settings.Output_folder;
                 outfolderButton.Checked = settings.Output_folder.Length > 0;
@@ -820,7 +822,6 @@ namespace Av1ador
             if (numericUpDown1.Focused == false && trackBar1.Focused == false)
                 return;
             trackBar1.Value = (int)numericUpDown1.Value;
-            encoder.Crf = (int)numericUpDown1.Value;
             Entry_update(7);
             Entry.Save(listBox1);
         }
@@ -1010,7 +1011,8 @@ namespace Av1ador
             }
             trackBar1.Maximum = encoder.Max_crf;
             numericUpDown1.Maximum = encoder.Max_crf;
-            numericUpDown1.Value = encoder.Crf;
+            if (cvComboBox.Focused)
+                numericUpDown1.Value = encoder.Crf;
             Func.Update_combo(speedComboBox, encoder.Presets, false);
             Dialogo = false;
             gsgroupBox.Enabled = encoder.Gs > 0;
@@ -1280,6 +1282,7 @@ namespace Av1ador
             else if (encodestopButton.Enabled && infoTimer.Interval == 250 && !primer_video.Busy && !encode.Can_run && !encode.Failed && !primer_video.Gs_thread && (entry.Param != "" || paramsBox.Text != "") && (encoder.Vf.Count == 0 || !encoder.Vf[0].Contains("crop=D")))
             {
                 encoder.Params = paramsBox.Text;
+                encoder.Crf = (int)numericUpDown1.Value;
                 encode = new Encode
                 {
                     Split_min_time = 4 + (int)((primer_video.EndTime - primer_video.StartTime) / 1400.0),
