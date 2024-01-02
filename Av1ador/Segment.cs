@@ -25,6 +25,7 @@ namespace Av1ador
         private double track_delay;
         private int[] fps = new int[0];
         private int frames_last;
+        private bool unattended;
         public string Tempdir { get; } = "temp\\";
         public string Dir { get; set; }
         public string File { get; set; }
@@ -198,12 +199,13 @@ namespace Av1ador
             bitrate = 0;
         }
 
-        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0, double spd = 1, bool unattended = false)
+        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0, double spd = 1, bool unat = false)
         {
             track_delay = delay;
             Dir = dir == "" ? Path.GetDirectoryName(file) + "\\" : dir + "\\";
             File = file;
             Name = Tempdir + Path.GetFileNameWithoutExtension(file);
+            unattended = unat;
             if (!Directory.Exists(Name))
                 Directory.CreateDirectory(Name);
             else if (!unattended)
@@ -601,13 +603,14 @@ namespace Av1ador
             {
                 Failed = true;
                 Set_state(true);
-                if (MessageBox.Show(log, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
+                if (unattended || MessageBox.Show(log, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
                 {
                     Status = new List<string>
                     {
                         "Failed"
                     };
-                    Failed = false;
+                    if (!unattended)
+                        Failed = false;
                     Chunks = null;
                 }
             }

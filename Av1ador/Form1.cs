@@ -288,6 +288,17 @@ namespace Av1ador
                 mpv.Cmd("set pause yes;seek " + (seek + segundo_video.First_frame).ToString() + " absolute+exact", 2);
         }
 
+        private void Next(ListBox list, int current)
+        {
+            if (current < list.Items.Count - 1)
+            {
+                list.SelectedIndex = -1;
+                list.SelectedIndex = current + 1;
+                encode = new Encode();
+                Mpv_load_first();
+            }
+        }
+
         private void Get_res(string entry_res = "")
         {
             if (primer_video == null)
@@ -1308,13 +1319,8 @@ namespace Av1ador
             else if (encodestopButton.Enabled && encode.Finished)
             {
                 Entry.Set_status(listBox1, encode.File, encode.Elapsed, false, false, true);
-                if (encodelistButton.Checked && Entry.Index(primer_video.File, listBox1) < listBox1.Items.Count - 1)
-                {
-                    listBox1.SelectedIndex = -1;
-                    listBox1.SelectedIndex = Entry.Index(primer_video.File, listBox1) + 1;
-                    encode = new Encode();
-                    Mpv_load_first();
-                }
+                if (encodelistButton.Checked)
+                    Next(listBox1, Entry.Index(primer_video.File, listBox1));
                 else
                 {
                     encodestopButton.Enabled = false;
@@ -1349,8 +1355,13 @@ namespace Av1ador
             else if (encode.Failed)
             {
                 Entry.Set_status(listBox1, encode.File, encode.Elapsed, false, true);
-                encodestopButton.Enabled = false;
-                encodestartButton.Enabled = true;
+                if (!encodelistButton.Checked || Entry.Index(primer_video.File, listBox1) >= listBox1.Items.Count - 1)
+                {
+                    encodestopButton.Enabled = false;
+                    encodestartButton.Enabled = true;
+                }
+                else
+                    Next(listBox1, Entry.Index(primer_video.File, listBox1));
             }
             if (encodestopButton.Enabled && !statusLabel.Text.Contains("grain"))
             {
