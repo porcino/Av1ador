@@ -288,7 +288,7 @@ namespace Av1ador
                 mpv.Cmd("set pause yes;seek " + (seek + segundo_video.First_frame).ToString() + " absolute+exact", 2);
         }
 
-        private void Next(ListBox list, int current)
+        private bool Next(ListBox list, int current)
         {
             if (current < list.Items.Count - 1)
             {
@@ -296,7 +296,9 @@ namespace Av1ador
                 list.SelectedIndex = current + 1;
                 encode = new Encode();
                 Mpv_load_first();
+                return true;
             }
+            return false;
         }
 
         private void Get_res(string entry_res = "")
@@ -1319,9 +1321,7 @@ namespace Av1ador
             else if (encodestopButton.Enabled && encode.Finished)
             {
                 Entry.Set_status(listBox1, encode.File, encode.Elapsed, false, false, true);
-                if (encodelistButton.Checked)
-                    Next(listBox1, Entry.Index(primer_video.File, listBox1));
-                else
+                if (!encodelistButton.Checked || !Next(listBox1, Entry.Index(primer_video.File, listBox1)))
                 {
                     encodestopButton.Enabled = false;
                     encodestartButton.Enabled = true;
