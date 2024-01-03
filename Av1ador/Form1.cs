@@ -181,6 +181,8 @@ namespace Av1ador
                         encoder.Af = Entry.Filter2List(entry.Af);
                     Get_res(entry.Resolution);
                     resComboBox.Text = entry.Resolution ?? resComboBox.Text;
+                    primer_video.StartTime = entry.Start;
+                    primer_video.EndTime = entry.End;
                     primer_video.CreditsTime = entry.Credits;
                     primer_video.CreditsEndTime = entry.CreditsEnd;
                     cvComboBox.SelectedIndex = entry.Cv;
@@ -937,6 +939,7 @@ namespace Av1ador
                 encode.Clear_splits(primer_video.File);
                 primer_video.StartTime = encoder.Playtime;
                 UpdateBar();
+                Entry_update(13);
             }
         }
 
@@ -949,6 +952,7 @@ namespace Av1ador
                 if (primer_video.CreditsTime > primer_video.EndTime)
                     primer_video.CreditsTime = 0;
                 UpdateBar();
+                Entry_update(13);
             }
         }
 
@@ -2296,7 +2300,7 @@ namespace Av1ador
             if (primer_video != null)
             {
                 listBox1.SelectedIndexChanged -= new EventHandler(ListBox1_SelectedIndexChanged);
-                Entry.Update(field, primer_video.File, listBox1, vfListBox, afListBox, gsUpDown.Value.ToString(), primer_video.CreditsTime, primer_video.CreditsEndTime, cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track, resComboBox.Text, speedComboBox.Text);
+                Entry.Update(field, primer_video, listBox1, vfListBox, afListBox, gsUpDown.Value.ToString(), cvComboBox.SelectedIndex, bitsComboBox.Text, paramsBox.Text, (int)numericUpDown1.Value, int.Parse(abitrateBox.Text), bitrateBox.Text, track, resComboBox.Text, speedComboBox.Text);
                 listBox1.SelectedIndexChanged += new EventHandler(ListBox1_SelectedIndexChanged);
             }
         }

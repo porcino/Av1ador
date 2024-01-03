@@ -20,6 +20,8 @@ namespace Av1ador
         public string Vf { get; set; }
         public string Af { get; set; }
         public string Gs { get; set; }
+        public double Start { get; set; }
+        public double End { get; set; }
         public double Credits { get; set; }
         public double CreditsEnd { get; set; }
         public int Cv { get; set; }
@@ -166,12 +168,12 @@ namespace Av1ador
             }
         }
 
-        public static void Update(int col, string file, ListBox list, ListBox vf, ListBox af, string gs, double credits, double creditsend, int cv, string bits, string param, int crf, int ba, string bv, int track, string res, string spd)
+        public static void Update(int col, Video video, ListBox list, ListBox vf, ListBox af, string gs, int cv, string bits, string param, int crf, int ba, string bv, int track, string res, string spd)
         {
             for (int i = 0; i < list.Items.Count; i++)
             {
                 Entry entry = list.Items[i] as Entry;
-                if (file != "" && entry.File == file)
+                if (video.File != "" && entry.File == video.File)
                 {
                     switch (col)
                     {
@@ -191,11 +193,11 @@ namespace Av1ador
                                 entry.Gs = gs;
                             break;
                         case 3:
-                            shouldsave = credits != entry.Credits || creditsend != entry.CreditsEnd;
+                            shouldsave = video.CreditsTime != entry.Credits || video.CreditsEndTime != entry.CreditsEnd;
                             if (shouldsave)
                             {
-                                entry.Credits = credits;
-                                entry.CreditsEnd = creditsend;
+                                entry.Credits = video.CreditsTime;
+                                entry.CreditsEnd = video.CreditsEndTime;
                             }
                             break;
                         case 4:
@@ -245,6 +247,14 @@ namespace Av1ador
                             shouldsave = spd != entry.Speed;
                             if (shouldsave)
                                 entry.Speed = spd;
+                            break;
+                        case 13:
+                            shouldsave = video.StartTime != entry.Start || video.EndTime != entry.End;
+                            if (shouldsave)
+                            {
+                                entry.Start = video.StartTime;
+                                entry.End = video.EndTime;
+                            }
                             break;
                     }
                     list.Items[i] = entry;
