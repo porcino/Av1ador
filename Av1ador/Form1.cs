@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.8";
+        private readonly string title = "Av1ador 1.2.9";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|asf|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -149,6 +149,7 @@ namespace Av1ador
                 if (primer_video == null || (primer_video != null && entry.File != primer_video.File))
                 {
                     encoder.Vf.Clear();
+                    encoder.Af.Clear();
                     while (primer_video != null && primer_video.Busy)
                     {
                         primer_video.Busy = false;
