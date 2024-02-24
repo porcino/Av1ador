@@ -94,9 +94,13 @@ namespace Av1ador
                 Channels.Add(0);
 
             string info = Get_info(file);
-            Match compare = Regex.Match(info, @"Stream #0:([0-9]+).*Video:.*\(default\)");
+            Match compare = Regex.Match(info, @"Stream #0:([0-9]+).*Video:");
+            int first = 0;
             if (compare.Success)
-                Default = int.Parse(compare.Groups[1].ToString()) + 1;
+                first = int.Parse(compare.Groups[1].ToString());
+            compare = Regex.Match(info, @"Stream #0:([0-9]+).*Video:.*\(default\)");
+            if (compare.Success)
+                Default = int.Parse(compare.Groups[1].ToString()) + 1 - first;
 
             compare = Regex.Match(info, " [0-9]{2,5}x[0-9]{2,5}");
             if (compare.Success)
