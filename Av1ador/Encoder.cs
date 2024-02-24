@@ -149,6 +149,7 @@ namespace Av1ador
             Gs = 0;
             Rate = 1.0;
             Multipass = "";
+            Vbr_str = "";
             if (codec == v[0])
             {
                 Cv = "libaom-av1";
