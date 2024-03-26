@@ -705,7 +705,11 @@ namespace Av1ador
                     str += " -rav1e-params bitrate=!bitrate!";
             }
             else if (always_2p)
+            {
                 str += " " + Multipass;
+                if (Cv == "libvpx-vp9")
+                    str += " -crf " + Crf.ToString();
+            }
             else
             {
                 if (Cv == "libxvid")
