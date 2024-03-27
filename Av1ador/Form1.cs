@@ -189,8 +189,9 @@ namespace Av1ador
                     cvComboBox.SelectedIndex = cvComboBox.Items.IndexOf(entry.Cv);
                     if (cvComboBox.SelectedIndex == -1)
                         cvComboBox.SelectedIndex = 0;
+                    else
+                        paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : encoder.Params_replace((int)Math.Round(primer_video.Fps), entry.Param);
                     speedComboBox.Text = entry.Speed;
-                    paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : encoder.Params_replace((int)Math.Round(primer_video.Fps), entry.Param);
                     bitsComboBox.Text = entry.Bits;
                     if (entry.Crf > numericUpDown1.Maximum)
                         return;
