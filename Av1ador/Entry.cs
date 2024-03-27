@@ -24,7 +24,7 @@ namespace Av1ador
         public double End { get; set; }
         public double Credits { get; set; }
         public double CreditsEnd { get; set; }
-        public int Cv { get; set; }
+        public string Cv { get; set; }
         public string Bits { get; set; }
         public string Param { get; set; }
         public int Crf { get; set; }
@@ -168,7 +168,7 @@ namespace Av1ador
             }
         }
 
-        public static void Update(int col, Video video, ListBox list, ListBox vf, ListBox af, string gs, int cv, string bits, string param, int crf, int ba, string bv, int track, string res, string spd)
+        public static void Update(int col, Video video, ListBox list, ListBox vf, ListBox af, string gs, string cv, string bits, string param, int crf, int ba, string bv, int track, string res, string spd)
         {
             for (int i = 0; i < list.Items.Count; i++)
             {
