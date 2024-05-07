@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.10";
+        private readonly string title = "Av1ador 1.2.11";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|asf|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -1218,6 +1218,12 @@ namespace Av1ador
 
         private void EncodestopButton_Click(object sender, EventArgs e)
         {
+            if (mpv.Mpv2_loaded && segundo_video != null)
+            {
+                segundo_video = null;
+                mpv.Cmd("stop", 2);
+                UpdateLayout(true);
+            }
             encodestopButton.Enabled = false;
             encode?.Set_state(true);
             Thread thread = new Thread(() => Exit(true));

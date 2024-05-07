@@ -599,7 +599,7 @@ namespace Av1ador
             string log = chunk.Start();
             if (log == "Retry")
                 log = chunk.Start();
-            if (log != "" && log != "Retry" && !Failed)
+            if (log.Trim() != "" && log != "Retry" && !Failed)
             {
                 Failed = true;
                 Set_state(true);
@@ -696,6 +696,7 @@ namespace Av1ador
             Encoding = true;
             Process ffmpeg = new Process();
             Func.Setinicial(ffmpeg, 3, Credits ? Func.Worsen_crf(Func.Replace_gs(Arguments, 0)) : Arguments);
+            File.WriteAllText(Pathfile + ".txt", "ffmpeg" + ffmpeg.StartInfo.Arguments + "\r\n");
             if (Arguments.Contains("libaom-av1"))
             {
                 retry = true;
@@ -720,7 +721,6 @@ namespace Av1ador
                 }
                 ffmpeg.StartInfo.Arguments = pass;
             }
-            File.WriteAllText(Pathfile + ".txt", "ffmpeg" + Arguments + "\r\n");
             Stopwatch watch = Stopwatch.StartNew();
             watch.Start();
             ffmpeg.Start();
