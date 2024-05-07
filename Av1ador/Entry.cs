@@ -9,6 +9,8 @@ namespace Av1ador
 {
     public class Entry
     {
+        private const string queue = "queue.xml";
+        private const string backup = "queue.xml.bak";
         private static bool shouldsave;
         private static int lastupdate;
         private static int refresh;
@@ -157,14 +159,29 @@ namespace Av1ador
 
         public static void Load(ListBox list)
         {
-            if (System.IO.File.Exists("queue.xml"))
+            if (System.IO.File.Exists(queue))
             {
                 System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Entry[]));
-                StreamReader file = new StreamReader("queue.xml");
-                Entry[] entries = (Entry[])reader.Deserialize(file);
-                file.Close();
-                foreach(Entry entry in entries)
-                    list.Items.Add(entry);
+                StreamReader file = new StreamReader(queue);
+                Entry[] entries;
+                try
+                {
+                    entries = (Entry[])reader.Deserialize(file);
+                    file.Close();
+                    foreach (Entry entry in entries)
+                        list.Items.Add(entry);
+                }
+                catch
+                {
+                    if (System.IO.File.Exists(backup))
+                    {
+                        file = new StreamReader(backup);
+                        entries = (Entry[])reader.Deserialize(file);
+                        file.Close();
+                        foreach (Entry entry in entries)
+                            list.Items.Add(entry);
+                    }
+                }
             }
         }
 
@@ -264,8 +281,6 @@ namespace Av1ador
 
         private static void Save_entries(ListBox list)
         {
-            string queue = "queue.xml";
-            string backup = queue.Replace(@"xml", "xml.bak");
             if (System.IO.File.Exists(backup))
                 System.IO.File.Delete(backup);
             System.IO.File.Move(queue, backup);
