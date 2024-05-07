@@ -264,8 +264,13 @@ namespace Av1ador
 
         private static void Save_entries(ListBox list)
         {
+            string queue = "queue.xml";
+            string backup = queue.Replace(@"xml", "xml.bak");
+            if (System.IO.File.Exists(backup))
+                System.IO.File.Delete(backup);
+            System.IO.File.Move(queue, backup);
             var writer = new System.Xml.Serialization.XmlSerializer(typeof(Entry[]));
-            var wfile = new StreamWriter(@"queue.xml");
+            var wfile = new StreamWriter(queue);
             Entry[] entries = new Entry[list.Items.Count];
             for (int i = 0; i < list.Items.Count; i++)
                 entries[i] = list.Items[i] as Entry;
