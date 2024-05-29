@@ -251,7 +251,7 @@ namespace Av1ador
                 Job = j[0];
                 Presets = new string[] { "placebo", "*veryslow", "slower", "slow", "medium", "fast", "faster", "veryfast", "superfast", "ultrafast" };
                 speed_str = "-preset ";
-                Params = "-x264opts threads=!threads!:min-keyint=!minkey!:keyint=!maxkey!:stitchable=1";
+                Params = "-x264opts min-keyint=!minkey!:keyint=!maxkey!:stitchable=1";
                 Color = ":colorprim=bt709:transfer=bt709:colormatrix=bt709";
                 Multipass = "-pass 1 -passlogfile \"!log!\"";
             }
