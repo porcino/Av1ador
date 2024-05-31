@@ -25,7 +25,7 @@ namespace Av1ador
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point point);
 
-        private readonly string title = "Av1ador 1.2.11";
+        private readonly string title = "Av1ador 1.2.12";
         private readonly Regex formatos = new Regex(".+(mkv|mp4|avi|webm|ivf|m2ts|wmv|mpg|mov|3gp|ts|mpeg|y4m|vob|m2v|m4v|flv|asf|png)$", RegexOptions.IgnoreCase);
         private Player mpv;
         private Video primer_video, segundo_video;
@@ -75,11 +75,8 @@ namespace Av1ador
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Text = title;
-            string exes = Func.Exes();
 
             encoder = new Encoder();
-            Encoder.Libfdk = exes.Contains("enable-libfdk-aac");
-            Encoder.Libplacebo = exes.Contains("enable-libplacebo");
             workersUpDown.Maximum = encoder.Cores;
             workersgroupBox.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(workersgroupBox, true, null);
             listBox1.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(listBox1, true, null);

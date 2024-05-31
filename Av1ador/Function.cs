@@ -15,16 +15,16 @@ namespace Av1ador
     {
         public static readonly string bindir = "bin\\";
 
-        public static string Exes()
+        public static string[] Exes()
         {
             string msg = "";
-            string output = "";
+            string[] output = new string[3];
             Process process = new Process();
             Setinicial(process, 3);
             try
             {
                 process.Start();
-                output = process.StandardError.ReadToEnd();
+                output[0] = process.StandardError.ReadToEnd();
             }
             catch
             {
@@ -53,6 +53,21 @@ namespace Av1ador
             if (msg != "")
                 if (MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
                     Environment.Exit(0);
+            Setinicial(process, 3, " -hide_banner -init_hw_device list");
+            process.Start();
+            string types = process.StandardOutput.ReadToEnd();
+            if (types.Contains("opencl"))
+            {
+                process.StartInfo.Arguments = " -hide_banner -v debug -init_hw_device opencl";
+                process.Start();
+                output[1] = new Regex(@"[0-9]+\.[0-9]+: ").Match(process.StandardError.ReadToEnd()).Value.Replace(":", "").Trim();
+            }
+            if (types.Contains("vulkan"))
+            {
+                process.StartInfo.Arguments = " -hide_banner -v debug -init_hw_device vulkan";
+                process.Start();
+                output[2] = new Regex(@"[0-9\.]+:").Match(new Regex(@"GPU listing:[\n\r]*.*[0-9]+: ").Match(process.StandardError.ReadToEnd()).Value).Value.Replace(":", "").Trim();
+            }
             return output;
         }
 

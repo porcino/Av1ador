@@ -20,6 +20,8 @@ namespace Av1ador
         private string speed_str;
         public static bool Libfdk { get; set; }
         public static bool Libplacebo { get; set; }
+        public static string OCL_Device { get; set; }
+        public static string Vkn_Device { get; set; }
         public string[] Resos { get; set; }
         public int Max_crf { get; set; }
         public int Crf { get; set; }
@@ -106,6 +108,12 @@ namespace Av1ador
             Vf = new List<string>();
             Af = new List<string>();
             Multipass = "";
+
+            string[] exes = Func.Exes();
+            OCL_Device = exes[1];
+            Vkn_Device = exes[2];
+            Libfdk = exes[0].Contains("enable-libfdk-aac");
+            Libplacebo = exes[0].Contains("enable-libplacebo") && Vkn_Device != "";
         }
         private string[] CheckNvidia(string[] vtags)
         {
@@ -683,12 +691,12 @@ namespace Av1ador
                 {
                     if (s.Contains("libplacebo") && Libplacebo)
                     {
-                        str += " -init_hw_device vulkan";
+                        str += " -init_hw_device vulkan:" + Vkn_Device;
                         break;
                     }
                     if (s.Contains("opencl"))
                     {
-                        str += " -init_hw_device opencl=gpu -filter_hw_device gpu";
+                        str += " -init_hw_device opencl=" + OCL_Device + " -filter_hw_device " + OCL_Device;
                         break;
                     }
                 }
