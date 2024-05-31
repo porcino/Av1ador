@@ -62,6 +62,11 @@ namespace Av1ador
                 process.Start();
                 output[1] = new Regex(@"[0-9]+\.[0-9]+: ").Match(process.StandardError.ReadToEnd()).Value.Replace(":", "").Trim();
             }
+            else
+            {
+                if (MessageBox.Show("No OpenCL device found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) == DialogResult.OK)
+                    Environment.Exit(0);
+            }
             if (types.Contains("vulkan"))
             {
                 process.StartInfo.Arguments = " -hide_banner -v debug -init_hw_device vulkan";
