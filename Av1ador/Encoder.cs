@@ -696,7 +696,7 @@ namespace Av1ador
                     }
                     if (s.Contains("opencl"))
                     {
-                        str += " -init_hw_device opencl=" + OCL_Device + " -filter_hw_device " + OCL_Device;
+                        str += " -init_hw_device opencl:" + OCL_Device;
                         break;
                     }
                 }
