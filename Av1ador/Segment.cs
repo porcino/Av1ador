@@ -199,12 +199,12 @@ namespace Av1ador
             bitrate = 0;
         }
 
-        public void Start_encode(string dir, string file, double ss, double to, double credits, double credits_end, double timebase, double kf_t, bool kf_f, bool audio, double delay = 0, int br = 0, double spd = 1, bool unat = false)
+        public void Start_encode(string dir, Video v, bool audio, double delay = 0, int br = 0, double spd = 1, bool unat = false)
         {
             track_delay = delay;
-            Dir = dir == "" ? Path.GetDirectoryName(file) + "\\" : dir + "\\";
-            File = file;
-            Name = Tempdir + Path.GetFileNameWithoutExtension(file);
+            Dir = dir == "" ? Path.GetDirectoryName(v.File) + "\\" : dir + "\\";
+            File = v.File;
+            Name = Tempdir + Path.GetFileNameWithoutExtension(v.File);
             unattended = unat;
             if (!Directory.Exists(Name))
                 Directory.CreateDirectory(Name);
@@ -223,11 +223,12 @@ namespace Av1ador
             bitrate = br;
             bool vbr = br > 0;
 
-            Kf_interval = kf_t;
-            double seek = ss - Kf_interval;
+            Kf_interval = v.Kf_interval;
+            double seek = v.StartTime - Kf_interval;
             string ss1 = seek > 0 ? " -ss " + seek.ToString() : "";
-            string ss2 = ss > 0 ? " -ss " + ss.ToString() : "";
-            double ato = (to - ss) * Spd;
+            string ss2 = v.StartTime > 0 ? " -ss " + v.StartTime.ToString() : "";
+            double to = v.EndTime != v.Duration ? v.EndTime : v.Duration + 1;
+            double ato = (to - v.StartTime) * Spd;
             string audiofile = Name + "\\audio." + A_Job;
 
             if (audio && A_Param != "")
@@ -236,7 +237,7 @@ namespace Av1ador
                 {
                     Status.Add("Encoding audio...");
                     Process ffaudio = new Process();
-                    Func.Setinicial(ffaudio, 3, " -y" + ss2 + " -i \"" + file + "\" -t " + ato.ToString() + A_Param + " \"" + audiofile + "\"");
+                    Func.Setinicial(ffaudio, 3, " -y" + ss2 + " -i \"" + v.File + "\" -t " + ato.ToString() + A_Param + " \"" + audiofile + "\"");
                     ffaudio.Start();
                     string aout = ffaudio.StartInfo.Arguments + Environment.NewLine;
                     BackgroundWorker abw = new BackgroundWorker();
@@ -276,15 +277,15 @@ namespace Av1ador
                 if (!System.IO.File.Exists(Name + "\\segments.txt") || (vbr && !System.IO.File.Exists(Name + "\\complexity.txt")))
                 {
                     Status.Add("Detecting scenes...");
-                    var trim_time = new List<string>{ ss.ToString() };
+                    var trim_time = new List<string>{ v.StartTime.ToString() };
                     Splits = trim_time;
                     Process ffmpeg = new Process();
                     Func.Setinicial(ffmpeg, 3);
-                    double final = credits > 0 && !vbr ? credits - (double)Split_min_time : to;
-                    if(kf_f || vbr || Fps_filter != "")
-                        ffmpeg.StartInfo.Arguments = (vbr ? " -loglevel debug" : "") + " -copyts -start_at_zero" + ss1 + " -i \"" + file + "\"" + ss2 + " -to " + final.ToString() + " -filter:v \"" + Fps_filter + "select='gt(scene,0.1)',select='isnan(prev_selected_t)+gte(t-prev_selected_t\\," + Split_min_time.ToString() + ")',showinfo\" -an -f null - ";
+                    double final = v.CreditsTime > 0 && !vbr ? v.CreditsTime - (double)Split_min_time : to;
+                    if((v.Width <= 1920 || v.Kf_fixed) || vbr || Fps_filter != "")
+                        ffmpeg.StartInfo.Arguments = (vbr ? " -loglevel debug" : "") + " -copyts -start_at_zero" + ss1 + " -i \"" + v.File + "\"" + ss2 + " -to " + final.ToString() + " -filter:v \"" + Fps_filter + "select='gt(scene,0.1)',select='isnan(prev_selected_t)+gte(t-prev_selected_t\\," + Split_min_time.ToString() + ")',showinfo\" -an -f null - ";
                     else
-                        ffmpeg.StartInfo.Arguments = " -copyts -start_at_zero -skip_frame nokey" + ss1 + " -i \"" + file + "\"" + ss2 + " -to " + final.ToString() + " -filter:v showinfo -an -f null - ";
+                        ffmpeg.StartInfo.Arguments = " -copyts -start_at_zero -skip_frame nokey" + ss1 + " -i \"" + v.File + "\"" + ss2 + " -to " + final.ToString() + " -filter:v showinfo -an -f null - ";
                     ffmpeg.Start();
                     ffmpeg.PriorityClass = ProcessPriorityClass.BelowNormal;
                     string output;
@@ -302,7 +303,7 @@ namespace Av1ador
                             Match compare = t_regex.Match(output);
                             if (compare.Success)
                             {
-                                double time = Double.Parse(compare.Groups[1].ToString()) * (new_timebase > 0 ? new_timebase : timebase);
+                                double time = Double.Parse(compare.Groups[1].ToString()) * (new_timebase > 0 ? new_timebase : v.Timebase);
                                 Match scene_compare = scene_regex.Match(output);
                                 if (!vbr || (scene_compare.Success && scene_compare.Groups[2].ToString() == "1"))
                                 {
@@ -311,7 +312,7 @@ namespace Av1ador
                                         time = final;
                                         break;
                                     }
-                                    else if (time > ss)
+                                    else if (time > v.StartTime)
                                     {
                                         if (trim_time.Count > 0 && (time - Double.Parse(trim_time[trim_time.Count - 1])) > Split_min_time)
                                         {
@@ -349,11 +350,11 @@ namespace Av1ador
                     {
                         try { ffmpeg.Kill(); } catch { }
                     } else {
-                        if (credits > 0 && !vbr)
+                        if (v.CreditsTime > 0 && !vbr)
                         {
-                            trim_time.Add("000" + credits.ToString());
-                            if (credits_end > 0)
-                                trim_time.Add(credits_end.ToString());
+                            trim_time.Add("000" + v.CreditsTime.ToString());
+                            if (v.CreditsEndTime > 0)
+                                trim_time.Add(v.CreditsEndTime.ToString());
                         }
                         trim_time.Add(to.ToString());
                         if (vbr)

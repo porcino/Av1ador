@@ -1325,8 +1325,7 @@ namespace Av1ador
                     encode.A_Job = encoder.A_Job;
                     delay = primer_video.Tracks_delay[checkedListBox1.CheckedIndices[0]];
                 }
-                double to = primer_video.EndTime != primer_video.Duration ? primer_video.EndTime : primer_video.Duration + 1;
-                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video.File, primer_video.StartTime, to, primer_video.CreditsTime, primer_video.CreditsEndTime, primer_video.Timebase, primer_video.Kf_interval, (primer_video.Width <= 1920 || primer_video.Kf_fixed), checkedListBox1.CheckedItems.Count > 0, delay, encoder.V_kbps, encoder.Out_spd, encodelistButton.Checked);
+                encode.Start_encode(folderBrowserDialog1.SelectedPath, primer_video, checkedListBox1.CheckedItems.Count > 0, delay, encoder.V_kbps, encoder.Out_spd, encodelistButton.Checked);
                 listBox1.Refresh();
             }
             else if (encodestopButton.Enabled && encode.Finished)
