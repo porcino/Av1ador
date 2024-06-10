@@ -133,7 +133,7 @@ namespace Av1ador
         {
             str = Regex.Replace(str, "-(" + param + " )[0-9]+ ", m => replace == "" ? "" : "-" + m.Groups[1].Value + replace + " ");
             str = Regex.Replace(str, "([\\s:]+)(" + param + "=)[0-9]+", m => replace == "" ? "" : m.Groups[1].Value + m.Groups[2].Value + replace);
-            return str.Replace("::", ":").Replace("params :", "params ").Replace(": "," ");
+            return str.Replace("::", ":").Replace("params :", "params ").Replace(": ", " ");
         }
 
         public static string Replace_gs(string str, int gs_level)
@@ -297,6 +297,19 @@ namespace Av1ador
                 unit = "GB";
             }
             return size.ToString() + unit;
+        }
+
+        public static List<string> Concat(List<string>[] list)
+        {
+            var concatenated = list[0];
+            for (int i = 1; i < list.Length; i++)
+            {
+                if (i > 0)
+                    concatenated = concatenated.Concat(list[i].Skip(1).Take(list[i].Count - 1)).ToList();
+                else
+                    concatenated = concatenated.Concat(list[i]).ToList();
+            }
+            return concatenated;
         }
     }
 }

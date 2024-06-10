@@ -54,6 +54,7 @@ namespace Av1ador
         public double Peak_br { get; set; }
         public int Counter { get; set; }
         public uint Clean { get; set; }
+        public static BackgroundWorker[] Bw { get; set; }
         public int Progress
         {
             get
@@ -224,11 +225,8 @@ namespace Av1ador
             bool vbr = br > 0;
 
             Kf_interval = v.Kf_interval;
-            double seek = v.StartTime - Kf_interval;
-            string ss1 = seek > 0 ? " -ss " + seek.ToString() : "";
-            string ss2 = v.StartTime > 0 ? " -ss " + v.StartTime.ToString() : "";
             double to = v.EndTime != v.Duration ? v.EndTime : v.Duration + 1;
-            double ato = (to - v.StartTime) * Spd;
+            double final = v.CreditsTime > 0 && !vbr ? v.CreditsTime - (double)Split_min_time : to;
             string audiofile = Name + "\\audio." + A_Job;
 
             if (audio && A_Param != "")
@@ -236,8 +234,10 @@ namespace Av1ador
                 if (!System.IO.File.Exists(audiofile))
                 {
                     Status.Add("Encoding audio...");
+                    string ssa = v.StartTime > 0 ? " -ss " + v.StartTime.ToString() : "";
+                    double toa = (to - v.StartTime) * Spd;
                     Process ffaudio = new Process();
-                    Func.Setinicial(ffaudio, 3, " -y" + ss2 + " -i \"" + v.File + "\" -t " + ato.ToString() + A_Param + " \"" + audiofile + "\"");
+                    Func.Setinicial(ffaudio, 3, " -y" + ssa + " -i \"" + v.File + "\" -t " + toa.ToString() + A_Param + " \"" + audiofile + "\"");
                     ffaudio.Start();
                     string aout = ffaudio.StartInfo.Arguments + Environment.NewLine;
                     BackgroundWorker abw = new BackgroundWorker();
@@ -268,116 +268,151 @@ namespace Av1ador
                 }
                 else
                     audio_size = new FileInfo(audiofile).Length;
-            } 
+            }
 
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.DoWork += (s, e) =>
+            if (!System.IO.File.Exists(Name + "\\segments.txt") || (vbr && !System.IO.File.Exists(Name + "\\complexity.txt")))
             {
-                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-                if (!System.IO.File.Exists(Name + "\\segments.txt") || (vbr && !System.IO.File.Exists(Name + "\\complexity.txt")))
-                {
-                    Status.Add("Detecting scenes...");
-                    var trim_time = new List<string>{ v.StartTime.ToString() };
-                    Splits = trim_time;
-                    Process ffmpeg = new Process();
-                    Func.Setinicial(ffmpeg, 3);
-                    double final = v.CreditsTime > 0 && !vbr ? v.CreditsTime - (double)Split_min_time : to;
-                    if((v.Width <= 1920 || v.Kf_fixed) || vbr || Fps_filter != "")
-                        ffmpeg.StartInfo.Arguments = (vbr ? " -loglevel debug" : "") + " -copyts -start_at_zero" + ss1 + " -i \"" + v.File + "\"" + ss2 + " -to " + final.ToString() + " -filter:v \"" + Fps_filter + "select='gt(scene,0.1)',select='isnan(prev_selected_t)+gte(t-prev_selected_t\\," + Split_min_time.ToString() + ")',showinfo\" -an -f null - ";
-                    else
-                        ffmpeg.StartInfo.Arguments = " -copyts -start_at_zero -skip_frame nokey" + ss1 + " -i \"" + v.File + "\"" + ss2 + " -to " + final.ToString() + " -filter:v showinfo -an -f null - ";
-                    ffmpeg.Start();
-                    ffmpeg.PriorityClass = ProcessPriorityClass.BelowNormal;
-                    string output;
-                    Regex t_regex = new Regex("pts:[ ]*([0-9]{2}[0-9]*)");
-                    Regex scene_regex = new Regex("scene:([0-9.]+) -> select:([0-1]+).[0]+");
-                    double score = 0;
-                    int frames = 0;
-                    var scenes_complex = new List<string>();
-                    double new_timebase = 0;
-                    while (!ffmpeg.HasExited && Can_run)
-                    {
-                        output = ffmpeg.StandardError.ReadLine();
-                        if (output != null)
-                        {
-                            Match compare = t_regex.Match(output);
-                            if (compare.Success)
-                            {
-                                double time = Double.Parse(compare.Groups[1].ToString()) * (new_timebase > 0 ? new_timebase : v.Timebase);
-                                Match scene_compare = scene_regex.Match(output);
-                                if (!vbr || (scene_compare.Success && scene_compare.Groups[2].ToString() == "1"))
-                                {
-                                    if (time > final)
-                                    {
-                                        time = final;
-                                        break;
-                                    }
-                                    else if (time > v.StartTime)
-                                    {
-                                        if (trim_time.Count > 0 && (time - Double.Parse(trim_time[trim_time.Count - 1])) > Split_min_time)
-                                        {
-                                            trim_time.Add(time.ToString());
-                                            Splits = trim_time;
+                Status.Add("Detecting scenes...");
+                int workers = Math.Max(Math.Min((int)Math.Ceiling(v.Duration / (double)(180 / ((double)v.Width / 1000))), 3), 1);
+                double tdist = (final - v.StartTime) / (double)workers;
+                Bw = new BackgroundWorker[workers];
+                List<string>[] trim_time = new List<string>[workers];
+                List<string>[] scenes_complex = new List<string>[workers];
+                Splits = trim_time[0];
+                Regex t_regex = new Regex("pts:[ ]*([0-9]{2}[0-9]*)");
+                Regex scene_regex = new Regex("scene:([0-9.]+) -> select:([0-1]+).[0]+");
+                Regex tb_regex = new Regex("time_base:[ ]*([0-9]+)/([0-9]+)");
 
-                                            if (frames > 0)
+                for (int i = 0; i < workers; i++)
+                {
+                    trim_time[i] = new List<string> { v.StartTime.ToString() };
+                    scenes_complex[i] = new List<string>();
+                    Bw[i] = new BackgroundWorker();
+                    Bw[i].DoWork += (s, e) =>
+                    {
+                        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                        object[] param = e.Argument as object[];
+                        int j = (int)param[0];
+                        double seek = v.StartTime + (double)j * tdist;
+                        string ss1 = (seek - Kf_interval) > 0 ? " -ss " + (seek - Kf_interval).ToString() : "";
+                        string ss2 = v.StartTime > 0 ? " -ss " + v.StartTime.ToString() : "";
+                        double final2 = final - (double)(workers - (j + 1)) * tdist;
+                        if (j > 0)
+                            ss2 = " -ss " + seek.ToString();
+                        Process ffmpeg = new Process();
+                        Func.Setinicial(ffmpeg, 3);
+                        if ((v.Width <= 1920 || v.Kf_fixed) || vbr || Fps_filter != "")
+                            ffmpeg.StartInfo.Arguments = (vbr ? " -loglevel debug" : "") + " -copyts -start_at_zero" + ss1 + " -i \"" + v.File + "\"" + ss2 + " -to " + final2.ToString() + " -filter:v \"" + Fps_filter + "select='gt(scene,0.1)',select='isnan(prev_selected_t)+gte(t-prev_selected_t\\," + Split_min_time.ToString() + ")',showinfo\" -an -f null - ";
+                        else
+                            ffmpeg.StartInfo.Arguments = " -copyts -start_at_zero -skip_frame nokey" + ss1 + " -i \"" + v.File + "\"" + ss2 + " -to " + final2.ToString() + " -filter:v showinfo -an -f null - ";
+                        ffmpeg.Start();
+                        ffmpeg.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        string output;
+                        double score = 0;
+                        int frames = 0;
+                        double new_timebase = 0;
+                        while (!ffmpeg.HasExited && Can_run)
+                        {
+                            output = ffmpeg.StandardError.ReadLine();
+                            if (output != null)
+                            {
+                                Match compare = t_regex.Match(output);
+                                if (compare.Success)
+                                {
+                                    double time = Double.Parse(compare.Groups[1].ToString()) * (new_timebase > 0 ? new_timebase : v.Timebase);
+                                    Match scene_compare = scene_regex.Match(output);
+                                    if (!vbr || (scene_compare.Success && scene_compare.Groups[2].ToString() == "1"))
+                                    {
+                                        if (time > final)
+                                        {
+                                            time = final;
+                                            break;
+                                        }
+                                        else if (time > seek)
+                                        {
+                                            if (trim_time[j].Count > 0 && (time - Double.Parse(trim_time[j][trim_time[j].Count - 1])) > Split_min_time)
                                             {
-                                                scenes_complex.Add((score / (double)frames).ToString());
-                                                score = 0;
-                                                frames = 0;
+                                                trim_time[j].Add(time.ToString());
+                                                Splits = Func.Concat(trim_time);
+
+                                                if (frames > 0)
+                                                {
+                                                    scenes_complex[j].Add((score / (double)frames).ToString());
+                                                    score = 0;
+                                                    frames = 0;
+                                                }
                                             }
                                         }
                                     }
+                                    else if (scene_compare.Success)
+                                    {
+                                        score += Double.Parse(scene_compare.Groups[1].ToString());
+                                        frames++;
+                                    }
                                 }
-                                else if (scene_compare.Success)
+                                else
                                 {
-                                    score += Double.Parse(scene_compare.Groups[1].ToString());
-                                    frames++;
-                                }
-                            } 
-                            else
-                            {
-                                if (Fps_filter != "" && new_timebase == 0)
-                                {
-                                    Regex tb_regex = new Regex("time_base:[ ]*([0-9]+)/([0-9]+)");
-                                    compare = tb_regex.Match(output);
-                                    if (compare.Success)
-                                        new_timebase = Double.Parse(compare.Groups[1].ToString()) / Double.Parse(compare.Groups[2].ToString());
+                                    if (Fps_filter != "" && new_timebase == 0)
+                                    {
+                                        compare = tb_regex.Match(output);
+                                        if (compare.Success)
+                                            new_timebase = Double.Parse(compare.Groups[1].ToString()) / Double.Parse(compare.Groups[2].ToString());
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (!Can_run)
+                        if (!Can_run)
+                        {
+                            try { ffmpeg.Kill(); } catch { }
+                        }
+                        else
+                        {
+                            if (vbr && j + 1 == workers)
+                            {
+                                if (frames > 0)
+                                    scenes_complex[j].Add((score / (double)frames).ToString());
+                            }
+                        }
+                    };
+                    Bw[i].RunWorkerCompleted += (s, e) =>
                     {
-                        try { ffmpeg.Kill(); } catch { }
-                    } else {
-                        if (v.CreditsTime > 0 && !vbr)
+                        bool busy = false;
+                        foreach (BackgroundWorker w in Bw)
                         {
-                            trim_time.Add("000" + v.CreditsTime.ToString());
-                            if (v.CreditsEndTime > 0)
-                                trim_time.Add(v.CreditsEndTime.ToString());
+                            busy = w.IsBusy;
+                            if (busy)
+                                break;
                         }
-                        trim_time.Add(to.ToString());
-                        if (vbr)
+                        if (!busy)
                         {
-                            if (frames > 0)
-                                scenes_complex.Add((score / (double)frames).ToString());
-                            System.IO.File.WriteAllLines(Name + "\\complexity.txt", scenes_complex.ToArray());
+                            Splits = Func.Concat(trim_time).Distinct().ToList();
+                            if (v.CreditsTime > 0 && !vbr)
+                            {
+                                Splits.Add("000" + v.CreditsTime.ToString());
+                                if (v.CreditsEndTime > 0)
+                                    Splits.Add(v.CreditsEndTime.ToString());
+                            }
+                            Splits.Add(to.ToString());
+                            System.IO.File.WriteAllLines(Name + "\\segments.txt", Splits.ToArray());
+                            if (vbr)
+                                System.IO.File.WriteAllLines(Name + "\\complexity.txt", Func.Concat(scenes_complex).ToArray());
+
+                            Status.Remove("Detecting scenes...");
+                            if (Can_run)
+                            {
+                                Status.Add("Encoding video...");
+                                watch.Start();
+                                Encoding();
+                            }
                         }
-                        Splits = trim_time;
-                        System.IO.File.WriteAllLines(Name + "\\segments.txt", trim_time.ToArray());
-                    }
+                    };
                 }
-            };
-            bw.RunWorkerCompleted += (s, e) => {
-                Status.Remove("Detecting scenes...");
-                if (Can_run)
+                for (int i = 0; i < workers; i++)
                 {
-                    Status.Add("Encoding video...");
-                    watch.Start();
-                    Encoding();
+                    object[] parameters = new object[] { i };
+                    Bw[i].RunWorkerAsync(parameters);
                 }
-            };
-            bw.RunWorkerAsync();
+            }
         }
 
         public void Encoding()
