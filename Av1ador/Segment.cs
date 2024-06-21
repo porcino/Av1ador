@@ -397,13 +397,7 @@ namespace Av1ador
                             if (vbr)
                                 System.IO.File.WriteAllLines(Name + "\\complexity.txt", Func.Concat(scenes_complex).ToArray());
 
-                            Status.Remove("Detecting scenes...");
-                            if (Can_run)
-                            {
-                                Status.Add("Encoding video...");
-                                watch.Start();
-                                Encoding();
-                            }
+                            Begin();
                         }
                     };
                 }
@@ -412,6 +406,19 @@ namespace Av1ador
                     object[] parameters = new object[] { i };
                     Bw[i].RunWorkerAsync(parameters);
                 }
+            }
+            else
+                Begin();
+        }
+
+        public void Begin()
+        {
+            Status.Remove("Detecting scenes...");
+            if (Can_run)
+            {
+                Status.Add("Encoding video...");
+                watch.Start();
+                Encoding();
             }
         }
 

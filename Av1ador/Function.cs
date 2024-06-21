@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -301,6 +302,7 @@ namespace Av1ador
 
         public static List<string> Concat(List<string>[] list)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             var concatenated = list[0];
             for (int i = 1; i < list.Length; i++)
             {
@@ -309,7 +311,15 @@ namespace Av1ador
                 else
                     concatenated = concatenated.Concat(list[i]).ToList();
             }
-            return concatenated;
+            try
+            {
+                List<double> result = concatenated.Select(x => double.Parse(x)).ToList();
+                result.Sort();
+                return result.Select(i => i.ToString()).ToList();
+            } catch
+            {
+                return concatenated;
+            }
         }
     }
 }
