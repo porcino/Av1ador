@@ -395,7 +395,7 @@ namespace Av1ador
                             Splits.Add(to.ToString());
                             System.IO.File.WriteAllLines(Name + "\\segments.txt", Splits.ToArray());
                             if (vbr)
-                                System.IO.File.WriteAllLines(Name + "\\complexity.txt", Func.Concat(scenes_complex).ToArray());
+                                System.IO.File.WriteAllLines(Name + "\\complexity.txt", Func.Concat(scenes_complex, false).ToArray());
 
                             Begin();
                         }

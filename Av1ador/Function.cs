@@ -300,7 +300,7 @@ namespace Av1ador
             return size.ToString() + unit;
         }
 
-        public static List<string> Concat(List<string>[] list)
+        public static List<string> Concat(List<string>[] list, bool sort = true)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             var concatenated = list[0];
@@ -311,6 +311,8 @@ namespace Av1ador
                 else
                     concatenated = concatenated.Concat(list[i]).ToList();
             }
+            if (!sort)
+                return concatenated;
             try
             {
                 List<double> result = concatenated.Select(x => double.Parse(x)).ToList();
