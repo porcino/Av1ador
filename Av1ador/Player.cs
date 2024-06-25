@@ -18,8 +18,14 @@ namespace Av1ador
         static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
         [DllImport("user32.dll")]
         static extern int GetWindowThreadProcessId(IntPtr hWnd, ref int ProcessID);
-
-        private readonly string mpv_args = " --priority=abovenormal --no-resume-playback --pause --cache=yes --hr-seek=always --hr-seek-demuxer-offset=5 -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --background=0.78/0.78/0.78 --alpha=blend --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no --tone-mapping=reinhard --tone-mapping-param=0.45 --tone-mapping-mode=rgb --gamut-mapping-mode=relative";
+        
+        private string Mpv_args
+        {
+            get
+            {
+                return " --priority=abovenormal --no-resume-playback --pause --cache=yes --hr-seek=always --hr-seek-demuxer-offset=5 -no-osc --osd-level=0 --no-border --mute --sid=no --no-window-dragging --video-unscaled=yes --no-input-builtin-bindings --input-ipc-server=\\\\.\\pipe\\mpvsocket --idle=yes --keep-open=yes --dither-depth=auto --osd-font-size=24 --osd-duration=5000 --osd-border-size=1.5 --osd-scale-by-window=no --tone-mapping=reinhard --tone-mapping-param=0.45 --gamut-mapping-mode=relative" + (Version.Contains("0.36") || Version.Contains("0.37") ? " --background=0.78/0.78/0.78 --alpha=blend" : " --background=none --background-color=0.78/0.78/0.78");
+            }
+        }
         private static readonly int processID = Process.GetCurrentProcess().Id;
         private System.IO.Pipes.NamedPipeClientStream mpv_tubo;
         private System.IO.Pipes.NamedPipeClientStream mpv2_tubo;
@@ -31,6 +37,7 @@ namespace Av1ador
         private bool reading;
         private int mpvid = -1;
         private int mpv2id = -1;
+        private string Version { get; set; }
         public bool Mpv_loaded { get; set; }
         public bool Mpv2_loaded { get; set; }
         public int Mpv_id { 
@@ -54,12 +61,13 @@ namespace Av1ador
 
         public Player(Control form, Panel leftpanel, Panel panel)
         {
+            Version = FileVersionInfo.GetVersionInfo(Func.bindir + "mpv.exe").ProductVersion;
             rightpanel = panel;
             Process[] processes = Process.GetProcessesByName("mpv");
             List<IntPtr> ignore = new List<IntPtr>();
             foreach (Process p in processes)
                 ignore.Add(p.MainWindowHandle);
-            Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "socket" + processID.ToString()) + " --vo=gpu-next,gpu");
+            Process.Start(Func.bindir + "mpv.exe", Mpv_args.Replace("socket", "socket" + processID.ToString()) + " --vo=gpu-next,gpu");
 
             Process mp = mpv1p;
             
@@ -151,7 +159,7 @@ namespace Av1ador
                 List<IntPtr> ignore = new List<IntPtr>();
                 foreach (Process p in processes)
                     ignore.Add(p.MainWindowHandle);
-                Process.Start(Func.bindir + "mpv.exe", mpv_args.Replace("socket", "2socket" + processID.ToString()));
+                Process.Start(Func.bindir + "mpv.exe", Mpv_args.Replace("socket", "2socket" + processID.ToString()));
                 BackgroundWorker bw = new BackgroundWorker();
                 Process mp = mpv2p;
                 bw.DoWork += (s, ee) =>
