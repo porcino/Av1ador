@@ -672,13 +672,16 @@ namespace Av1ador
                 {
                     if (pos > 0 && vf[pos - 1].StartsWith("scale"))
                     {
-                        string[] wh = Func.Find_w_h(vf);
-                        Match algo = Regex.Match(vf[pos - 1], @"flags=(bilinear|neighbor|lanczos|spline|gauss)");
-                        string downscaler = "";
-                        if(algo.Success)
-                            downscaler = ":downscaler=" + algo.Groups[1].ToString().Replace("neighbor", "nearest").Replace("spline", "spline36").Replace("gauss", "gaussian");
-                        vf[pos] = vf[pos].Replace("libplacebo=", "libplacebo=w=" + wh[0] + ":h=" + wh[1] + downscaler + ":");
-                        vf.RemoveAll(s => s.StartsWith("scale"));
+                        string[] wh = Func.Find_w_h(new List<string>() { vf[pos - 1] });
+                        if (wh.Count() > 0)
+                        {
+                            Match algo = Regex.Match(vf[pos - 1], @"flags=(bilinear|neighbor|lanczos|spline|gauss)");
+                            string downscaler = "";
+                            if (algo.Success)
+                                downscaler = ":downscaler=" + algo.Groups[1].ToString().Replace("neighbor", "nearest").Replace("spline", "spline36").Replace("gauss", "gaussian");
+                            vf[pos] = vf[pos].Replace("libplacebo=", "libplacebo=w=" + wh[0] + ":h=" + wh[1] + downscaler + ":");
+                            vf.RemoveAll(s => s.StartsWith("scale"));
+                        }
                     }
                 }
             }
