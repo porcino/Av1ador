@@ -672,7 +672,7 @@ namespace Av1ador
                 {
                     if (pos > 0 && vf[pos - 1].StartsWith("scale"))
                     {
-                        string[] wh = Func.Find_w_h(new List<string>() { vf[pos - 1] });
+                        string[] wh = Func.Find_w_h(vf);
                         Match algo = Regex.Match(vf[pos - 1], @"flags=(bilinear|neighbor|lanczos|spline|gauss)");
                         string downscaler = "";
                         if(algo.Success)
