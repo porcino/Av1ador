@@ -60,8 +60,8 @@ namespace Av1ador
                 int aid = (int)ee.Argument;
                 while (primer_video != null && (primer_video.Busy || primer_video.Tracks.Count != primer_video.Tracks_delay.Count))
                     Thread.Sleep(30);
-                if (primer_video != null && encoder != null && aid > -1 && primer_video.Tracks_delay.Count > 0)
-                    encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
+                //if (primer_video != null && encoder != null && aid > -1 && primer_video.Tracks_delay.Count > 0)
+                //    encoder.Af_add("adelay", primer_video.Tracks_delay[aid].ToString());
             };
             aset.RunWorkerCompleted += (s, ee) =>
             {
