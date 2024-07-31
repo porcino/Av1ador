@@ -93,7 +93,7 @@ namespace Av1ador
 
         public Encoder()
         {
-            Resos = new string[] { "4320p", "2160p", "1080p", "900p", "720p", "576p", "480p", "360p", "240p", "160p" };
+            Resos = new string[] { "4320p", "2160p", "1080p", "900p", "720p", "576p", "540p", "480p", "360p", "240p", "160p" };
             Max_crf = 63;
             Crf = 36;
             Cores = Environment.ProcessorCount > 16 ? 16 : Environment.ProcessorCount;
@@ -259,7 +259,7 @@ namespace Av1ador
                 Job = j[0];
                 Presets = new string[] { "placebo", "*veryslow", "slower", "slow", "medium", "fast", "faster", "veryfast", "superfast", "ultrafast" };
                 speed_str = "-preset ";
-                Params = "-x264opts min-keyint=!minkey!:keyint=!maxkey!:stitchable=1";
+                Params = "-x264opts threads=!threads!:min-keyint=!minkey!:keyint=!maxkey!:stitchable=1";
                 Color = ":colorprim=bt709:transfer=bt709:colormatrix=bt709";
                 Multipass = "-pass 1 -passlogfile \"!log!\"";
             }
@@ -353,10 +353,10 @@ namespace Av1ador
             return Math.Round((double)(kbps + ba + fps / 10) * duracion / (double)8 / (double)1024, 1);
         }
 
-        public string Params_replace(int fps, [Optional] string p)
+        public string Params_replace(double fps, [Optional] string p)
         {
-            int minkey = fps > 1 ? fps : 24;
-            int maxkey = fps > 1 ? fps * 10 : 240;
+            int minkey = fps > 1 ? (int)Math.Ceiling(fps) : 24;
+            int maxkey = fps > 1 ? (int)Math.Ceiling(fps * 10.0) : 240;
             if (Cv == "libxvid")
                 maxkey /= 2;
             if (p == null)

@@ -187,7 +187,7 @@ namespace Av1ador
                     if (cvComboBox.SelectedIndex == -1)
                         cvComboBox.SelectedIndex = 0;
                     else
-                        paramsBox.Text = entry.Param == "" ? encoder.Params_replace((int)Math.Round(primer_video.Fps)) : encoder.Params_replace((int)Math.Round(primer_video.Fps), entry.Param);
+                        paramsBox.Text = entry.Param == "" ? encoder.Params_replace(primer_video.Fps) : encoder.Params_replace(primer_video.Fps, entry.Param);
                     speedComboBox.Text = entry.Speed;
                     bitsComboBox.Text = entry.Bits;
                     if (entry.Crf > numericUpDown1.Maximum)
@@ -1014,7 +1014,7 @@ namespace Av1ador
                 {
                     Func.Update_combo(bitsComboBox, encoder.Bit_depth, !encoder.Cv.Contains("264"));
                     if (primer_video != null)
-                        paramsBox.Text = encoder.Params_replace((int)primer_video.Fps);
+                        paramsBox.Text = encoder.Params_replace(primer_video.Fps);
                 }
                 else
                 {
