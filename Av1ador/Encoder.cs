@@ -182,7 +182,7 @@ namespace Av1ador
                 Job = j[1];
                 Presets = new string[] { "0 (slowest)", "1", "2", "3", "4", "*5", "6", "7", "8", "9", "10", "11", "12 (fastest)" };
                 speed_str = "-preset ";
-                Params = "-svtav1-params tune=0:fast-decode=0:irefresh-type=2:keyint=!maxkey!:enable-overlays=1:enable-restoration=0:film-grain-denoise=0:film-grain=!gs!:enable-qm=1:qm-min=0:qm-max=5";
+                Params = "-svtav1-params tune=0:fast-decode=0:irefresh-type=2:keyint=!maxkey!:enable-restoration=0:film-grain-denoise=0:film-grain=!gs!";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
                 Gs = 50;
                 Rate = 0.85;

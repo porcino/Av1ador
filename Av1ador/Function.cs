@@ -133,7 +133,7 @@ namespace Av1ador
         public static string Param_replace(string str, string param, string replace)
         {
             str = Regex.Replace(str, "-(" + param + " )[0-9]+ ", m => replace == "" ? "" : "-" + m.Groups[1].Value + replace + " ");
-            str = Regex.Replace(str, "([\\s:]+)(" + param + "=)[0-9]+", m => replace == "" ? "" : m.Groups[1].Value + m.Groups[2].Value + replace);
+            str = Regex.Replace(str, "([\\s:]+)(" + param + "=)[0-9]+", m => replace == "" ? m.Groups[1].Value + "" : m.Groups[1].Value + m.Groups[2].Value + replace);
             return str.Replace("::", ":").Replace("params :", "params ").Replace(": ", " ");
         }
 
