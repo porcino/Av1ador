@@ -119,6 +119,7 @@
             this.cropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deinterlaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.inverseTelecineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.delogoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frameInterpolationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1426,6 +1427,7 @@
             this.cropToolStripMenuItem,
             this.debandToolStripMenuItem,
             this.deinterlaceToolStripMenuItem,
+            this.inverseTelecineToolStripMenuItem,
             this.delogoToolStripMenuItem,
             this.frameInterpolationToolStripMenuItem,
             this.flipToolStripMenuItem,
@@ -1487,6 +1489,14 @@
             this.deinterlaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deinterlaceToolStripMenuItem.Text = "Deinterlace";
             this.deinterlaceToolStripMenuItem.Click += new System.EventHandler(this.DeinterlaceToolStripMenuItem_Click);
+            // 
+            // inverseTelecineToolStripMenuItem
+            // 
+            this.inverseTelecineToolStripMenuItem.AutoSize = false;
+            this.inverseTelecineToolStripMenuItem.Name = "inverseTelecineToolStripMenuItem";
+            this.inverseTelecineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.inverseTelecineToolStripMenuItem.Text = "Inverse telecine";
+            this.inverseTelecineToolStripMenuItem.Click += new System.EventHandler(this.InverseTelecineToolStripMenuItem_Click);
             // 
             // delogoToolStripMenuItem
             // 
@@ -2592,7 +2602,7 @@
             this.SaveToolStripMenuItem,
             this.RemoveToolStripMenuItem});
             this.FilterContextMenu.Name = "FilterContextMenu";
-            this.FilterContextMenu.Size = new System.Drawing.Size(188, 70);
+            this.FilterContextMenu.Size = new System.Drawing.Size(188, 48);
             // 
             // SaveToolStripMenuItem
             // 
@@ -2974,6 +2984,7 @@
         private System.Windows.Forms.ToolStripMenuItem nothingMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shutdownMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem inverseTelecineToolStripMenuItem;
     }
 }
 

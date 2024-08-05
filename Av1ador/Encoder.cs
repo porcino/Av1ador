@@ -502,6 +502,8 @@ namespace Av1ador
                 if (v == "True")
                     Vf.Insert(0, "nnedi='weights=" + resdir + "nnedi3_weights.bin:field=a'");
             }
+            else if (f == "detelecine")
+                Vf.Add("setfield=mode=tff,separatefields,scale=iw:ih*2,setsar=1");
             else if (f == "autocolor")
             {
                 Vf.RemoveAll(s => s.StartsWith("scale=in_color_matrix"));
