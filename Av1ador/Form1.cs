@@ -83,7 +83,7 @@ namespace Av1ador
 
             playtimeLabel.Text = "";
             mediainfoLabel.Text = "";
-            cvComboBox.SelectedIndex = 0;
+            cvComboBox.SelectedIndex = 1;
             fpsComboBox.SelectedIndex = 0;
             bitsComboBox.SelectedIndex = 0;
             hdrComboBox.SelectedIndex = 0;

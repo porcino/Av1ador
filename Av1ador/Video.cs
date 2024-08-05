@@ -498,7 +498,7 @@ namespace Av1ador
                 }
                 Clear_tmp();
                 if (!gsupdown.Enabled && mediainfo == inf.Text && status.Text.Contains("grain"))
-                    Grain_level = (int)(Func.Median(gs.ToArray()) / (200.0 / (100.0 + maxgs)));
+                    Grain_level = (int)Math.Min(Func.Median(gs.ToArray()), maxgs);
             };
             bw.RunWorkerCompleted += (s, e) => {
                 if (!gsupdown.Enabled && Grain_level > -1)

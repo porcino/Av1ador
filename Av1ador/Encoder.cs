@@ -132,7 +132,7 @@ namespace Av1ador
             {
                 case "mp4":
                     A_codecs = new string[] { a[0], a[1], a[3] };
-                    V_codecs = new string[] { v[10], v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8], v[9]  };
+                    V_codecs = new string[] { v[10], v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8], v[9] };
                     V_codecs = CheckNvidia(V_codecs);
                     break;
                 case "mkv":
@@ -180,7 +180,7 @@ namespace Av1ador
                 Crf = 36;
                 Bit_depth = new string[] { "10", "8" };
                 Job = j[1];
-                Presets = new string[] { "0 (slowest)", "1", "2", "3", "4", "*5", "6", "7", "8", "9", "10", "11", "12 (fastest)" };
+                Presets = new string[] { "0 (slowest)", "1", "2", "3", "*4", "5", "6", "7", "8", "9", "10", "11", "12 (fastest)" };
                 speed_str = "-preset ";
                 Params = "-svtav1-params tune=0:fast-decode=0:irefresh-type=2:keyint=!maxkey!:enable-restoration=0:film-grain-denoise=0:film-grain=!gs!";
                 Color = " -color_primaries 1 -color_trc 1 -colorspace 1";
