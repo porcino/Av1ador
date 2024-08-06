@@ -469,7 +469,7 @@ namespace Av1ador
                     Process ffmpeg = new Process();
                     Func.Setinicial(ffmpeg, 3);
                     int ss = (int)(Duration * i / (loop + 2));
-                    string cmd = " -loglevel panic -init_hw_device opencl:" + Encoder.OCL_Device + " -ss " + ss + " -i \"" + File + "\"  -an -sn -frames:v 1 -vf \"" + crop + "thumbnail=n=" + frames + ",scale=w=1920:h=1080:force_original_aspect_ratio=decrease:force_divisible_by=2";
+                    string cmd = " -loglevel panic -init_hw_device opencl:" + Encoder.OCL_Device + " -ss " + ss + " -i \"" + File + "\"  -an -sn -frames:v 1 -vf \"" + crop + "crop='min(386,iw):min(386,ih)':exact=1,thumbnail=n=" + frames;
                     if (Hdr == 1)
                         cmd += ",format=p010,hwupload,tonemap_opencl=tonemap=hable:r=tv:p=bt709:t=bt709:m=bt709:format=nv12,hwdownload,format=nv12";
                     else if (Hdr == 2 && Encoder.Libplacebo)
@@ -477,14 +477,17 @@ namespace Av1ador
                         cmd = cmd.Replace("opencl:" + Encoder.OCL_Device, "vulkan:" + Encoder.Vkn_Device);
                         cmd += ",format=yuv420p10le,hwupload,libplacebo=tonemapping=reinhard:range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709:format=yuv420p,hwdownload,format=yuv420p";
                     }
-                    cmd += "\" -lossless 1 -compression_level 1 -y \"" + name + "_th.webp\"";
+                    cmd += "\" -y \"" + name + "_ss.png\"";
                     ffmpeg.StartInfo.Arguments = cmd;
                     ffmpeg.Start();
                     ffmpeg.WaitForExit(-1);
-                    ffmpeg.StartInfo.Arguments = " -loglevel panic -init_hw_device opencl:" + Encoder.OCL_Device + " -i \"" + name + "_th.webp\" -frames:v 1 -vf pad=(iw+16):(ih+16):8:8,format=pix_fmts=yuv420p,hwupload,nlmeans_opencl=s=1.8:p=7:r=9,hwdownload,format=pix_fmts=yuv420p,crop=(iw-16):(ih-16):8:8 -lossless 1 -compression_level 1 -y \"" + name + "_th_dns.webp\"";
+                    ffmpeg.StartInfo.Arguments = " -loglevel panic -i \"" + name + "_ss.png\" -vf crop='min(270,iw):min(270,ih)' -lossless 1 -compression_level 1 -y \"" + name + "_th.webp\"";
                     ffmpeg.Start();
                     ffmpeg.WaitForExit(-1);
-                    ffmpeg.StartInfo.Arguments = " -loglevel panic -init_hw_device opencl:" + Encoder.OCL_Device + " -i \"" + name + "_th.webp\" -frames:v 1 -vf pad=(iw+12):(ih+12):6:6,format=pix_fmts=yuv420p,hwupload,nlmeans_opencl=s=4:p=5:r=15,hwdownload,format=pix_fmts=yuv420p,crop=(iw-10):(ih-12):6:6 -lossless 1 -compression_level 1 -y \"" + name + "_th_dnb.webp\"";
+                    ffmpeg.StartInfo.Arguments = " -loglevel panic -init_hw_device opencl:" + Encoder.OCL_Device + " -i \"" + name + "_ss.png\" -frames:v 1 -vf format=pix_fmts=yuv420p,hwupload,nlmeans_opencl=s=1.8:p=7:r=9,hwdownload,format=pix_fmts=yuv420p,crop='min(270,iw):min(270,ih)':exact=1 -lossless 1 -compression_level 1 -y \"" + name + "_th_dns.webp\"";
+                    ffmpeg.Start();
+                    ffmpeg.WaitForExit(-1);
+                    ffmpeg.StartInfo.Arguments = " -loglevel panic -init_hw_device opencl:" + Encoder.OCL_Device + " -i \"" + name + "_ss.png\" -frames:v 1 -vf format=pix_fmts=yuv420p,hwupload,nlmeans_opencl=s=4:p=5:r=15,hwdownload,format=pix_fmts=yuv420p,crop='min(270,iw):min(270,ih)':exact=1 -lossless 1 -compression_level 1 -y \"" + name + "_th_dnb.webp\"";
                     ffmpeg.Start();
                     ffmpeg.WaitForExit(-1);
                     double s1 = new FileInfo(name + "_th.webp").Length;
@@ -537,6 +540,8 @@ namespace Av1ador
             string name = Path.GetFileNameWithoutExtension(File);
             try
             {
+                if (System.IO.File.Exists(name + "_ss.png"))
+                    System.IO.File.Delete(name + "_ss.png");
                 if (System.IO.File.Exists(name + "_th.webp"))
                     System.IO.File.Delete(name + "_th.webp");
                 if (System.IO.File.Exists(name + "_th_dns.webp"))
