@@ -173,7 +173,16 @@ namespace Av1ador
                     if (compara.Success)
                         Fps = Math.Round(Double.Parse(compara.Groups[1].ToString()) / (Duration < 180 ? Duration : 180));
                     else
-                        Fps = -1;
+                    {
+                        Func.Setinicial(ffmpeg, 2, " -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 -read_intervals %180 \"" + file + "\"");
+                        ffmpeg.Start();
+                        output2 = ffmpeg.StandardOutput.ReadToEnd();
+                        compara = new Regex("([0-9]+)", RegexOptions.RightToLeft).Match(output2);
+                        if (compara.Success)
+                            Fps = Math.Round(Double.Parse(compara.Groups[1].ToString()) / (Duration < 180 ? Duration : 180));
+                        else
+                            Fps = -1;
+                    }
                 };
                 bw.RunWorkerAsync();
             }
