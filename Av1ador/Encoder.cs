@@ -504,7 +504,7 @@ namespace Av1ador
             }
             else if (f == "detelecine")
                 Vf.Add("setfield=mode=tff,separatefields,scale=iw:ih*2,setsar=1");
-            else if (f == "autocolor")
+            else if (f == "autocolor" && v == "smpte170m")
             {
                 Vf.RemoveAll(s => s.StartsWith("scale=in_color_matrix"));
                 if (v != "" && v != "bt2020")
