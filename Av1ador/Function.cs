@@ -305,12 +305,7 @@ namespace Av1ador
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             var concatenated = list[0];
             for (int i = 1; i < list.Length; i++)
-            {
-                if (i > 0)
-                    concatenated = concatenated.Concat(list[i].Skip(1).Take(list[i].Count - 1)).ToList();
-                else
-                    concatenated = concatenated.Concat(list[i]).ToList();
-            }
+                concatenated = concatenated.Concat(list[i].Skip(1).Take(list[i].Count - 1)).ToList();
             if (!sort)
                 return concatenated;
             try

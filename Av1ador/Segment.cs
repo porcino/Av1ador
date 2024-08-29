@@ -273,7 +273,7 @@ namespace Av1ador
             if (!System.IO.File.Exists(Name + "\\segments.txt") || (vbr && !System.IO.File.Exists(Name + "\\complexity.txt")))
             {
                 Status.Add("Detecting scenes...");
-                int workers = Math.Max(Math.Min((int)Math.Ceiling(v.Duration / (double)(180 / ((double)v.Width / 1000))), 3), 1);
+                int workers = vbr ? 1 : Math.Max(Math.Min((int)Math.Ceiling(v.Duration / (double)(180 / ((double)v.Width / 1000))), 3), 1);
                 double tdist = (final - v.StartTime) / (double)workers;
                 Bw = new BackgroundWorker[workers];
                 List<string>[] trim_time = new List<string>[workers];
